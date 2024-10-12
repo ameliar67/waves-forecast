@@ -1,0 +1,3 @@
+[submodule "libs/surfpy"]
+	path = libs/surfpy
+	url = https://github.com/mpiannucci/surfpy.git
