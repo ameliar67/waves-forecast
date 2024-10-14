@@ -2,9 +2,13 @@ import surfpy
 import sys
 import matplotlib.pyplot as plt
 
+from flask import Flask, render_template
 
+app = Flask(__name__)
 
-if __name__=='__main__':
+@app.route("/")
+def hello_world():
+
     ri_wave_location = surfpy.Location(41.35, -71.4, altitude=30.0, name='Rhode Island Coast')
     ri_wave_location.depth = 30.0
     ri_wave_location.angle = 145.0
@@ -40,6 +44,7 @@ if __name__=='__main__':
 
     print('maxs', maxs, 'mins', mins, 'summary', summary, 'times', times)
 
+
     plt.plot(times, maxs, c='green')
     plt.plot(times, mins, c='blue')
     plt.plot(times, summary, c='red')
@@ -48,3 +53,10 @@ if __name__=='__main__':
     plt.grid(True)
     plt.title('GFS Wave Atlantic: ' + atlantic_wave_model.latest_model_time().strftime('%d/%m/%Y %Hz'))
     plt.show()
+    return render_template('index.html', info=maxs)
+
+
+if __name__=='__main__':
+
+
+    app.run(debug=True)
