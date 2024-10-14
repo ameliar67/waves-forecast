@@ -1,0 +1,16 @@
+.main-container {
+    display: flex;
+    align-items: center;
+    margin: 50px;
+    flex-direction: column;
+}
+
+
+h1{
+    font-family: sans-serif;
+}
+
+p{
+    font-family: sans-serif;
+    font-size: 20px;
+}
