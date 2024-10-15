@@ -33,9 +33,6 @@ surfpy.merge_wave_weather_data(data, weather_data)
 for dat in data:
     dat.solve_breaking_wave_heights(ri_wave_location)
     dat.change_units(surfpy.units.Units.english)
-json_data = surfpy.serialize(data)
-with open("forecast.json", "w") as outfile:
-    outfile.write(json_data)
 
 maxs = [x.maximum_breaking_height for x in data]
 mins = [x.minimum_breaking_height for x in data]
