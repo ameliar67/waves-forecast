@@ -42,18 +42,15 @@ mins = [x.minimum_breaking_height for x in data]
 summary = [x.wave_summary.wave_height for x in data]
 times = [x.date for x in data]
 
-print("maxs", maxs, "mins", mins, "summary", summary, "times", times)
-
-fig = plt.figure()
+fig = plt.figure(figsize=(10, 6))
 ax = fig.subplots()
-
 ax.plot(times, maxs, c="green")
 ax.plot(times, mins, c="blue")
 ax.plot(times, summary, c="red")
-
-ax.set_xlabel("Hours")
+ax.set_xlabel("Date and Time")
 ax.set_ylabel("Breaking Wave Height (ft)")
 ax.grid(True)
+
 
 img = BytesIO()
 fig.savefig(img, format="png")
