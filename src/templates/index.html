@@ -8,7 +8,10 @@
 <body>
     <div class="main-container">
         <h1>Welcome to Wave Forecast</h1>
-        <p>{{ info }}</p>
+        <p>Location: {{ location }}</p>
+        <p>CurrentWave Height: </p>
+        <p class="current-wave-height">{{ current_wave_height }} feet</p>
+        <img src="data:image/png;base64, {{ plot_url }}">
     </div>
 </body>
 </html>
