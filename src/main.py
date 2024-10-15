@@ -62,7 +62,7 @@ plot_url = base64.b64encode(img.getvalue()).decode("utf8")
 @app.route("/")
 def wave_data():
     return render_template(
-        "index.html", info=summary, location=ri_wave_location.name, plot_url=plot_url
+        "index.html", info=summary, location=ri_wave_location.name, plot_url=plot_url, current_wave_height=round(summary[0])
     )
 
 
