@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 import surfpy
+import matplotlib.dates as mdates
 
 def get_wave_forecast(
     wave_location: surfpy.Location,
@@ -19,7 +20,7 @@ def get_wave_forecast(
 
     for d in wave_data:
         d.solve_breaking_wave_heights(wave_location)
-
+ 
     return wave_data
 
 def get_chart(forecast: list[surfpy.buoydata.BuoyData],
@@ -32,11 +33,14 @@ def get_chart(forecast: list[surfpy.buoydata.BuoyData],
     summary = [x.wave_summary.wave_height for x in forecast]
     times = [x.date for x in forecast]
 
-    fig = plt.figure(figsize=(10, 6))
+
+    fig = plt.figure(figsize=(25, 10))
     ax = fig.subplots()
     ax.plot(times, maxs, c="green")
     ax.plot(times, mins, c="blue")
     ax.plot(times, summary, c="red")
+    date_format = mdates.DateFormatter("%A %d %B\n%Y\n%H:%M") 
+    ax.xaxis.set_major_formatter(date_format)
     ax.set_xlabel("Date and Time")
     ax.set_ylabel(f"Breaking Wave Height ({forecast[0].unit})")
     ax.grid(True)
