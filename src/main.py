@@ -3,6 +3,7 @@ import surf_data
 import surfpy
 import xml.etree.ElementTree as ET
 import sys
+import sqlite3
 
 sys.path.insert(0, "..")
 
@@ -22,6 +23,13 @@ for child in root:
         "latitude": float(child.attrib["lat"]),
     }
 
+def get_db_connection():
+    conn = sqlite3.connect("database.db", detect_types=sqlite3.PARSE_COLNAMES)
+    return conn
+
+connection = get_db_connection()
+with open("schema.sql") as f:
+    connection.executescript(f.read())
 
 def generateWaveForecast(selectedLocation):
     lat = locations_dict[selectedLocation]["latitude"]

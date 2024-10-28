@@ -5,11 +5,7 @@ import datetime
 import sqlite3
 import pickle
 from new_data import retrieveNewData
-
-
-def get_db_connection():
-    conn = sqlite3.connect("database.db", detect_types=sqlite3.PARSE_COLNAMES)
-    return conn
+import main
 
 
 def get_wave_forecast(
@@ -18,7 +14,7 @@ def get_wave_forecast(
     wave_model: surfpy.WaveModel,
     hours_to_forecast=24,
 ) -> list[surfpy.buoydata.BuoyData] | None:
-    conn = get_db_connection()
+    conn = main.get_db_connection()
     database_data = conn.execute("SELECT * FROM waveData").fetchall()
 
     for line in database_data:

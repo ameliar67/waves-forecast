@@ -1,7 +1,7 @@
 import surfpy
 import pickle
 import surf_data
-
+import main
 
 def retrieveNewData(wave_model, hours_to_forecast, wave_location, wind_location):
 
@@ -20,9 +20,7 @@ def retrieveNewData(wave_model, hours_to_forecast, wave_location, wind_location)
 
     serialised_array = pickle.dumps(wave_data)
 
-    connection = surf_data.get_db_connection()
-    with open("schema.sql") as f:
-        connection.executescript(f.read())
+    connection = main.get_db_connection()
 
     cur = connection.cursor()
     cur.execute(
