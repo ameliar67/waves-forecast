@@ -16,6 +16,18 @@ p{
 }
 
 .current-wave-height    {
+    margin-top: 50px;
     font-size: 35px;
     font-weight: bold;
+}
+
+form{
+    display:flex;
+    align-items:center;
+    padding: 50px;
+}
+
+select  {
+    margin-left: 20px;
+    margin-right: 20px;
 }

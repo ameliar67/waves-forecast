@@ -13,6 +13,8 @@
 
         <h1>Welcome to Wave Forecast</h1>
 
+        <p>Weather Station Location: {{ location }}</p>
+
         <form action="/forecast.html" method="post">
 
             <label for="location">Choose a weather station:</label>
@@ -26,6 +28,12 @@
             <input type="submit" value="Submit">
 
           </form>
+
+        <p>Current Wave Height: </p>
+
+        <p class="current-wave-height">{{ current_wave_height }} feet</p>
+
+        <img src="data:image/png;base64, {{ plot_url }}">
 
     </div>
 
@@ -44,4 +52,3 @@
 </body>
 
 </html>
-
