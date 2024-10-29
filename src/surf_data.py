@@ -1,37 +1,33 @@
 import matplotlib.pyplot as plt
 import surfpy
 import matplotlib.dates as mdates
-import datetime
-import pickle
+from cache import Cache
 from new_data import retrieve_new_data
-import main
+import pickle
+import datetime
 
 
 def get_wave_forecast(
     wave_location: surfpy.Location,
     wind_location: surfpy.Location,
     wave_model: surfpy.WaveModel,
+    cache: Cache,
     hours_to_forecast=24,
 ) -> list[surfpy.buoydata.BuoyData] | None:
-    conn = main.get_db_connection()
-    database_data = conn.execute("SELECT * FROM waveData").fetchall()
+    key = f"{wave_location.name}"
+    cache_item = cache.get_item(key)
+    print("key", key)
 
-    for line in database_data:
-        time = line[1]
-        content = line[3]
-        location = line[4]
-        datetime_object = datetime.datetime.strptime(time, "%Y-%m-%d %H:%M:%S")
+    if cache_item is not None:
+        result = pickle.loads(cache_item)
+        return result
 
-        if (
-            datetime_object.day == datetime.datetime.now().day
-            and location == wave_location.name
-        ):
-            wave_data = pickle.loads(content)
-            conn.close()
-            return wave_data
+    result = retrieve_new_data(wave_model, hours_to_forecast, wave_location, wind_location)
+    expires_at = datetime.datetime.now().day + 1
+    result_cache_value = pickle.dumps(result)
+    cache.set_item(key, result_cache_value, expires_at)
 
-    conn.close()
-    return retrieve_new_data(wave_model, hours_to_forecast, wave_location, wind_location)
+    return result
 
 
 def get_chart(

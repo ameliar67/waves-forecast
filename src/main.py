@@ -3,7 +3,7 @@ import surf_data
 import surfpy
 import xml.etree.ElementTree as ET
 import sys
-import sqlite3
+from cache import Cache
 
 sys.path.insert(0, "..")
 
@@ -11,6 +11,8 @@ from flask import Flask, render_template, request
 from io import BytesIO
 
 app = Flask(__name__)
+cache = Cache("database.db")
+cache.migrate()
 
 locations_dict = {}
 
@@ -22,14 +24,6 @@ for child in root:
         "longitude": float(child.attrib["lon"]),
         "latitude": float(child.attrib["lat"]),
     }
-
-def get_db_connection():
-    conn = sqlite3.connect("database.db", detect_types=sqlite3.PARSE_COLNAMES)
-    return conn
-
-connection = get_db_connection()
-with open("schema.sql") as f:
-    connection.executescript(f.read())
 
 def generate_wave_forecast(selectedLocation):
     lat = locations_dict[selectedLocation]["latitude"]
@@ -43,6 +37,7 @@ def generate_wave_forecast(selectedLocation):
         wave_location=location,
         wind_location=location,
         wave_model=surfpy.wavemodel.us_west_coast_gfs_wave_model(),
+        cache=cache,
     )
 
     if not wave_forecast:
