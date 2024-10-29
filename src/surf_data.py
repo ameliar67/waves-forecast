@@ -2,9 +2,8 @@ import matplotlib.pyplot as plt
 import surfpy
 import matplotlib.dates as mdates
 import datetime
-import sqlite3
 import pickle
-from new_data import retrieveNewData
+from new_data import retrieve_new_data
 import main
 
 
@@ -32,7 +31,7 @@ def get_wave_forecast(
             return wave_data
 
     conn.close()
-    return retrieveNewData(wave_model, hours_to_forecast, wave_location, wind_location)
+    return retrieve_new_data(wave_model, hours_to_forecast, wave_location, wind_location)
 
 
 def get_chart(

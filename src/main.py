@@ -31,7 +31,7 @@ connection = get_db_connection()
 with open("schema.sql") as f:
     connection.executescript(f.read())
 
-def generateWaveForecast(selectedLocation):
+def generate_wave_forecast(selectedLocation):
     lat = locations_dict[selectedLocation]["latitude"]
     lon = locations_dict[selectedLocation]["longitude"]
     location = surfpy.Location(lat, lon, altitude=0, name=selectedLocation)
@@ -51,7 +51,7 @@ def generateWaveForecast(selectedLocation):
     return wave_forecast
 
 
-def generateImage(dataforImage):
+def generate_image(dataforImage):
     img = BytesIO()
     fig = surf_data.get_chart(dataforImage, surfpy.units.Units.english)
     fig.savefig(img, format="png")
@@ -68,8 +68,8 @@ def location_selection():
 @app.route("/forecast.html", methods=["GET", "POST"])
 def wave_forecast():
     selectedLocation = request.form.get("location")
-    waves = generateWaveForecast(selectedLocation)
-    image = generateImage(waves)
+    waves = generate_wave_forecast(selectedLocation)
+    image = generate_image(waves)
 
     summary = [x.wave_summary.wave_height for x in waves]
 

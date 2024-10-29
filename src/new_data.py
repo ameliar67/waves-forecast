@@ -1,9 +1,8 @@
 import surfpy
 import pickle
-import surf_data
 import main
 
-def retrieveNewData(wave_model, hours_to_forecast, wave_location, wind_location):
+def retrieve_new_data(wave_model, hours_to_forecast, wave_location, wind_location):
 
     wave_grib_data = wave_model.fetch_grib_datas(0, hours_to_forecast)
     raw_wave_data = wave_model.parse_grib_datas(wave_location, wave_grib_data)
