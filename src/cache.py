@@ -17,8 +17,8 @@ class Cache:
         return row[1]
 
 
-    def set_item(self, key, value, expiry):
-        self.conn.execute("INSERT INTO cache (key, value, expiry) VALUES (?, ?, ?)", [key, value, expiry])
+    def set_item(self, key, value, expiry, wave_height):
+        self.conn.execute("INSERT INTO cache (key, value, expiry, wave_height) VALUES (?, ?, ?, ?)", [key, value, expiry, wave_height])
 
     def close(self):
         self.conn.close()
