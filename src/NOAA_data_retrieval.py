@@ -1,10 +1,7 @@
 import surfpy
 from math import isnan
 from math import isnan
-from typing import List
 from surfpy import units
-from surfpy.basedata import BaseData
-from surfpy import BuoyData
 import matplotlib.dates as mdates
 import matplotlib.pyplot as plt
 
