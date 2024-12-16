@@ -4,7 +4,6 @@
 <head>
     <meta charset="UTF-8">
     <title>Wave Forecast</title>
-    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/styles.css') }}">
 </head>
 
 <body>
@@ -19,8 +18,10 @@
 
             <label for="location">Choose a weather station:</label>
 
-            <select name="location" id="location">
-              <!-- Dropdown options will be injected here -->
+            <select name="location-list" id="location-list">
+              {% for loc in locations  %}
+                <option>{{ loc }}</option>
+              {% endfor %}
             </select>
 
             <br><br>

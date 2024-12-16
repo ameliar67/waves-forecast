@@ -4,9 +4,12 @@ import xml.etree.ElementTree as ET
 from cache import Cache
 import os
 from starlette.applications import Starlette
+from starlette.templating import Jinja2Templates
 from starlette.responses import HTMLResponse
 from starlette.requests import Request
 from starlette.routing import Route
+
+templates = Jinja2Templates(directory='templates')
 
 path = os.path.dirname(os.path.abspath(__file__))
 db = os.path.join(path, 'database.db')
@@ -42,40 +45,27 @@ def generate_wave_forecast(selected_location):
     return wave_forecast
 
 async def landing_page(request):
-    with open("templates/index.html", "r") as file:
-        html_content = file.read()
 
-    locations = locations_dict.keys()
+    context = {'request': request, 'locations': locations_dict.keys()}
 
-    dropdown_placeholder = "<select name=\"location\" id=\"location\">"
-    options = "".join([f'<option value="{location}">{location}</option>' for location in locations])
-
-    html_content = html_content.replace("<select name=\"location\" id=\"location\">", dropdown_placeholder + options)
-
-    return HTMLResponse(html_content)
+    return templates.TemplateResponse("index.html", context)
 
 
 async def forecast(request: Request):
     form_data = await request.form()
-
-    selected_location = form_data.get('location')
+    selected_location = form_data.get('location-list')
     plot_image = generate_wave_forecast(selected_location)
-
-    with open("templates/forecast.html", "r") as file:
-        html_content = file.read()
 
     try:
 
-        locations = locations_dict.keys()
+        context = {
+            'request': request,
+            'locations': locations_dict.keys(),
+            'plot_url': plot_image,
+            'location': selected_location
+        }
 
-        dropdown_placeholder = "<select name=\"location\" id=\"location\">"
-        options = "".join([f'<option value="{location}">{location}</option>' for location in locations])
-
-        html_content = html_content.replace("<select name=\"location\" id=\"location\">", dropdown_placeholder + options)
-        html_content = html_content.replace("{{ plot_url }}", plot_image)
-        html_content = html_content.replace("{{ location }}", selected_location)
-
-        return HTMLResponse(html_content)
+        return templates.TemplateResponse("forecast.html", context)
 
     except Exception as e:
         error_html = f'''
