@@ -15,13 +15,11 @@ class Cache:
         if row is None:
             return None
 
-        # TODO - validate expiry
-        if row["TODO"] < datetime.datetime.now().day:
+        if row[1] < datetime.datetime.now().day:
             self.conn.execute("DELETE FROM cache WHERE key = ?;", [key])
             return None
 
-        # TODO - return value
-        # return value
+        return row[0]
 
     def set_item(self, key, value, expiry):
         self.conn.execute("INSERT INTO cache (key, value, expiry) VALUES (?, ?, ?)", [key, value, expiry])
