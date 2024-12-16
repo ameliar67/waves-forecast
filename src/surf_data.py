@@ -6,6 +6,7 @@ import datetime
 import base64
 from io import BytesIO
 
+
 def get_wave_forecast(
     wave_model: str,
     cache: Cache,
@@ -18,7 +19,7 @@ def get_wave_forecast(
     location.depth = 10.0
     location.angle = 200.0
     location.slope = 0.28
-    
+
     key = f"{location.name}"
     cache_item = cache.get_item(key)
 

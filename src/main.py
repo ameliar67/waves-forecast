@@ -9,17 +9,19 @@ from starlette.responses import HTMLResponse
 from starlette.requests import Request
 from starlette.routing import Route
 
-templates = Jinja2Templates(directory='templates')
+templates = Jinja2Templates(directory="templates")
 
 path = os.path.dirname(os.path.abspath(__file__))
-db = os.path.join(path, 'database.db')
+db = os.path.join(path, "database.db")
 
 cache = Cache(db)
 cache.migrate()
 
 locations_dict = {}
 
-tree = ET.parse(os.path.join(path, "../libs/surfpy/surfpy/tests/data/activestations.xml"))
+tree = ET.parse(
+    os.path.join(path, "../libs/surfpy/surfpy/tests/data/activestations.xml")
+)
 root = tree.getroot()
 for child in root:
     locations_dict[child.attrib["name"]] = {
@@ -44,44 +46,45 @@ def generate_wave_forecast(selected_location):
 
     return wave_forecast
 
+
 async def landing_page(request):
 
-    context = {'request': request, 'locations': locations_dict.keys()}
+    context = {"request": request, "locations": locations_dict.keys()}
 
     return templates.TemplateResponse("index.html", context)
 
 
 async def forecast(request: Request):
     form_data = await request.form()
-    selected_location = form_data.get('location-list')
+    selected_location = form_data.get("location-list")
     plot_image = generate_wave_forecast(selected_location)
 
     try:
 
         context = {
-            'request': request,
-            'locations': locations_dict.keys(),
-            'plot_url': plot_image,
-            'location': selected_location
+            "request": request,
+            "locations": locations_dict.keys(),
+            "plot_url": plot_image,
+            "location": selected_location,
         }
 
         return templates.TemplateResponse("forecast.html", context)
 
     except Exception as e:
-        error_html = f'''
+        error_html = f"""
         <html>
         <body>
             <h1>Error generating surf report: {e}</h1>
             <a href="/">Back to form</a>
         </body>
         </html>
-        '''
+        """
         return HTMLResponse(content=error_html, status_code=500)
-    
+
 
 routes = [
-    Route('/', landing_page),
-    Route('/forecast.html', forecast, methods=["POST"]),  
+    Route("/", landing_page),
+    Route("/forecast.html", forecast, methods=["POST"]),
 ]
 
 app = Starlette(debug=True, routes=routes)
