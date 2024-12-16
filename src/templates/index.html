@@ -17,8 +17,8 @@
 
             <label for="location">Choose a weather station:</label>
 
-            <select name="location" id="location-list">
-              <option value="location">Location</option>
+            <select name="location" id="location">
+              <!-- Dropdown options will be injected here -->
             </select>
 
             <br><br>
@@ -30,15 +30,15 @@
     </div>
 
     <script>
-      let select = document.getElementById("location-list")
-      let locations = "{{locations}}".split(", &#")
+      //let select = document.getElementById("location-list")
+      //let locations = "{{locations}}".split(", &#")
 
-      for(let i = 1; i < locations.length; i+=2)  {
-        let el = document.createElement("option");
-        el.textContent = locations[i].slice(3, -5);
-        el.value = locations[i].slice(3, -5);
-        select.appendChild(el);
-      }
+      //for(let i = 1; i < locations.length; i+=2)  {
+        //let el = document.createElement("option");
+        //el.textContent = locations[i].slice(3, -5);
+        //el.value = locations[i].slice(3, -5);
+        //select.appendChild(el);
+      //}
     </script>
 
 </body>

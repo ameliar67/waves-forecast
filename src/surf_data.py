@@ -13,8 +13,7 @@ def get_wave_forecast(
     lat=str,
     lon=str,
     hours_to_forecast=24,
-):
-    
+) -> str:
     location = surfpy.Location(lat, lon, altitude=0, name=selectedLocation)
     location.depth = 10.0
     location.angle = 200.0
@@ -24,12 +23,12 @@ def get_wave_forecast(
     cache_item = cache.get_item(key)
 
     if cache_item is not None:
-        result = json.loads(cache_item.read())
-        i = base64.b64decode(result)
-        return i
+        # TODO: cache hit and miss paths should return an identical result
+        # a caller should not observe a difference in behaviour (apart from latency) between cached vs fresh result
+        result = json.loads(cache_item)
+        return result
 
     image_data = retrieve_new_data(wave_model, hours_to_forecast, location)
-    wave_height = 1         #TODO
 
     img = BytesIO()
     image_data.savefig(img, format="png")
@@ -37,8 +36,6 @@ def get_wave_forecast(
 
     expires_at = datetime.datetime.now().day + 1
     serialized_object = json.dumps(plot_base64_image)
-    cache.set_item(key, serialized_object, expires_at, wave_height)
+    cache.set_item(key, serialized_object, expires_at)
 
-    return [plot_base64_image, wave_height]
-
-
+    return plot_base64_image

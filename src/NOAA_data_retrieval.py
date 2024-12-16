@@ -1,6 +1,5 @@
 import surfpy
 from math import isnan
-from math import isnan
 from surfpy import units
 import matplotlib.dates as mdates
 import matplotlib.pyplot as plt
@@ -77,7 +76,7 @@ def get_chart(
     return fig
 
 
-def retrieve_new_data(wave_model, hours_to_forecast, location):
+def retrieve_new_data(wave_model, hours_to_forecast, location) -> plt.Figure:
 
     wave_grib_data = wave_model.fetch_grib_datas(0, hours_to_forecast)
     raw_wave_data = wave_model.parse_grib_datas(location, wave_grib_data)
@@ -91,9 +90,9 @@ def retrieve_new_data(wave_model, hours_to_forecast, location):
 
     for d in wave_data:
         d.solve_breaking_wave_heights(location)
-    print(d.summary, "d.summary")
 
     res = change_units(wave_data, surfpy.units.Units.metric, surfpy.units.Units.metric)
+    #current_wave_height = round(res[0].wave_summary.wave_height)
 
     chart = get_chart(res)
 

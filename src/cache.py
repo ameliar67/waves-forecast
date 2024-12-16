@@ -9,16 +9,23 @@ class Cache:
         with open("schema.sql") as f:
             self.conn.executescript(f.read())
 
+    # TODO: row[n] relies on implicit ordering of columns in SELECT * result
     def get_item(self, key):
-        row = self.conn.execute("SELECT * FROM cache WHERE key = ?", [key]).fetchone()
-        if row is None or row[2] < datetime.datetime.now().day:
+        row = self.conn.execute("SELECT value, expiry FROM cache WHERE key = ?", [key]).fetchone()
+        if row is None:
             return None
 
-        return row[1]
+        # TODO - validate expiry
+        if row["TODO"] < datetime.datetime.now().day:
+            self.conn.execute("DELETE FROM cache WHERE key = ?;", [key])
+            return None
 
+        # TODO - return value
+        # return value
 
-    def set_item(self, key, value, expiry, wave_height):
-        self.conn.execute("INSERT INTO cache (key, value, expiry, wave_height) VALUES (?, ?, ?, ?)", [key, value, expiry, wave_height])
+    def set_item(self, key, value, expiry):
+        self.conn.execute("INSERT INTO cache (key, value, expiry) VALUES (?, ?, ?)", [key, value, expiry])
+        self.conn.commit()
 
     def close(self):
         self.conn.close()

@@ -1,20 +1,22 @@
 import surf_data
 import surfpy
 import xml.etree.ElementTree as ET
-import sys
 from cache import Cache
+import os
+from starlette.applications import Starlette
+from starlette.responses import HTMLResponse
+from starlette.requests import Request
+from starlette.routing import Route
 
-sys.path.insert(0, "..")
+path = os.path.dirname(os.path.abspath(__file__))
+db = os.path.join(path, 'database.db')
 
-from flask import Flask, render_template, request
-
-app = Flask(__name__)
-cache = Cache("database.db")
+cache = Cache(db)
 cache.migrate()
 
 locations_dict = {}
 
-tree = ET.parse("../libs/surfpy/surfpy/tests/data/activestations.xml")
+tree = ET.parse(os.path.join(path, "../libs/surfpy/surfpy/tests/data/activestations.xml"))
 root = tree.getroot()
 for child in root:
     locations_dict[child.attrib["name"]] = {
@@ -23,14 +25,15 @@ for child in root:
         "latitude": float(child.attrib["lat"]),
     }
 
-def generate_wave_forecast(selectedLocation):
+
+def generate_wave_forecast(selected_location):
 
     wave_forecast = surf_data.get_wave_forecast(
         wave_model=surfpy.wavemodel.us_west_coast_gfs_wave_model(),
         cache=cache,
-        selectedLocation=selectedLocation,
-        lat=locations_dict[selectedLocation]["latitude"],
-        lon=locations_dict[selectedLocation]["longitude"]
+        selectedLocation=selected_location,
+        lat=locations_dict[selected_location]["latitude"],
+        lon=locations_dict[selected_location]["longitude"],
     )
 
     if not wave_forecast:
@@ -38,29 +41,57 @@ def generate_wave_forecast(selectedLocation):
 
     return wave_forecast
 
+async def landing_page(request):
+    with open("templates/index.html", "r") as file:
+        html_content = file.read()
 
-@app.route("/", methods=["GET", "POST"])
-def location_selection():
-    return render_template("index.html", locations=locations_dict.keys())
+    locations = locations_dict.keys()
+
+    dropdown_placeholder = "<select name=\"location\" id=\"location\">"
+    options = "".join([f'<option value="{location}">{location}</option>' for location in locations])
+
+    html_content = html_content.replace("<select name=\"location\" id=\"location\">", dropdown_placeholder + options)
+
+    return HTMLResponse(html_content)
 
 
-@app.route("/forecast.html", methods=["GET", "POST"])
-def wave_forecast():
-    selectedLocation = request.form.get("location")
+async def forecast(request: Request):
+    form_data = await request.form()
+
+    selected_location = form_data.get('location')
+    plot_image = generate_wave_forecast(selected_location)
+
+    with open("templates/forecast.html", "r") as file:
+        html_content = file.read()
+
+    try:
+
+        locations = locations_dict.keys()
+
+        dropdown_placeholder = "<select name=\"location\" id=\"location\">"
+        options = "".join([f'<option value="{location}">{location}</option>' for location in locations])
+
+        html_content = html_content.replace("<select name=\"location\" id=\"location\">", dropdown_placeholder + options)
+        html_content = html_content.replace("{{ plot_url }}", plot_image)
+        html_content = html_content.replace("{{ location }}", selected_location)
+
+        return HTMLResponse(html_content)
+
+    except Exception as e:
+        error_html = f'''
+        <html>
+        <body>
+            <h1>Error generating surf report: {e}</h1>
+            <a href="/">Back to form</a>
+        </body>
+        </html>
+        '''
+        return HTMLResponse(content=error_html, status_code=500)
     
-    data = generate_wave_forecast(selectedLocation)
-    plot_image = data[0]
-    wave_height = data[1]
 
-    return render_template(
-        "forecast.html",
-        location=selectedLocation,
-        plot_url=plot_image,
-        current_wave_height=wave_height,
-        locations=locations_dict.keys(),
-        selectedLocation=selectedLocation,
-    )
+routes = [
+    Route('/', landing_page),  # Serve the landing page (index.html)
+    Route('/forecast.html', forecast, methods=["POST"]),  
+]
 
-
-if __name__ == "__main__":
-    app.run(debug=True)
+app = Starlette(debug=True, routes=routes)
