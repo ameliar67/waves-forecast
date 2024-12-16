@@ -9,7 +9,6 @@ class Cache:
         with open("schema.sql") as f:
             self.conn.executescript(f.read())
 
-    # TODO: row[n] relies on implicit ordering of columns in SELECT * result
     def get_item(self, key):
         row = self.conn.execute("SELECT value, expiry FROM cache WHERE key = ?", [key]).fetchone()
         if row is None:
