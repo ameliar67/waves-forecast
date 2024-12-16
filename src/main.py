@@ -90,7 +90,7 @@ async def forecast(request: Request):
     
 
 routes = [
-    Route('/', landing_page),  # Serve the landing page (index.html)
+    Route('/', landing_page),
     Route('/forecast.html', forecast, methods=["POST"]),  
 ]
 
