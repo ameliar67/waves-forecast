@@ -9,7 +9,7 @@ class Cache:
         with open("schema.sql") as f:
             self.conn.executescript(f.read())
 
-    def get_item(self, key):
+    def get_item(self, key) -> None:
         row = self.conn.execute("SELECT value, expiry FROM cache WHERE key = ?", [key]).fetchone()
         if row is None:
             return None
@@ -20,9 +20,9 @@ class Cache:
 
         return row[0]
 
-    def set_item(self, key, value, expiry):
+    def set_item(self, key, value, expiry) -> None:
         self.conn.execute("INSERT INTO cache (key, value, expiry) VALUES (?, ?, ?)", [key, value, expiry])
         self.conn.commit()
 
-    def close(self):
+    def close(self) -> None:
         self.conn.close()
