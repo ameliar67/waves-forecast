@@ -5,9 +5,9 @@ from cache import Cache
 import os
 from starlette.applications import Starlette
 from starlette.templating import Jinja2Templates
-from starlette.responses import HTMLResponse
 from starlette.requests import Request
-from starlette.routing import Route
+from starlette.routing import Route, Mount
+from starlette.staticfiles import StaticFiles
 
 templates = Jinja2Templates(directory="templates")
 
@@ -72,13 +72,13 @@ async def forecast(request: Request):
 
     except Exception as e:
         context = {"request": request, "error": e}
-
         return templates.TemplateResponse("404.html", context)
 
 
 routes = [
     Route("/", landing_page),
     Route("/forecast.html", forecast, methods=["POST"]),
+    Mount("/static", app=StaticFiles(directory="static"), name="static")
 ]
 
 app = Starlette(debug=True, routes=routes)
