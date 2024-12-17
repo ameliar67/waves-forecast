@@ -71,15 +71,9 @@ async def forecast(request: Request):
         return templates.TemplateResponse("forecast.html", context)
 
     except Exception as e:
-        error_html = f"""
-        <html>
-        <body>
-            <h1>Error generating surf report: {e}</h1>
-            <a href="/">Back to form</a>
-        </body>
-        </html>
-        """
-        return HTMLResponse(content=error_html, status_code=500)
+        context = {"request": request, "error": e}
+
+        return templates.TemplateResponse("404.html", context)
 
 
 routes = [
