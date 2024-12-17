@@ -36,7 +36,7 @@ def generate_wave_forecast(selected_location):
     wave_forecast = surf_data.get_wave_forecast(
         wave_model=surfpy.wavemodel.us_west_coast_gfs_wave_model(),
         cache=cache,
-        selectedLocation=selected_location,
+        selected_location=selected_location,
         lat=locations_dict[selected_location]["latitude"],
         lon=locations_dict[selected_location]["longitude"],
     )
@@ -50,7 +50,6 @@ def generate_wave_forecast(selected_location):
 async def landing_page(request):
 
     context = {"request": request, "locations": locations_dict.keys()}
-
     return templates.TemplateResponse("index.html", context)
 
 
