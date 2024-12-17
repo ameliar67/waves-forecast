@@ -5,17 +5,18 @@ import json
 import datetime
 import base64
 from io import BytesIO
+from models import SurfReportRequest
 
 
 def get_wave_forecast(
     wave_model: str,
     cache: Cache,
-    selectedLocation: surfpy.Location,
+    selected_location: surfpy.Location,
     lat=str,
     lon=str,
     hours_to_forecast=24,
 ) -> str:
-    location = surfpy.Location(lat, lon, altitude=0, name=selectedLocation)
+    location = surfpy.Location(lat, lon, altitude=0, name=selected_location)
     location.depth = 10.0
     location.angle = 200.0
     location.slope = 0.28
@@ -29,7 +30,14 @@ def get_wave_forecast(
         result = json.loads(cache_item)
         return result
 
-    image_data = retrieve_new_data(wave_model, hours_to_forecast, location)
+    input_data = {
+        wave_model: wave_model,
+        hours_to_forecast: hours_to_forecast,
+        selected_location: location
+    }
+
+    input = SurfReportRequest(**input_data)
+    image_data = retrieve_new_data(input.wave_model, input.hours_to_forecast, input.location)
 
     img = BytesIO()
     image_data.savefig(img, format="png")
