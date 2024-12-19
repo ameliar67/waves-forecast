@@ -66,7 +66,8 @@ async def forecast(request: Request):
             "locations": locations_dict.keys(),
             "plot_url": data.chart,
             "location": selected_location,
-            "current_wave_height": data.wave_height
+            "current_wave_height": data.wave_height,
+            "units": surfpy.units.unit_name(surfpy.units.Units.metric, surfpy.units.Measurement.length)
         }
 
         return templates.TemplateResponse("forecast.html", context)
