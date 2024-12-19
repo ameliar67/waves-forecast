@@ -28,9 +28,9 @@ def get_wave_forecast(
         # TODO: cache hit and miss paths should return an identical result
         # a caller should not observe a difference in behaviour (apart from latency) between cached vs fresh result
         cache_item['chart'] = json.loads(cache_item['chart'])
-        data = SurfReportResponse(**cache_item)
+        response = SurfReportResponse(**cache_item)
 
-        return data
+        return response
 
 
     # call retrieve_new_data for new forecast
@@ -47,9 +47,9 @@ def get_wave_forecast(
     # set_item in cache
     cache.set_item(key, serialized_object, wave_height, expires_at)
 
-    return_data = SurfReportResponse(**{
+    response = SurfReportResponse(**{
         'chart': plot_base64_image,
         'wave_height': forecast_data['current_wave_height']
     })
 
-    return return_data
+    return response
