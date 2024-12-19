@@ -5,7 +5,7 @@ import json
 import datetime
 import base64
 from io import BytesIO
-from models import SurfReportRequest
+from models import SurfReportResponse
 
 
 def get_wave_forecast(
@@ -15,7 +15,7 @@ def get_wave_forecast(
     lat=str,
     lon=str,
     hours_to_forecast=24,
-) -> str:
+) -> object:
     location = surfpy.Location(lat, lon, altitude=0, name=selected_location)
     location.depth = 10.0
     location.angle = 200.0
@@ -27,24 +27,29 @@ def get_wave_forecast(
     if cache_item is not None:
         # TODO: cache hit and miss paths should return an identical result
         # a caller should not observe a difference in behaviour (apart from latency) between cached vs fresh result
-        result = json.loads(cache_item)
-        return result
+        cache_item['chart'] = json.loads(cache_item['chart'])
+        data = SurfReportResponse(**cache_item)
 
-    input_data = {
-        wave_model: wave_model,
-        hours_to_forecast: hours_to_forecast,
-        selected_location: location
-    }
+        return data
 
-    input = SurfReportRequest(**input_data)
-    image_data = retrieve_new_data(input.wave_model, input.hours_to_forecast, input.location)
+
+    # call retrieve_new_data for new forecast
+    forecast_data = retrieve_new_data(wave_model, hours_to_forecast, location)
 
     img = BytesIO()
-    image_data.savefig(img, format="png")
+    forecast_data['chart'].savefig(img, format="png")
     plot_base64_image = base64.b64encode(img.getvalue()).decode("utf8")
 
     expires_at = datetime.datetime.now().day + 1
     serialized_object = json.dumps(plot_base64_image)
-    cache.set_item(key, serialized_object, expires_at)
+    wave_height = forecast_data['current_wave_height']
 
-    return plot_base64_image
+    # set_item in cache
+    cache.set_item(key, serialized_object, wave_height, expires_at)
+
+    return_data = SurfReportResponse(**{
+        'chart': plot_base64_image,
+        'wave_height': forecast_data['current_wave_height']
+    })
+
+    return return_data

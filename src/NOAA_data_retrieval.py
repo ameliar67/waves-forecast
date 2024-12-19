@@ -92,8 +92,13 @@ def retrieve_new_data(wave_model, hours_to_forecast, location) -> plt.Figure:
         d.solve_breaking_wave_heights(location)
 
     res = change_units(wave_data, surfpy.units.Units.metric, surfpy.units.Units.metric)
-    #current_wave_height = round(res[0].wave_summary.wave_height)
+    current_wave_height = round(res[0].wave_summary.wave_height)
 
     chart = get_chart(res)
 
-    return chart
+    forecast_data = {
+        'chart': chart,
+        'current_wave_height': current_wave_height
+    }
+
+    return forecast_data

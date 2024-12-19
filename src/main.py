@@ -56,15 +56,17 @@ async def landing_page(request):
 async def forecast(request: Request):
     form_data = await request.form()
     selected_location = form_data.get("location-list")
-    plot_image = generate_wave_forecast(selected_location)
+
+    data = generate_wave_forecast(selected_location)
 
     try:
 
         context = {
             "request": request,
             "locations": locations_dict.keys(),
-            "plot_url": plot_image,
+            "plot_url": data.chart,
             "location": selected_location,
+            "current_wave_height": data.wave_height
         }
 
         return templates.TemplateResponse("forecast.html", context)
