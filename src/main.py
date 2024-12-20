@@ -8,6 +8,8 @@ from starlette.templating import Jinja2Templates
 from starlette.requests import Request
 from starlette.routing import Route, Mount
 from starlette.staticfiles import StaticFiles
+from starlette.responses import HTMLResponse, JSONResponse
+from starlette.exceptions import HTTPException
 
 templates = Jinja2Templates(directory="templates")
 
@@ -18,6 +20,9 @@ cache = Cache(db)
 cache.migrate()
 
 locations_dict = {}
+
+HTML_404_PAGE = os.path.join(path, "../templates/404.html")
+HTML_500_PAGE = os.path.join(path, "../templates/500.html")
 
 tree = ET.parse(
     os.path.join(path, "../libs/surfpy/surfpy/tests/data/activestations.xml")
@@ -59,9 +64,7 @@ async def forecast(request: Request):
 
     data = generate_wave_forecast(selected_location)
 
-    try:
-
-        context = {
+    context = {
             "request": request,
             "locations": locations_dict.keys(),
             "plot_url": data.chart,
@@ -70,12 +73,17 @@ async def forecast(request: Request):
             "units": surfpy.units.unit_name(surfpy.units.Units.metric, surfpy.units.Measurement.length)
         }
 
-        return templates.TemplateResponse("forecast.html", context)
+    return templates.TemplateResponse("forecast.html", context)
 
-    except Exception as e:
-        context = {"request": request, "error": e}
-        return templates.TemplateResponse("404.html", context)
 
+async def not_found(request: Request, exc: HTTPException):
+    return HTMLResponse(content=HTML_404_PAGE, status_code=exc.status_code)
+
+async def server_error(request: Request, exc: HTTPException):
+    return HTMLResponse(content=HTML_500_PAGE, status_code=exc.status_code)
+
+async def handle_error(request: Request, exc: HTTPException):
+    return JSONResponse({"detail": exc.detail}, status_code=exc.status_code)
 
 routes = [
     Route("/", landing_page),
@@ -83,4 +91,10 @@ routes = [
     Mount("/static", app=StaticFiles(directory="static"), name="static")
 ]
 
-app = Starlette(debug=True, routes=routes)
+exception_handlers = {
+    404: not_found,
+    500: server_error,
+    Exception: handle_error
+}
+
+app = Starlette(debug=True, routes=routes, exception_handlers=exception_handlers)
