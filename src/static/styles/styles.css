@@ -1,33 +1,107 @@
-h1{
-    font-family: sans-serif;
+html *  {
+    font-family: "Inter";
 }
 
-p{
-    font-family: sans-serif;
-    font-size: 20px;
-    line-height: 0.2em;
+html, body  {
+    height: 100%;
 }
 
-.main-container {
-    display: flex;
-    align-items: center;
-    margin: 50px;
-    flex-direction: column;
+h1  {
+    font-size: 3.5em;
 }
 
-.current-wave-height    {
-    margin-top: 50px;
-    font-size: 35px;
+p  {
+    font-size: 2em;
+}
+
+h1, html, body, .current_wave_height_text  {
+    margin: 0;
+}
+
+img, .forecast_header {
+    width: 100%;
+}
+
+#current-wave-height, .wave_and_weather_title, .wave_height  {
     font-weight: bold;
 }
 
-form{
-    display:flex;
-    align-items:center;
-    padding: 50px;
+#main-container, .location_form  {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
 }
 
-select  {
-    margin-left: 20px;
-    margin-right: 20px;
+#current-wave-height  {
+    margin-top: 50px;
+    font-size: 1em;
 }
+
+.forecast_header  {
+    display: flex;
+    justify-content: space-between;
+}
+
+.wave_and_weather_title  {
+    font-size: 1.5em;
+    padding: 1em;
+}
+
+.title_form_text  {
+    font-size: 1.5em;
+    padding: 1em;
+}
+
+.landing_page  {
+    align-content: center;
+}
+
+.wave_height  {
+    font-size: 3em;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.current_wave_height_text  {
+    font-size: 1.3em;
+}
+
+.form-group  {
+    display: flex;
+    align-items: center;
+}
+
+#location_list  {
+    max-width: 400px;
+    padding: 10px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.location_form  {
+    margin: 20px;
+}
+
+  #submit_button  {
+    width: 80%;
+    padding: 12px;
+    background-color: #00b5bb;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin: 10px;
+}
+
+  #submit_button:hover  {
+    background-color: #006381;
+}
+
+  @media (max-width: 500px)  {
+    .location_form  {
+      padding: 20px;
+  }
+}
+

@@ -7,17 +7,16 @@
     <link href="{{ url_for('static', path='/styles/styles.css') }}" rel="stylesheet" />
 </head>
 
-<body>
+<body class="landing_page">
 
-    <div class="main-container">
+    <div id="main-container">
 
-        <h1>Welcome to Wave Forecast</h1>
+        <h1 class="landing_page_title">Wave & Weather Forecast</h1>
 
-        <form action="/forecast.html" method="post">
+        <form class="location_form" id="location_form" action="/forecast.html" method="post">
 
-            <label for="location">Choose a weather station:</label>
-
-            <select name="location-list" id="location-list">
+            <select name="location-list" id="location_list">
+              <option value="" disabled selected>Choose a Location</option>
               {% for loc in locations  %}
                 <option>{{ loc }}</option>
               {% endfor %}
@@ -25,7 +24,7 @@
 
             <br><br>
 
-            <input type="submit" value="Submit">
+            <input type="submit" id="submit_button" value="Submit">
 
           </form>
 

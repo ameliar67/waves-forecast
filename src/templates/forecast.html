@@ -9,17 +9,18 @@
 
 <body>
 
-    <div class="main-container">
+    <div id="main-container">
 
-        <h1>Welcome to Wave Forecast</h1>
+      <div class="forecast_header">
 
-        <p>Weather Station Location: {{ location }}</p>
+        <p class="wave_and_weather_title">Wave and Weather Forecast</p>
 
-        <form action="/forecast.html" method="post">
+        <p class="title_form_text">{{ location }}</p>
 
-            <label for="location">Choose a weather station:</label>
-
-            <select name="location-list" id="location-list">
+        <form class="location_form" id="location_form" action="/forecast.html" method="post">
+            <div class="form-group">
+            <select name="location-list" id="location_list">
+              <option value="" disabled selected>Choose a Location...</option>
               {% for loc in locations  %}
                 <option>{{ loc }}</option>
               {% endfor %}
@@ -27,11 +28,15 @@
 
             <br><br>
 
-            <input type="submit" value="Submit">
+            <input id="submit_button" type="submit" value="Submit">
+          </div>
 
           </form>
 
-        <p>Current Wave Height: {{ current_wave_height }} {{ units }}</p>
+        </div>
+
+        <p class="current_wave_height_text" id="current_wave_height">Current Wave Height: </p>
+        <p class="wave_height">{{ current_wave_height }} {{ units }}</p>
 
         <img src="data:image/png;base64, {{ plot_url }}">
 
