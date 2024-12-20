@@ -19,7 +19,7 @@
 
         <form class="location_form" id="location_form" action="/forecast.html" method="post">
             <div class="form-group">
-            <select name="location-list" id="location_list">
+            <select name="location-list" id="location_list" required>
               <option value="" disabled selected>Choose a Location...</option>
               {% for loc in locations  %}
                 <option>{{ loc }}</option>
