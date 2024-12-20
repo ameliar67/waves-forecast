@@ -65,13 +65,15 @@ async def forecast(request: Request):
     data = generate_wave_forecast(selected_location)
 
     context = {
-            "request": request,
-            "locations": locations_dict.keys(),
-            "plot_url": data.chart,
-            "location": selected_location,
-            "current_wave_height": data.wave_height,
-            "units": surfpy.units.unit_name(surfpy.units.Units.metric, surfpy.units.Measurement.length)
-        }
+        "request": request,
+        "locations": locations_dict.keys(),
+        "plot_url": data.chart,
+        "location": selected_location,
+        "current_wave_height": data.wave_height,
+        "units": surfpy.units.unit_name(
+            surfpy.units.Units.metric, surfpy.units.Measurement.length
+        ),
+    }
 
     return templates.TemplateResponse("forecast.html", context)
 
@@ -79,22 +81,21 @@ async def forecast(request: Request):
 async def not_found(request: Request, exc: HTTPException):
     return HTMLResponse(content=HTML_404_PAGE, status_code=exc.status_code)
 
+
 async def server_error(request: Request, exc: HTTPException):
     return HTMLResponse(content=HTML_500_PAGE, status_code=exc.status_code)
+
 
 async def handle_error(request: Request, exc: HTTPException):
     return JSONResponse({"detail": exc.detail}, status_code=exc.status_code)
 
+
 routes = [
     Route("/", landing_page),
     Route("/forecast.html", forecast, methods=["POST"]),
-    Mount("/static", app=StaticFiles(directory="static"), name="static")
+    Mount("/static", app=StaticFiles(directory="static"), name="static"),
 ]
 
-exception_handlers = {
-    404: not_found,
-    500: server_error,
-    Exception: handle_error
-}
+exception_handlers = {404: not_found, 500: server_error, Exception: handle_error}
 
 app = Starlette(debug=True, routes=routes, exception_handlers=exception_handlers)
