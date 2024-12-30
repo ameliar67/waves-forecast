@@ -59,7 +59,6 @@ def get_wave_forecast(
         return closest_buoy
 
     result = find_closest_buoy(buoyStations, test_location)
-    print('result')
 
     img = BytesIO()
     forecast_data['chart'].savefig(img, format="png")

@@ -25,7 +25,6 @@ locations_dict = {}
 HTML_404_PAGE = os.path.join(path, "../templates/404.html")
 HTML_500_PAGE = os.path.join(path, "../templates/500.html")
 
-
 tree = ET.parse(
     os.path.join(path, "../libs/surfpy/surfpy/tests/data/activestations.xml")
 )
