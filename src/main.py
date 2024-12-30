@@ -1,4 +1,5 @@
 import surf_data
+import map
 import surfpy
 import xml.etree.ElementTree as ET
 from cache import Cache
@@ -23,6 +24,7 @@ locations_dict = {}
 
 HTML_404_PAGE = os.path.join(path, "../templates/404.html")
 HTML_500_PAGE = os.path.join(path, "../templates/500.html")
+
 
 tree = ET.parse(
     os.path.join(path, "../libs/surfpy/surfpy/tests/data/activestations.xml")
@@ -54,7 +56,8 @@ def generate_wave_forecast(selected_location):
 
 async def landing_page(request):
 
-    context = {"request": request, "locations": locations_dict.keys()}
+    worldMap = map.generate_map()
+    context = {"request": request, "locations": locations_dict.keys(), "world_map": worldMap}
     return templates.TemplateResponse("index.html", context)
 
 
@@ -92,6 +95,7 @@ async def handle_error(request: Request, exc: HTTPException):
 
 routes = [
     Route("/", landing_page),
+    Mount("/templates", app=StaticFiles(directory="templates"), name="template"),
     Route("/forecast.html", forecast, methods=["POST"]),
     Mount("/static", app=StaticFiles(directory="static"), name="static"),
 ]
