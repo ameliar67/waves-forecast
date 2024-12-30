@@ -22,6 +22,19 @@ def generate_map() :
     )
         ).add_to(marker_cluster)
 
+    css = """
+    <style>
+    #map {
+        position: absolute !important;
+        top: 35% !important;
+        height: 70% !important;
+    }
+    </style>
+    """
+
+    m.get_root().html.add_child(folium.Element(css))
+
+
     map_string = m.get_root().render()
 
     return map_string
