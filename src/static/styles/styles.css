@@ -52,9 +52,6 @@ img, .forecast_header {
     padding: 1em;
 }
 
-.landing_page  {
-    align-content: center;
-}
 
 .wave_height  {
     font-size: 3em;
@@ -97,10 +94,6 @@ img, .forecast_header {
 
   #submit_button:hover  {
     background-color: #006381;
-}
-
-#map    {
-    height: 20%;
 }
 
   @media (max-width: 500px)  {
