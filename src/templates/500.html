@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <title>404 Error</title>
+        <link href="{{ url_for('static', path='/styles/styles.css') }}" rel="stylesheet" />
+    </head>
+
+    <body>
+        <h1>Error generating surf report: {{ detail }}</h1>
+        <a href="/">Back to form</a>
+    </body>
+
+</html>
