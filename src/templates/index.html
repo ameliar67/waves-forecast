@@ -15,22 +15,33 @@
 
         <form class="location_form" id="location_form" action="/forecast.html" method="post">
 
-            <select name="location-list" id="location_list" required>
-              <option value="" disabled selected>Choose a Location</option>
-              {% for loc in locations  %}
+            <select name="location-list" id="location_list">
+                <option value="" disabled selected>Choose a Location</option>
+                {% for loc in locations %}
                 <option>{{ loc }}</option>
-              {% endfor %}
+                {% endfor %}
             </select>
 
             <br><br>
 
             <input type="submit" id="submit_button" value="Submit">
+            <!-- <iframe src="templates/world_map.html" width="650px" height="500px" allow="same-origin"></iframe> -->
 
-          </form>
+        </form>
+        <div id="map">
+            {{ world_map | safe }}
+        </div>
 
     </div>
+
+    <script>
+        function goToForecastPage(locationId) {
+            var select = document.getElementById('location_list');
+            select.value = locationId;
+            document.getElementById('location_form').submit();
+        }
+    </script>
 
 </body>
 
 </html>
-
