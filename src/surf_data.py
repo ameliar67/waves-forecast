@@ -36,6 +36,31 @@ def get_wave_forecast(
     # call retrieve_new_data for new forecast
     forecast_data = retrieve_new_data(wave_model, hours_to_forecast, location)
 
+    buoyStations = surfpy.BuoyStations()
+    buoyStations.fetch_stations()
+    test_location = surfpy.Location(36.7783, -119.4179)
+
+    def find_closest_buoy(s, location, active=False):
+        if len(s.stations) < 1:
+            return None
+
+        closest_buoy = None
+        closest_distance = float('inf')
+
+        for station in s.stations:
+            if active and not station.active:
+                continue
+
+            dist = location.distance(station.location)
+            if dist < closest_distance:
+                closest_buoy = station
+                closest_distance = dist
+
+        return closest_buoy
+
+    result = find_closest_buoy(buoyStations, test_location)
+    print('result')
+
     img = BytesIO()
     forecast_data['chart'].savefig(img, format="png")
     plot_base64_image = base64.b64encode(img.getvalue()).decode("utf8")
