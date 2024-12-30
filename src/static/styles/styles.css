@@ -99,6 +99,10 @@ img, .forecast_header {
     background-color: #006381;
 }
 
+#map    {
+    height: 20%;
+}
+
   @media (max-width: 500px)  {
     .location_form  {
       padding: 20px;
