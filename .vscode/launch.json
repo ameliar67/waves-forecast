@@ -7,10 +7,14 @@
             "processId": "${command:pickProcess}"
         },
         {
-            "name": "Python Debugger: Python File",
+            "name": "Python Debugger: uvicorn",
             "type": "debugpy",
             "request": "launch",
-            "program": "${file}"
+            "cwd": "${workspaceFolder}/src",
+            "module": "uvicorn",
+            "args": [
+                "main:app"
+            ]
         }
     ]
 }

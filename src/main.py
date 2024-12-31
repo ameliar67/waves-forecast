@@ -36,6 +36,8 @@ for child in root:
         "latitude": float(child.attrib["lat"]),
     }
 
+sorted_dict = dict(sorted(locations_dict.items()))
+
 
 def generate_wave_forecast(selected_location):
 
@@ -56,7 +58,7 @@ def generate_wave_forecast(selected_location):
 async def landing_page(request):
 
     worldMap = map.generate_map()
-    context = {"request": request, "locations": locations_dict.keys(), "world_map": worldMap}
+    context = {"request": request, "locations": sorted_dict.keys(), "world_map": worldMap}
     return templates.TemplateResponse("index.html", context)
 
 
