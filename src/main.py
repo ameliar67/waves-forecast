@@ -58,7 +58,11 @@ def generate_wave_forecast(selected_location):
 async def landing_page(request):
 
     worldMap = map.generate_map()
-    context = {"request": request, "locations": sorted_dict.keys(), "world_map": worldMap}
+    context = {
+        "request": request,
+        "locations": sorted_dict.keys(),
+        "world_map": worldMap,
+    }
     return templates.TemplateResponse("index.html", context)
 
 
@@ -77,7 +81,7 @@ async def forecast(request: Request):
         "units": surfpy.units.unit_name(
             surfpy.units.Units.metric, surfpy.units.Measurement.length
         ),
-        "alerts": data.alerts
+        "alerts": data.alerts,
     }
 
     return templates.TemplateResponse("forecast.html", context)

@@ -27,11 +27,10 @@ def get_wave_forecast(
     if cache_item is not None:
         # TODO: cache hit and miss paths should return an identical result
         # a caller should not observe a difference in behaviour (apart from latency) between cached vs fresh result
-        cache_item['chart'] = json.loads(cache_item['chart'])
+        cache_item["chart"] = json.loads(cache_item["chart"])
         response = SurfReportResponse(**cache_item)
 
         return response
-
 
     # call retrieve_new_data for new forecast
     forecast_data = retrieve_new_data(wave_model, hours_to_forecast, location)
@@ -45,7 +44,7 @@ def get_wave_forecast(
             return None
 
         closest_buoy = None
-        closest_distance = float('inf')
+        closest_distance = float("inf")
 
         for station in s.stations:
             if active and not station.active:
@@ -61,20 +60,24 @@ def get_wave_forecast(
     result = find_closest_buoy(buoyStations, test_location)
 
     img = BytesIO()
-    forecast_data['chart'].savefig(img, format="png")
+    forecast_data["chart"].savefig(img, format="png")
     plot_base64_image = base64.b64encode(img.getvalue()).decode("utf8")
 
     expires_at = datetime.datetime.now().day + 1
     serialized_object = json.dumps(plot_base64_image)
-    wave_height = forecast_data['current_wave_height']
+    wave_height = forecast_data["current_wave_height"]
 
     # set_item in cache
-    cache.set_item(key, serialized_object, wave_height, expires_at, forecast_data['alerts'])
+    cache.set_item(
+        key, serialized_object, wave_height, expires_at, forecast_data["alerts"]
+    )
 
-    response = SurfReportResponse(**{
-        'chart': plot_base64_image,
-        'wave_height': forecast_data['current_wave_height'],
-        'alerts': forecast_data['alerts']
-    })
+    response = SurfReportResponse(
+        **{
+            "chart": plot_base64_image,
+            "wave_height": forecast_data["current_wave_height"],
+            "alerts": forecast_data["alerts"],
+        }
+    )
 
     return response

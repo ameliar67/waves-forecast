@@ -5,6 +5,7 @@ import matplotlib.dates as mdates
 import matplotlib.pyplot as plt
 import weather_alerts
 
+
 def change_units(content, new_units, old_unit):
 
     for d in content:
@@ -14,17 +15,28 @@ def change_units(content, new_units, old_unit):
         for swell in d.swell_components:
             swell.change_units(new_units)
 
-        d.minimum_breaking_height = units.convert(d.minimum_breaking_height, units.Measurement.length, old_unit, d.unit)
-        d.maximum_breaking_height = units.convert(d.maximum_breaking_height, units.Measurement.length, old_unit, d.unit)
-        d.wind_speed = units.convert(d.wind_speed, units.Measurement.speed, old_unit, d.unit)
-        d.air_temperature = units.convert(d.air_temperature, units.Measurement.temperature, old_unit, d.unit)
-        d.pressure = units.convert(d.pressure, units.Measurement.pressure, old_unit, d.unit)
+        d.minimum_breaking_height = units.convert(
+            d.minimum_breaking_height, units.Measurement.length, old_unit, d.unit
+        )
+        d.maximum_breaking_height = units.convert(
+            d.maximum_breaking_height, units.Measurement.length, old_unit, d.unit
+        )
+        d.wind_speed = units.convert(
+            d.wind_speed, units.Measurement.speed, old_unit, d.unit
+        )
+        d.air_temperature = units.convert(
+            d.air_temperature, units.Measurement.temperature, old_unit, d.unit
+        )
+        d.pressure = units.convert(
+            d.pressure, units.Measurement.pressure, old_unit, d.unit
+        )
 
     return content
 
+
 def merge_wave_weather_data(wave_data, weather_data, units):
     last_weather_index = 0
-    
+
     for wave in wave_data:
         wave.change_units(units.Units.metric)
         if wave.date > weather_data[-1].date:
@@ -36,7 +48,9 @@ def merge_wave_weather_data(wave_data, weather_data, units):
                 continue
 
             weather.change_units(units.Units.metric)
-            if weather.air_temperature is not None and not isnan(weather.air_temperature):
+            if weather.air_temperature is not None and not isnan(
+                weather.air_temperature
+            ):
                 wave.air_temperature = weather.air_temperature
             wave.short_forecast = weather.short_forecast
             if weather.wind_speed is not None and not isnan(weather.wind_speed):
@@ -51,10 +65,7 @@ def merge_wave_weather_data(wave_data, weather_data, units):
     return wave_data
 
 
-
-def get_chart(
-    forecast, units: str = surfpy.units.Units.metric
-):
+def get_chart(forecast, units: str = surfpy.units.Units.metric):
 
     forecast = change_units(forecast, units, units)
 
@@ -99,14 +110,16 @@ def retrieve_new_data(wave_model, hours_to_forecast, location) -> plt.Figure:
     chart = get_chart(res)
 
     alerts_list = alerts.get("features", [])
-    headline = alerts_list[0].get("properties", {}).get("headline", None) if alerts_list else None
+    headline = (
+        alerts_list[0].get("properties", {}).get("headline", None)
+        if alerts_list
+        else None
+    )
 
     forecast_data = {
-        'chart': chart,
-        'current_wave_height': current_wave_height,
-        'alerts': headline or '0'
+        "chart": chart,
+        "current_wave_height": current_wave_height,
+        "alerts": headline or "0",
     }
-
-
 
     return forecast_data

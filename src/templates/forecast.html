@@ -2,54 +2,54 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <title>Wave Forecast</title>
-    <link href="{{ url_for('static', path='/styles/styles.css') }}" rel="stylesheet" />
+  <meta charset="UTF-8">
+  <title>Wave Forecast</title>
+  <link href="{{ url_for('static', path='/styles/styles.css') }}" rel="stylesheet" />
 </head>
 
 <body>
 
-    <div id="main-container">
+  <div id="main-container">
 
-      <div class="forecast_header">
+    <div class="forecast_header">
 
-        <p class="wave_and_weather_title">Wave and Weather Forecast</p>
+      <p class="wave_and_weather_title">Wave and Weather Forecast</p>
 
-        <p class="title_form_text">{{ location }}</p>
+      <p class="title_form_text">{{ location }}</p>
 
-        <form class="location_form" id="location_form" action="/forecast.html" method="post">
-            <div class="form-group">
-            <select name="location-list" id="location_list" required>
-              <option value="" disabled selected>Choose a Location...</option>
-              {% for loc in locations  %}
-                <option>{{ loc }}</option>
-              {% endfor %}
-            </select>
+      <form class="location_form" id="location_form" action="/forecast.html" method="post">
+        <div class="form-group">
+          <select name="location-list" id="location_list" required>
+            <option value="" disabled selected>Choose a Location...</option>
+            {% for loc in locations %}
+            <option>{{ loc }}</option>
+            {% endfor %}
+          </select>
 
-            <br><br>
+          <br><br>
 
-            <input id="submit_button" type="submit" value="Submit">
-          </div>
-
-          </form>
-
+          <input id="submit_button" type="submit" value="Submit">
         </div>
 
-        <div class="individual_data_fields">
-          <div class="wave_height_layout">
-            <p class="current_wave_height_text" id="current_wave_height">Current Wave Height: </p>
-            <p class="wave_height">{{ current_wave_height }} {{ units }}</p>
-          </div>
-          <div class="alerts_layout">
-            <p class="current_weather_warnings_text">Current Weather warnings: </p>
-            <p class="alerts">{{ alerts }}</p>
-          </div>
-      </div>
-
-        <img src="data:image/png;base64, {{ plot_url }}">
-
+      </form>
 
     </div>
+
+    <div class="individual_data_fields">
+      <div class="wave_height_layout">
+        <p class="current_wave_height_text" id="current_wave_height">Current Wave Height: </p>
+        <p class="wave_height">{{ current_wave_height }} {{ units }}</p>
+      </div>
+      <div class="alerts_layout">
+        <p class="current_weather_warnings_text">Current Weather warnings: </p>
+        <p class="alerts">{{ alerts }}</p>
+      </div>
+    </div>
+
+    <img src="data:image/png;base64, {{ plot_url }}">
+
+
+  </div>
 
 
 </body>
