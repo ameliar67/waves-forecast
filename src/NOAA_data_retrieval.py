@@ -3,6 +3,7 @@ from math import isnan
 from surfpy import units
 import matplotlib.dates as mdates
 import matplotlib.pyplot as plt
+import weather_alerts
 
 def change_units(content, new_units, old_unit):
 
@@ -86,6 +87,7 @@ def retrieve_new_data(wave_model, hours_to_forecast, location) -> plt.Figure:
 
     buoy_data = wave_model.to_buoy_data(raw_wave_data)
     weather_data = surfpy.WeatherApi.fetch_hourly_forecast(location)
+    alerts = weather_alerts.WeatherAlerts.fetch_active_weather_alerts(location)
     wave_data = merge_wave_weather_data(buoy_data, weather_data, units)
 
     for d in wave_data:
@@ -96,9 +98,15 @@ def retrieve_new_data(wave_model, hours_to_forecast, location) -> plt.Figure:
 
     chart = get_chart(res)
 
+    alerts_list = alerts.get("features", [])
+    headline = alerts_list[0].get("properties", {}).get("headline", None) if alerts_list else None
+
     forecast_data = {
         'chart': chart,
-        'current_wave_height': current_wave_height
+        'current_wave_height': current_wave_height,
+        'alerts': headline or '0'
     }
+
+
 
     return forecast_data
