@@ -1,5 +1,6 @@
 import surfpy
 import folium
+import filteredLocations
 from folium.plugins import MarkerCluster
 
 def generate_map():
@@ -7,22 +8,14 @@ def generate_map():
     map = folium.Map(location=[1, 1], zoom_start=2.5)
     marker_cluster = MarkerCluster().add_to(map)
 
-    buoyStations = surfpy.BuoyStations()
-    buoyStations.fetch_stations()
+    stations = filteredLocations.filterLocations(surfpy.BuoyStations())
 
-    for buoyStation in buoyStations.stations:
+    for buoyStation in stations.keys():
 
-        if (
-            buoyStation.buoy_type == "tao"
-            or buoyStation.buoy_type == "oilrig"
-            or buoyStation.buoy_type == "dart"
-            or buoyStation.owner == "Prediction and Research Moored Array in the Atlantic"
-        ):
-            continue
         folium.Marker(
-            location=[buoyStation.location.latitude, buoyStation.location.longitude],
+            location=[stations[buoyStation]["latitude"], stations[buoyStation]["longitude"]],
             popup=folium.Popup(
-                f"""<div id={buoyStation.location.name} onclick="goToForecastPage('{buoyStation.location.name}')">{buoyStation.location.name}</div>
+                f"""<div id={buoyStation} onclick="goToForecastPage('{buoyStation}')">{buoyStation}</div>
         """,
                 max_width=200,
             ),
