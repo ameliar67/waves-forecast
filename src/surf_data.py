@@ -67,13 +67,15 @@ def get_wave_forecast(
     expires_at = datetime.datetime.now().day + 1
     serialized_object = json.dumps(plot_base64_image)
     wave_height = forecast_data['current_wave_height']
+    print('forecast_data', forecast_data)
 
     # set_item in cache
-    cache.set_item(key, serialized_object, wave_height, expires_at)
+    cache.set_item(key, serialized_object, wave_height, expires_at, forecast_data['alerts'])
 
     response = SurfReportResponse(**{
         'chart': plot_base64_image,
-        'wave_height': forecast_data['current_wave_height']
+        'wave_height': forecast_data['current_wave_height'],
+        'alerts': forecast_data['alerts']
     })
 
     return response
