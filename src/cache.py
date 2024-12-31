@@ -14,7 +14,7 @@ class Cache:
 
     def get_item(self, key) -> None:
         row = self.conn.execute(
-            "SELECT chart, expiry, average_wave_height FROM cache WHERE key = ?", [key]
+            "SELECT chart, expiry, average_wave_height, alerts FROM cache WHERE key = ?", [key]
         ).fetchone()
         
         if row is None:
@@ -26,14 +26,15 @@ class Cache:
 
         result = {
             'chart': row[0],
-            'wave_height': row[2]
+            'wave_height': row[2],
+            'alerts': row[3]
         }
         return result
 
-    def set_item(self, key, chart, average_wave_height, expiry) -> None:
+    def set_item(self, key, chart, average_wave_height, expiry, alerts) -> None:
         self.conn.execute(
-            "INSERT INTO cache (key, chart, average_wave_height, expiry) VALUES (?, ?, ?, ?)",
-            [key, chart, average_wave_height, expiry],
+            "INSERT INTO cache (key, chart, average_wave_height, expiry, alerts) VALUES (?, ?, ?, ?, ?)",
+            [key, chart, average_wave_height, expiry, alerts],
         )
         self.conn.commit()
 
