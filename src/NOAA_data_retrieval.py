@@ -98,6 +98,14 @@ def retrieve_new_data(wave_model, hours_to_forecast, location) -> plt.Figure:
 
     buoy_data = wave_model.to_buoy_data(raw_wave_data)
     weather_data = surfpy.WeatherApi.fetch_hourly_forecast(location)
+
+    if len(weather_data) == 0:
+        forecast_data = {
+            "chart": None,
+            "current_wave_height": 0,
+            "alerts": "No forecast available",
+        }
+        return forecast_data
     alerts = weather_alerts.WeatherAlerts.fetch_active_weather_alerts(location)
     wave_data = merge_wave_weather_data(buoy_data, weather_data, units)
 
