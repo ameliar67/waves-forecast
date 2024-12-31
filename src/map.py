@@ -29,6 +29,10 @@ def generate_map() :
         top: 35% !important;
         height: 70% !important;
     }
+    .leaflet-popup-content-wrapper:hover  {
+        text-decoration: underline;
+        cursor: pointer;
+    }
     </style>
     """
 
