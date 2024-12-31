@@ -25,18 +25,15 @@ locations_dict = {}
 HTML_404_PAGE = os.path.join(path, "../templates/404.html")
 HTML_500_PAGE = os.path.join(path, "../templates/500.html")
 
-tree = ET.parse(
-    os.path.join(path, "../libs/surfpy/surfpy/tests/data/activestations.xml")
-)
-root = tree.getroot()
-for child in root:
-    locations_dict[child.attrib["name"]] = {
-        "id": child.attrib["id"],
-        "longitude": float(child.attrib["lon"]),
-        "latitude": float(child.attrib["lat"]),
-    }
 
-sorted_locations_dict = dict(sorted(locations_dict.items()))
+buoyStations = surfpy.BuoyStations()
+buoyStations.fetch_stations()
+
+for station in buoyStations.stations:
+    locations_dict[station.location.name] = {
+        "longitude": float(station.location.longitude),
+        "latitude": float(station.location.latitude),
+    }
 
 
 def generate_wave_forecast(selected_location):
@@ -60,7 +57,7 @@ async def landing_page(request):
     worldMap = map.generate_map()
     context = {
         "request": request,
-        "locations": sorted_locations_dict.keys(),
+        "locations": locations_dict.keys(),
         "world_map": worldMap,
     }
     return templates.TemplateResponse("index.html", context)
