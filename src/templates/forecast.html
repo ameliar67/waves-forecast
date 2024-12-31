@@ -35,10 +35,19 @@
 
         </div>
 
-        <p class="current_wave_height_text" id="current_wave_height">Current Wave Height: </p>
-        <p class="wave_height">{{ current_wave_height }} {{ units }}</p>
+        <div class="individual_data_fields">
+          <div class="wave_height_layout">
+            <p class="current_wave_height_text" id="current_wave_height">Current Wave Height: </p>
+            <p class="wave_height">{{ current_wave_height }} {{ units }}</p>
+          </div>
+          <div class="alerts_layout">
+            <p class="current_weather_warnings_text">Current Weather warnings: </p>
+            <p class="alerts">{{ alerts }}</p>
+          </div>
+      </div>
 
         <img src="data:image/png;base64, {{ plot_url }}">
+
 
     </div>
 
