@@ -35,6 +35,17 @@ def get_wave_forecast(
     # call retrieve_new_data for new forecast
     forecast_data = retrieve_new_data(wave_model, hours_to_forecast, location)
 
+    if forecast_data['alerts'] == "No forecast available":
+            response = SurfReportResponse(
+                **{
+                    "chart": "No forecast available",
+                    "wave_height": 0,
+                    "alerts": "No forecast available",
+                }
+            )
+
+            return response
+
     buoyStations = surfpy.BuoyStations()
     buoyStations.fetch_stations()
     test_location = surfpy.Location(36.7783, -119.4179)
