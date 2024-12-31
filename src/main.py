@@ -75,6 +75,7 @@ async def forecast(request: Request):
         "units": surfpy.units.unit_name(
             surfpy.units.Units.metric, surfpy.units.Measurement.length
         ),
+        "alerts": data.alerts
     }
 
     return templates.TemplateResponse("forecast.html", context)
