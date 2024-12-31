@@ -15,7 +15,7 @@
 
       <p class="wave_and_weather_title">Wave and Weather Forecast</p>
 
-      <p class="title_form_text">{{ location }}</p>
+      <p class="title_form_text">{{ selected_location }}</p>
 
       <form class="location_form" id="location_form" action="/forecast.html" method="post">
         <div class="form-group">
@@ -42,11 +42,11 @@
       </div>
       <div class="alerts_layout">
         <p class="current_weather_warnings_text">Current Weather warnings: </p>
-        <p class="alerts">{{ alerts }}</p>
+        <p class="alerts">{{ weather_alerts }}</p>
       </div>
     </div>
 
-    <img src="data:image/png;base64, {{ plot_url }}">
+    <img src="data:image/png;base64, {{ wave_height_graph }}">
 
 
   </div>

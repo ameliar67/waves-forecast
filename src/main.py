@@ -36,7 +36,7 @@ for child in root:
         "latitude": float(child.attrib["lat"]),
     }
 
-sorted_dict = dict(sorted(locations_dict.items()))
+sorted_locations_dict = dict(sorted(locations_dict.items()))
 
 
 def generate_wave_forecast(selected_location):
@@ -60,7 +60,7 @@ async def landing_page(request):
     worldMap = map.generate_map()
     context = {
         "request": request,
-        "locations": sorted_dict.keys(),
+        "locations": sorted_locations_dict.keys(),
         "world_map": worldMap,
     }
     return templates.TemplateResponse("index.html", context)
@@ -75,13 +75,13 @@ async def forecast(request: Request):
     context = {
         "request": request,
         "locations": locations_dict.keys(),
-        "plot_url": data.chart,
-        "location": selected_location,
+        "wave_height_graph": data.chart,
+        "selected_location": selected_location,
         "current_wave_height": data.wave_height,
         "units": surfpy.units.unit_name(
             surfpy.units.Units.metric, surfpy.units.Measurement.length
         ),
-        "alerts": data.alerts,
+        "weather_alerts": data.alerts,
     }
 
     return templates.TemplateResponse("forecast.html", context)
