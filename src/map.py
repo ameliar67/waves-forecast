@@ -2,11 +2,10 @@ import surfpy
 import folium
 from folium.plugins import MarkerCluster
 
-
 def generate_map():
 
-    m = folium.Map(location=[1, 1], zoom_start=2.5)
-    marker_cluster = MarkerCluster().add_to(m)
+    map = folium.Map(location=[1, 1], zoom_start=2.5)
+    marker_cluster = MarkerCluster().add_to(map)
 
     buoyStations = surfpy.BuoyStations()
     buoyStations.fetch_stations()
@@ -17,6 +16,7 @@ def generate_map():
             buoyStation.buoy_type == "tao"
             or buoyStation.buoy_type == "oilrig"
             or buoyStation.buoy_type == "dart"
+            or buoyStation.owner == "Prediction and Research Moored Array in the Atlantic"
         ):
             continue
         folium.Marker(
@@ -42,8 +42,8 @@ def generate_map():
     </style>
     """
 
-    m.get_root().html.add_child(folium.Element(css))
+    map.get_root().html.add_child(folium.Element(css))
 
-    map_string = m.get_root().render()
+    map_string = map.get_root().render()
 
     return map_string
