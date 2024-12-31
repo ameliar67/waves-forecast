@@ -1,6 +1,7 @@
 import surf_data
 import map
 import surfpy
+import filteredLocations
 import xml.etree.ElementTree as ET
 from cache import Cache
 import os
@@ -20,20 +21,10 @@ db = os.path.join(path, "database.db")
 cache = Cache(db)
 cache.migrate()
 
-locations_dict = {}
+locations_dict = filteredLocations.filterLocations(surfpy.BuoyStations())
 
 HTML_404_PAGE = os.path.join(path, "../templates/404.html")
 HTML_500_PAGE = os.path.join(path, "../templates/500.html")
-
-
-buoyStations = surfpy.BuoyStations()
-buoyStations.fetch_stations()
-
-for station in buoyStations.stations:
-    locations_dict[station.location.name] = {
-        "longitude": float(station.location.longitude),
-        "latitude": float(station.location.latitude),
-    }
 
 
 def generate_wave_forecast(selected_location):
