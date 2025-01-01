@@ -56,7 +56,7 @@ async def landing_page(request):
 
 async def forecast(request: Request):
     form_data = await request.form()
-    selected_location = form_data.get("location-list")
+    selected_location = form_data.get("location")
 
     data = generate_wave_forecast(selected_location)
 
