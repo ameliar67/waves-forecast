@@ -13,25 +13,20 @@
 
     <div class="forecast_header">
 
-      <p class="wave_and_weather_title">Wave and Weather Forecast</p>
+      <p class="wave_and_weather_title">Surf Forecast</p>
 
       <p class="title_form_text">{{ selected_location }}</p>
 
       <form class="location_form" id="location_form" action="/forecast.html" method="post">
-        <div class="form-group">
-          <select name="location-list" id="location_list" required>
-            <option value="" disabled selected>Choose a Location...</option>
+        <input id="location_list" type="text" name="location" list="options" placeholder="Search or select an option">
+        <datalist id="options">
             {% for loc in locations %}
-            <option>{{ loc }}</option>
+            <option value="{{ loc }}">{{ loc }}</option>
             {% endfor %}
-          </select>
-
-          <br><br>
-
-          <input id="submit_button" type="submit" value="Submit">
-        </div>
-
-      </form>
+        </datalist>
+        <br><br>
+        <input id="submit_button" type="submit" value="Submit">
+    </form>
 
     </div>
 
