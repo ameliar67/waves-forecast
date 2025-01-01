@@ -106,6 +106,7 @@ def retrieve_new_data(wave_model, hours_to_forecast, location) -> plt.Figure:
             "alerts": "No forecast available",
         }
         return forecast_data
+
     alerts = weather_alerts.WeatherAlerts.fetch_active_weather_alerts(location)
     wave_data = merge_wave_weather_data(buoy_data, weather_data, units)
 
