@@ -11,32 +11,16 @@
 
     <div id="main-container">
 
-        <h1 class="landing_page_title">Surf Forecast</h1>
+    <div id="header">
+        <p class="landing_page_title">Surf Forecast</p>
 
-        <form class="location_form" id="location_form" action="/forecast.html" method="post">
-            <input id="location_list" type="text" name="location" list="options" placeholder="Search or select a location">
-            <datalist id="options">
-                {% for loc in locations %}
-                <option value="{{ loc }}">{{ loc }}</option>
-                {% endfor %}
-            </datalist>
-            <br><br>
-            <input id="submit_button" type="submit" value="Submit">
-        </form>
-
+        {% include 'list_form.html' %}
+    </div>
         <div id="map">
             {{ world_map | safe }}
         </div>
 
     </div>
-
-    <script>
-        function goToForecastPage(locationId) {
-            var select = document.getElementById('location_list');
-            select.value = locationId;
-            document.getElementById('location_form').submit();
-        }
-    </script>
 
 </body>
 
