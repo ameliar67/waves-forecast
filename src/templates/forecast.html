@@ -17,17 +17,7 @@
 
       <p class="title_form_text">{{ selected_location }}</p>
 
-      <form class="location_form" id="location_form" action="/forecast.html" method="post">
-        <input id="location_list" type="text" name="location" list="options" placeholder="Search or select an option">
-        <datalist id="options">
-            {% for loc in locations %}
-            <option value="{{ loc }}">{{ loc }}</option>
-            {% endfor %}
-        </datalist>
-        <br><br>
-        <input id="submit_button" type="submit" value="Submit">
-    </form>
-
+      {% include 'list_form.html' %}
     </div>
 
     <div class="individual_data_fields">
