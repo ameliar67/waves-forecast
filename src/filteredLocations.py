@@ -1,18 +1,15 @@
-def filterLocations(buoyStations) -> dict:
-
-    buoyStations.fetch_stations()
-
+def filterLocations(stations) -> dict:
     locations_dict = {}
-
-    for buoyStation in buoyStations.stations:
+    for buoyStation in stations:
         if (
-            buoyStation.buoy_type == "tao"
-            or buoyStation.buoy_type == "oilrig"
-            or buoyStation.buoy_type == "dart"
-            or buoyStation.owner == "Prediction and Research Moored Array in the Atlantic"
+            buoyStation.buoy_type in ("tao", "oilrig", "dart")
+            or buoyStation.owner
+            == "Prediction and Research Moored Array in the Atlantic"
+            or not buoyStation.location.name
         ):
             continue
-        locations_dict[buoyStation.location.name] = {
+        locations_dict[buoyStation.station_id] = {
+            "name": buoyStation.location.name,
             "longitude": float(buoyStation.location.longitude),
             "latitude": float(buoyStation.location.latitude),
         }
