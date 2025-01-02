@@ -2,7 +2,6 @@ import surf_data
 import map
 import surfpy
 import filteredLocations
-import xml.etree.ElementTree as ET
 from cache import Cache
 import os
 from starlette.applications import Starlette
@@ -21,7 +20,9 @@ db = os.path.join(path, "database.db")
 cache = Cache(db)
 cache.migrate()
 
-locations_dict = filteredLocations.filterLocations(surfpy.BuoyStations())
+buoy_stations = surfpy.BuoyStations()
+buoy_stations.fetch_stations()
+locations_dict = filteredLocations.filterLocations(buoy_stations.stations)
 
 HTML_404_PAGE = os.path.join(path, "../templates/404.html")
 HTML_500_PAGE = os.path.join(path, "../templates/500.html")
@@ -45,26 +46,25 @@ def generate_wave_forecast(selected_location):
 
 async def landing_page(request):
 
-    worldMap = map.generate_map()
+    world_map = map.generate_map(locations_dict)
     context = {
         "request": request,
-        "locations": locations_dict.keys(),
-        "world_map": worldMap,
+        "locations": locations_dict,
+        "world_map": world_map,
     }
     return templates.TemplateResponse("index.html", context)
 
 
 async def forecast(request: Request):
-    form_data = await request.form()
-    selected_location = form_data.get("location")
+    selected_location = request.path_params.get("location_id")
 
     data = generate_wave_forecast(selected_location)
 
     context = {
         "request": request,
-        "locations": locations_dict.keys(),
+        "locations": locations_dict,
         "wave_height_graph": data.chart,
-        "selected_location": selected_location,
+        "selected_location": locations_dict[selected_location]["name"],
         "current_wave_height": data.wave_height,
         "units": surfpy.units.unit_name(
             surfpy.units.Units.metric, surfpy.units.Measurement.length
@@ -90,7 +90,7 @@ async def handle_error(request: Request, exc: HTTPException):
 routes = [
     Route("/", landing_page),
     Mount("/templates", app=StaticFiles(directory="templates"), name="template"),
-    Route("/forecast.html", forecast, methods=["POST"]),
+    Route("/forecast/{location_id:str}", forecast, methods=["GET"]),
     Mount("/static", app=StaticFiles(directory="static"), name="static"),
 ]
 
