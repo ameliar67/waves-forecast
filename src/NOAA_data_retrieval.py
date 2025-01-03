@@ -127,8 +127,8 @@ def retrieve_new_data(wave_model, hours_to_forecast, location) -> plt.Figure:
 
     forecast_data = {
         "chart": chart,
-        "current_wave_height": current_wave_height,
-        "alerts": headline or "0",
+        "average_wave_height": current_wave_height,
+        "weather_alerts": headline or "0",
     }
 
     return forecast_data

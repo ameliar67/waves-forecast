@@ -1,39 +1,24 @@
 import datetime
-import sqlite3
+from azure.core.exceptions import AzureError
+from azure.storage.blob import ContainerClient
+from typing import Union
 
 
 class Cache:
-    def __init__(self, cache_file: str) -> None:
-        self.conn = sqlite3.connect(
-            cache_file, detect_types=sqlite3.PARSE_COLNAMES, check_same_thread=False
-        )
+    def __init__(self, container_client: ContainerClient) -> None:
+        self.container_client = container_client
 
-    def migrate(self) -> None:
-        with open("schema.sql") as f:
-            self.conn.executescript(f.read())
-
-    def get_item(self, key) -> None:
-        row = self.conn.execute(
-            "SELECT chart, expiry, average_wave_height, alerts FROM cache WHERE key = ?",
-            [key],
-        ).fetchone()
-
-        if row is None:
+    def get_item(self, key: str, max_age_seconds: int) -> Union[bytes, None]:
+        try:
+            blob_client = self.container_client.get_blob_client(key)
+            valid_from = datetime.datetime.now() - datetime.timedelta(
+                seconds=max_age_seconds
+            )
+            blob_response = blob_client.download_blob(if_modified_since=valid_from)
+            return blob_response.readall()
+        except AzureError:
             return None
 
-        if row[1] < datetime.datetime.now().day:
-            self.conn.execute("DELETE FROM cache WHERE key = ?;", [key])
-            return None
-
-        result = {"chart": row[0], "wave_height": row[2], "alerts": row[3]}
-        return result
-
-    def set_item(self, key, chart, average_wave_height, expiry, alerts) -> None:
-        self.conn.execute(
-            "INSERT INTO cache (key, chart, average_wave_height, expiry, alerts) VALUES (?, ?, ?, ?, ?)",
-            [key, chart, average_wave_height, expiry, alerts],
-        )
-        self.conn.commit()
-
-    def close(self) -> None:
-        self.conn.close()
+    def set_item(self, key: str, data: bytes) -> None:
+        blob_client = self.container_client.get_blob_client(key)
+        blob_client.upload_blob(data)

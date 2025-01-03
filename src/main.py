@@ -1,24 +1,33 @@
-import surf_data
-import map
-import surfpy
-import filteredLocations
-from cache import Cache
 import os
+
+import surfpy
 from starlette.applications import Starlette
-from starlette.templating import Jinja2Templates
-from starlette.requests import Request
-from starlette.routing import Route, Mount
-from starlette.staticfiles import StaticFiles
-from starlette.responses import HTMLResponse, JSONResponse
 from starlette.exceptions import HTTPException
+from starlette.requests import Request
+from starlette.responses import HTMLResponse, JSONResponse
+from starlette.routing import Mount, Route
+from starlette.staticfiles import StaticFiles
+from starlette.templating import Jinja2Templates
+
+import filteredLocations
+import map
+import surf_data
+from cache import Cache
+
+from azure.identity import DefaultAzureCredential
+from azure.storage.blob import ContainerClient
 
 templates = Jinja2Templates(directory="templates")
 
 path = os.path.dirname(os.path.abspath(__file__))
-db = os.path.join(path, "database.db")
 
-cache = Cache(db)
-cache.migrate()
+cache_container_client = ContainerClient(
+    "https://localhost:10000/devstoreaccount1", # TODO: read from environment/configuration
+    "forecast-cache",
+    DefaultAzureCredential(),
+    connection_verify=False, # TODO: set to false for localhost HTTPS with self-signed cert only
+)
+cache = Cache(cache_container_client)
 
 buoy_stations = surfpy.BuoyStations()
 buoy_stations.fetch_stations()
@@ -26,22 +35,6 @@ locations_dict = filteredLocations.filterLocations(buoy_stations.stations)
 
 HTML_404_PAGE = os.path.join(path, "../templates/404.html")
 HTML_500_PAGE = os.path.join(path, "../templates/500.html")
-
-
-def generate_wave_forecast(selected_location):
-
-    wave_forecast = surf_data.get_wave_forecast(
-        wave_model=surfpy.wavemodel.us_west_coast_gfs_wave_model(),
-        cache=cache,
-        selected_location=selected_location,
-        lat=locations_dict[selected_location]["latitude"],
-        lon=locations_dict[selected_location]["longitude"],
-    )
-
-    if not wave_forecast:
-        raise ValueError("Failed to get forecast from NOAA")
-
-    return wave_forecast
 
 
 async def landing_page(request):
@@ -56,20 +49,34 @@ async def landing_page(request):
 
 
 async def forecast(request: Request):
-    selected_location = request.path_params.get("location_id")
+    location_id = request.path_params.get("location_id")
+    if location_id not in locations_dict:
+        # TODO - return an error message
+        return not_found()
 
-    data = generate_wave_forecast(selected_location)
+    selected_location = locations_dict[location_id]
+    wave_forecast = surf_data.get_wave_forecast(
+        wave_model=surfpy.wavemodel.us_west_coast_gfs_wave_model(),
+        cache=cache,
+        location_id=location_id,
+        selected_location=selected_location["name"],
+        lat=selected_location["latitude"],
+        lon=selected_location["longitude"],
+    )
+
+    if not wave_forecast:
+        raise ValueError("Failed to get forecast from NOAA")
 
     context = {
         "request": request,
         "locations": locations_dict,
-        "wave_height_graph": data.chart,
-        "selected_location": locations_dict[selected_location]["name"],
-        "current_wave_height": data.wave_height,
+        "wave_height_graph": wave_forecast["chart"],
+        "selected_location": selected_location["name"],
+        "current_wave_height": wave_forecast["average_wave_height"],
         "units": surfpy.units.unit_name(
             surfpy.units.Units.metric, surfpy.units.Measurement.length
         ),
-        "weather_alerts": data.alerts,
+        "weather_alerts": wave_forecast["weather_alerts"],
     }
 
     return templates.TemplateResponse("forecast.html", context)

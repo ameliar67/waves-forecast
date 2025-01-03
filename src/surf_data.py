@@ -2,93 +2,50 @@ import surfpy
 from cache import Cache
 from NOAA_data_retrieval import retrieve_new_data
 import json
-import datetime
 import base64
 from io import BytesIO
-from models import SurfReportResponse
+from typing import TypedDict
 
+
+class WaveForecastData(TypedDict):
+    chart: str
+    average_wave_height: float
+    weather_alerts: str | None
 
 def get_wave_forecast(
     wave_model: str,
     cache: Cache,
-    selected_location: surfpy.Location,
+    location_id: str,
+    selected_location: str,
     lat=str,
     lon=str,
     hours_to_forecast=24,
-) -> object:
+) -> WaveForecastData:
+    cache_encoding = 'utf-8'
+    key = f"forecast/{location_id}"
+    cache_item = cache.get_item(key, max_age_seconds=86_400)
+    if cache_item is not None:
+        return json.loads(cache_item.decode(cache_encoding))
+
+    # call retrieve_new_data for new forecast
     location = surfpy.Location(lat, lon, altitude=0, name=selected_location)
     location.depth = 10.0
     location.angle = 200.0
     location.slope = 0.28
 
-    key = f"{location.name}"
-    cache_item = cache.get_item(key)
-
-    if cache_item is not None:
-        # TODO: cache hit and miss paths should return an identical result
-        # a caller should not observe a difference in behaviour (apart from latency) between cached vs fresh result
-        cache_item["chart"] = json.loads(cache_item["chart"])
-        response = SurfReportResponse(**cache_item)
-
-        return response
-
-    # call retrieve_new_data for new forecast
     forecast_data = retrieve_new_data(wave_model, hours_to_forecast, location)
-
-    if forecast_data['alerts'] == "No forecast available":
-            response = SurfReportResponse(
-                **{
-                    "chart": "No forecast available",
-                    "wave_height": 0,
-                    "alerts": "No forecast available",
-                }
-            )
-
-            return response
-
-    buoyStations = surfpy.BuoyStations()
-    buoyStations.fetch_stations()
-    test_location = surfpy.Location(36.7783, -119.4179)
-
-    def find_closest_buoy(s, location, active=False):
-        if len(s.stations) < 1:
-            return None
-
-        closest_buoy = None
-        closest_distance = float("inf")
-
-        for station in s.stations:
-            if active and not station.active:
-                continue
-
-            dist = location.distance(station.location)
-            if dist < closest_distance:
-                closest_buoy = station
-                closest_distance = dist
-
-        return closest_buoy
-
-    result = find_closest_buoy(buoyStations, test_location)
 
     img = BytesIO()
     forecast_data["chart"].savefig(img, format="png")
     plot_base64_image = base64.b64encode(img.getvalue()).decode("utf8")
 
-    expires_at = datetime.datetime.now().day + 1
-    serialized_object = json.dumps(plot_base64_image)
-    wave_height = forecast_data["current_wave_height"]
+    wave_height = forecast_data["average_wave_height"]
+    data = {
+        "chart": plot_base64_image,
+        "average_wave_height": wave_height,
+        "weather_alerts": forecast_data["weather_alerts"],
+    }
 
     # set_item in cache
-    cache.set_item(
-        key, serialized_object, wave_height, expires_at, forecast_data["alerts"]
-    )
-
-    response = SurfReportResponse(
-        **{
-            "chart": plot_base64_image,
-            "wave_height": forecast_data["current_wave_height"],
-            "alerts": forecast_data["alerts"],
-        }
-    )
-
-    return response
+    cache.set_item(key, json.dumps(data).encode(cache_encoding))
+    return data
