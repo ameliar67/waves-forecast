@@ -25,7 +25,6 @@ cache_container_client = ContainerClient(
     "https://localhost:10000/devstoreaccount1", # TODO: read from environment/configuration
     "forecast-cache",
     DefaultAzureCredential(),
-    connection_verify=False, # TODO: set to false for localhost HTTPS with self-signed cert only
 )
 cache = Cache(cache_container_client)
 

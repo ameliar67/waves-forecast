@@ -14,7 +14,10 @@
             "module": "uvicorn",
             "args": [
                 "main:app"
-            ]
+            ],
+            "env": {
+                "REQUESTS_CA_BUNDLE": "/etc/ssl/certs/ca-certificates.crt"
+            }
         }
     ]
 }
