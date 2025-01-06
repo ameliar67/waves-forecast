@@ -14,14 +14,16 @@ from starlette.templating import Jinja2Templates
 import map
 import surf_data
 from cache import Cache
+from config import Config
 from locations import get_coastal_locations
 
 templates = Jinja2Templates(directory="templates")
 
-path = os.path.dirname(os.path.abspath(__file__))
+app_root_path = os.path.dirname(os.path.abspath(__file__))
+app_config = Config.from_environment()
 
 cache_container_client = ContainerClient(
-    "https://localhost:10000/devstoreaccount1",  # TODO: read from environment/configuration
+    app_config.cache_blob_account_url,
     "forecast-cache",
     DefaultAzureCredential(),
 )
@@ -29,8 +31,8 @@ cache = Cache(cache_container_client)
 
 locations_dict = get_coastal_locations(cache)
 
-HTML_404_PAGE = os.path.join(path, "../templates/404.html")
-HTML_500_PAGE = os.path.join(path, "../templates/500.html")
+HTML_404_PAGE = os.path.join(app_root_path, "../templates/404.html")
+HTML_500_PAGE = os.path.join(app_root_path, "../templates/500.html")
 
 
 async def landing_page(request):

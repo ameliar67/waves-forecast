@@ -16,6 +16,7 @@
                 "main:app"
             ],
             "env": {
+                "CACHE_BLOB_ACCOUNT_URL": "https://localhost:10000/devstoreaccount1",
                 "REQUESTS_CA_BUNDLE": "/etc/ssl/certs/ca-certificates.crt"
             }
         }
