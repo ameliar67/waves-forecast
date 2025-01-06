@@ -8,12 +8,10 @@ class Cache:
     def __init__(self, container_client: ContainerClient) -> None:
         self.container_client = container_client
 
-    def get_item(self, key: str, max_age_seconds: int) -> Union[bytes, None]:
+    def get_item(self, key: str, max_age: datetime.timedelta) -> Union[bytes, None]:
         try:
             blob_client = self.container_client.get_blob_client(key)
-            valid_from = datetime.datetime.now() - datetime.timedelta(
-                seconds=max_age_seconds
-            )
+            valid_from = datetime.datetime.now() - max_age
             blob_response = blob_client.download_blob(if_modified_since=valid_from)
             return blob_response.readall()
         except AzureError:

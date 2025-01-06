@@ -1,6 +1,7 @@
+import datetime
 import surfpy
 from cache import Cache
-from NOAA_data_retrieval import retrieve_new_data
+from data_retrieval import retrieve_new_data
 import json
 import base64
 from io import BytesIO
@@ -12,6 +13,7 @@ class WaveForecastData(TypedDict):
     average_wave_height: float
     weather_alerts: str | None
 
+
 def get_wave_forecast(
     wave_model: str,
     cache: Cache,
@@ -21,9 +23,9 @@ def get_wave_forecast(
     lon=str,
     hours_to_forecast=24,
 ) -> WaveForecastData:
-    cache_encoding = 'utf-8'
-    key = f"forecast/{location_id}"
-    cache_item = cache.get_item(key, max_age_seconds=86_400)
+    cache_encoding = "utf-8"
+    key = f"forecast/v1/{location_id}"
+    cache_item = cache.get_item(key, max_age=datetime.timedelta(days=1))
     if cache_item is not None:
         return json.loads(cache_item.decode(cache_encoding))
 
