@@ -1,6 +1,8 @@
 import os
 
 import surfpy
+from azure.identity import DefaultAzureCredential
+from azure.storage.blob import ContainerClient
 from starlette.applications import Starlette
 from starlette.exceptions import HTTPException
 from starlette.requests import Request
@@ -9,28 +11,23 @@ from starlette.routing import Mount, Route
 from starlette.staticfiles import StaticFiles
 from starlette.templating import Jinja2Templates
 
-import filteredLocations
 import map
 import surf_data
 from cache import Cache
-
-from azure.identity import DefaultAzureCredential
-from azure.storage.blob import ContainerClient
+from locations import get_coastal_locations
 
 templates = Jinja2Templates(directory="templates")
 
 path = os.path.dirname(os.path.abspath(__file__))
 
 cache_container_client = ContainerClient(
-    "https://localhost:10000/devstoreaccount1", # TODO: read from environment/configuration
+    "https://localhost:10000/devstoreaccount1",  # TODO: read from environment/configuration
     "forecast-cache",
     DefaultAzureCredential(),
 )
 cache = Cache(cache_container_client)
 
-buoy_stations = surfpy.BuoyStations()
-buoy_stations.fetch_stations()
-locations_dict = filteredLocations.filterLocations(buoy_stations.stations)
+locations_dict = get_coastal_locations(cache)
 
 HTML_404_PAGE = os.path.join(path, "../templates/404.html")
 HTML_500_PAGE = os.path.join(path, "../templates/500.html")

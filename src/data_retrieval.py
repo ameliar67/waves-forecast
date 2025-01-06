@@ -1,9 +1,11 @@
-import surfpy
 from math import isnan
-from surfpy import units
+
 import matplotlib.dates as mdates
 import matplotlib.pyplot as plt
-import weather_alerts
+import requests
+import surfpy
+from surfpy import units
+from surfpy.location import Location
 
 
 def change_units(content, new_units, old_unit):
@@ -88,6 +90,15 @@ def get_chart(forecast, units: str = surfpy.units.Units.metric):
     return fig
 
 
+def fetch_active_weather_alerts(location: Location, api_root_url: str) -> dict:
+    # https://api.weather.gov/alerts/active?point=46.221924,-123.816882
+
+    url = f"{api_root_url}alerts/active?point={location.latitude},{location.longitude}"
+    resp = requests.get(url)
+    resp_json = resp.json()
+    return resp_json
+
+
 def retrieve_new_data(wave_model, hours_to_forecast, location) -> plt.Figure:
 
     wave_grib_data = wave_model.fetch_grib_datas(0, hours_to_forecast)
@@ -99,6 +110,8 @@ def retrieve_new_data(wave_model, hours_to_forecast, location) -> plt.Figure:
     buoy_data = wave_model.to_buoy_data(raw_wave_data)
     weather_data = surfpy.WeatherApi.fetch_hourly_forecast(location)
 
+    print("air temp", type(weather_data[0]), weather_data[0].air_temperature)
+
     if len(weather_data) == 0:
         forecast_data = {
             "chart": None,
@@ -107,7 +120,7 @@ def retrieve_new_data(wave_model, hours_to_forecast, location) -> plt.Figure:
         }
         return forecast_data
 
-    alerts = weather_alerts.WeatherAlerts.fetch_active_weather_alerts(location)
+    alerts = fetch_active_weather_alerts(location, "https://api.weather.gov/")
     wave_data = merge_wave_weather_data(buoy_data, weather_data, units)
 
     for d in wave_data:

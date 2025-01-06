@@ -1,6 +1,7 @@
 import folium
 from folium.plugins import MarkerCluster
 
+
 def generate_map(stations):
     map = folium.Map(location=[1, 1], zoom_start=2.5)
     marker_cluster = MarkerCluster().add_to(map)
