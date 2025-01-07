@@ -46,6 +46,7 @@ def get_wave_forecast(
         "chart": plot_base64_image,
         "average_wave_height": wave_height,
         "weather_alerts": forecast_data["weather_alerts"],
+        "air_temperature": forecast_data["air_temperature"]
     }
 
     # set_item in cache

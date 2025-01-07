@@ -72,6 +72,7 @@ async def forecast(request: Request):
             surfpy.units.Units.metric, surfpy.units.Measurement.length
         ),
         "weather_alerts": wave_forecast["weather_alerts"],
+        "air_temperature": wave_forecast["air_temperature"]
     }
 
     return templates.TemplateResponse("forecast.html", context)
