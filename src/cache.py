@@ -11,12 +11,13 @@ class Cache:
     def get_item(self, key: str, max_age: datetime.timedelta) -> Union[bytes, None]:
         try:
             blob_client = self.container_client.get_blob_client(key)
-            valid_from = datetime.datetime.now() - max_age
+            valid_from = datetime.datetime.now(datetime.timezone.utc) - max_age
             blob_response = blob_client.download_blob(if_modified_since=valid_from)
             return blob_response.readall()
-        except AzureError:
+        except AzureError as ex:
+            print(ex)
             return None
 
     def set_item(self, key: str, data: bytes) -> None:
         blob_client = self.container_client.get_blob_client(key)
-        blob_client.upload_blob(data)
+        blob_client.upload_blob(data, overwrite=True)
