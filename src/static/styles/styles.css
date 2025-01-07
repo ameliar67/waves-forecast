@@ -64,6 +64,8 @@ img, .forecast_header {
 .wave_and_weather_title  {
     font-size: 1.5em;
     padding-left: 1em;
+    color: black;
+    text-decoration: none;
 }
 
 .title_form_text  {
