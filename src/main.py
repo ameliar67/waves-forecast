@@ -6,7 +6,7 @@ from azure.storage.blob import ContainerClient
 from starlette.applications import Starlette
 from starlette.exceptions import HTTPException
 from starlette.requests import Request
-from starlette.responses import HTMLResponse, JSONResponse
+from starlette.responses import JSONResponse
 from starlette.routing import Mount, Route
 from starlette.staticfiles import StaticFiles
 from starlette.templating import Jinja2Templates
@@ -31,9 +31,6 @@ cache = Cache(cache_container_client)
 
 locations_dict = get_coastal_locations(cache)
 
-HTML_404_PAGE = os.path.join(app_root_path, "../templates/404.html")
-HTML_500_PAGE = os.path.join(app_root_path, "../templates/500.html")
-
 
 async def landing_page(request):
 
@@ -49,8 +46,8 @@ async def landing_page(request):
 async def forecast(request: Request):
     location_id = request.path_params.get("location_id")
     if location_id not in locations_dict:
-        # TODO - return an error message
-        return not_found()
+        error = f"No location matching {location_id}, is currently available"
+        return await not_found(request, HTTPException(404, error))
 
     selected_location = locations_dict[location_id]
     wave_forecast = surf_data.get_wave_forecast(
@@ -81,11 +78,11 @@ async def forecast(request: Request):
 
 
 async def not_found(request: Request, exc: HTTPException):
-    return HTMLResponse(content=HTML_404_PAGE, status_code=exc.status_code)
+     return templates.TemplateResponse("404.html", {"request": request, "detail": exc.detail, "status_code": exc.status_code})
 
 
 async def server_error(request: Request, exc: HTTPException):
-    return HTMLResponse(content=HTML_500_PAGE, status_code=exc.status_code)
+     return templates.TemplateResponse("500.html", {"request": request, "detail": exc.detail, "status_code": exc.status_code})
 
 
 async def handle_error(request: Request, exc: HTTPException):
@@ -94,7 +91,7 @@ async def handle_error(request: Request, exc: HTTPException):
 
 routes = [
     Route("/", landing_page),
-    Mount("/templates", app=StaticFiles(directory="templates"), name="template"),
+    Mount("/templates", app=StaticFiles(directory="templates"), name="html_templates"),
     Route("/forecast/{location_id:str}", forecast, methods=["GET"]),
     Mount("/static", app=StaticFiles(directory="static"), name="static"),
 ]

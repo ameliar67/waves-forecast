@@ -58,6 +58,7 @@ img, .forecast_header {
     justify-content: space-between;
     height: 20%;
     align-items: center;
+    box-shadow: 2px 2px 10px #d6d6d6;
 }
 
 .wave_and_weather_title  {
@@ -74,6 +75,7 @@ img, .forecast_header {
     flex-direction: row;
     justify-content: space-around;
     width: 100%;
+    margin: 5%;
 }
 
 .wave_height_layout {
@@ -126,6 +128,18 @@ img, .forecast_header {
     width: 40%;
 }
 
+#text_container_404, #text_container_500 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#body_404, #body_500   {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
   #submit_button  {
     width: 30%;
     padding: 12px;
@@ -136,6 +150,7 @@ img, .forecast_header {
     cursor: pointer;
     transition: background-color 0.3s ease;
     margin: 10px;
+    text-align: center;
 }
 
   #submit_button:hover  {
