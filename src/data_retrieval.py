@@ -126,6 +126,21 @@ def retrieve_new_data(wave_model, hours_to_forecast, location) -> plt.Figure:
     else:
         air_temperature = "No temperature forecast available"
 
+    if weather_data[0].short_forecast:
+        short_forecast = weather_data[0].short_forecast
+    else:
+        short_forecast = "No forecast available"
+
+    if weather_data[0].wind_speed:
+        wind_speed = weather_data[0].wind_speed
+    else:
+        wind_speed = "No wind speed available"
+
+    if weather_data[0].wind_compass_direction:
+        wind_direction = weather_data[0].wind_compass_direction
+    else:
+        wind_direction = "No wind directon available"
+
     alerts = fetch_active_weather_alerts(location, "https://api.weather.gov/")
     wave_data = merge_wave_weather_data(buoy_data, weather_data, units)
 
@@ -148,7 +163,10 @@ def retrieve_new_data(wave_model, hours_to_forecast, location) -> plt.Figure:
         "chart": chart,
         "average_wave_height": current_wave_height,
         "weather_alerts": headline or "0",
-        "air_temperature": air_temperature
+        "air_temperature": air_temperature,
+        "short_forecast": short_forecast,
+        "wind_speed": wind_speed,
+        "wind_direction": wind_direction,
     }
 
     return forecast_data

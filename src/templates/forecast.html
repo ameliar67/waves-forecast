@@ -23,17 +23,35 @@
     </div>
 
     <div class="individual_data_fields">
-      <div class="wave_height_layout">
-        <p class="wave_height">{{ current_wave_height }} {{ units }}</p>
-        <p class="current_wave_height_text" id="current_wave_height">Current Wave Height </p>
+      <div class="wave_data_fields">
+        <div class="wave_height_layout">
+          <p class="wave_height">{{ current_wave_height }} {{ units }}</p>
+          <p class="current_wave_height_text" id="current_wave_height">Current Wave Height </p>
+        </div>
       </div>
-      <div class="alerts_layout">
-        <p class="alerts">{{ weather_alerts }}</p>
-        <p class="current_weather_warnings_text">Current Weather warnings </p>
+      <div class="wind_data_fields">
+        <div class="alerts_layout">
+          <p class="alerts">{{ wind_speed }}</p>
+          <p class="current_weather_warnings_text">Current Wind Speed </p>
+        </div>
+        <div class="alerts_layout">
+          <p class="alerts">{{ wind_direction }}</p>
+          <p class="current_weather_warnings_text">Current Wind Direction </p>
+        </div>
       </div>
-      <div class="alerts_layout">
-        <p class="alerts">{{ air_temperature }}</p>
-        <p class="current_weather_warnings_text">Current Air temperature </p>
+      <div class="general_weather_data_fields">
+        <div class="alerts_layout">
+          <p class="alerts">{{ short_forecast }}</p>
+          <p class="current_weather_warnings_text">Current Forecast </p>
+        </div>
+        <div class="alerts_layout">
+          <p class="alerts">{{ weather_alerts }}</p>
+          <p class="current_weather_warnings_text">Current Weather warnings </p>
+        </div>
+        <div class="alerts_layout">
+          <p class="alerts">{{ air_temperature }}</p>
+          <p class="current_weather_warnings_text">Current Air temperature </p>
+        </div>
       </div>
     </div>
 

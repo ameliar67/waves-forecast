@@ -74,10 +74,11 @@ img, .forecast_header {
 
 .individual_data_fields {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     justify-content: space-around;
-    width: 100%;
+    width: 80%;
     margin: 5%;
+    gap: 3em;
 }
 
 .wave_height_layout {
@@ -105,7 +106,8 @@ img, .forecast_header {
 }
 
 .landing_page_title   {
-    font-size: 3.5em
+    font-size: 3.5em;
+    font-weight: bold;
 }
 
 .current_weather_warnings_text   {
@@ -166,6 +168,12 @@ datalist {
     overflow-x: hidden;
     overflow-y: auto;
   }
+
+.wave_data_fields, .wind_data_fields, .general_weather_data_fields  {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
   
   datalist option {
     font-size: 0.8em;
