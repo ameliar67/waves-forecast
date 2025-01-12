@@ -1,5 +1,3 @@
-import os
-
 import surfpy
 from azure.identity import DefaultAzureCredential
 from azure.storage.blob import ContainerClient
@@ -7,19 +5,13 @@ from starlette.applications import Starlette
 from starlette.exceptions import HTTPException
 from starlette.requests import Request
 from starlette.responses import JSONResponse
-from starlette.routing import Mount, Route
-from starlette.staticfiles import StaticFiles
-from starlette.templating import Jinja2Templates
+from starlette.routing import Route
 
-import map
 import surf_data
 from cache import Cache
 from config import Config
 from locations import get_coastal_locations
 
-templates = Jinja2Templates(directory="templates")
-
-app_root_path = os.path.dirname(os.path.abspath(__file__))
 app_config = Config.from_environment()
 
 cache_container_client = ContainerClient(
@@ -33,14 +25,9 @@ locations_dict = get_coastal_locations(cache)
 
 
 async def landing_page(request):
-
-    world_map = map.generate_map(locations_dict)
-    context = {
-        "request": request,
+    return JSONResponse({
         "locations": locations_dict,
-        "world_map": world_map,
-    }
-    return templates.TemplateResponse("index.html", context)
+    })
 
 
 async def forecast(request: Request):
@@ -63,8 +50,6 @@ async def forecast(request: Request):
         raise ValueError("Failed to get forecast from NOAA")
 
     context = {
-        "request": request,
-        "locations": locations_dict,
         "wave_height_graph": wave_forecast["chart"],
         "selected_location": selected_location["name"],
         "current_wave_height": wave_forecast["average_wave_height"],
@@ -78,28 +63,26 @@ async def forecast(request: Request):
         "wind_direction": wave_forecast["wind_direction"]
     }
 
-    return templates.TemplateResponse("forecast.html", context)
+    return JSONResponse(context)
 
 
 async def not_found(request: Request, exc: HTTPException):
-     return templates.TemplateResponse("404.html", {"request": request, "detail": exc.detail, "status_code": exc.status_code})
+     return JSONResponse({"detail": exc.detail, "status_code": exc.status_code})
 
 
 async def server_error(request: Request, exc: HTTPException):
-     return templates.TemplateResponse("500.html", {"request": request, "detail": exc.detail, "status_code": exc.status_code})
+     return JSONResponse({"detail": exc.detail, "status_code": exc.status_code})
 
 
 async def handle_error(request: Request, exc: HTTPException):
-    return JSONResponse({"detail": exc.detail}, status_code=exc.status_code)
+    return JSONResponse({"detail": exc.detail})
 
 
 routes = [
-    Route("/", landing_page),
-    Mount("/templates", app=StaticFiles(directory="templates"), name="html_templates"),
+    Route("/locations", landing_page),
     Route("/forecast/{location_id:str}", forecast, methods=["GET"]),
-    Mount("/static", app=StaticFiles(directory="static"), name="static"),
 ]
 
 exception_handlers = {404: not_found, 500: server_error, Exception: handle_error}
 
-app = Starlette(debug=True, routes=routes, exception_handlers=exception_handlers)
+app = Starlette(routes=routes, exception_handlers=exception_handlers)
