@@ -2,23 +2,33 @@
   "name": "frontend",
   "version": "0.1.0",
   "private": true,
+  "source": "app/index.html",
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
+    "dev": "parcel",
+    "build": "parcel build",
     "lint": "next lint"
   },
   "dependencies": {
+    "@react-leaflet/core": "^3.0.0",
+    "@types/leaflet.markercluster": "^1.5.5",
+    "leaflet": "^1.9.4",
+    "leaflet-defaulticon-compatibility": "^0.1.2",
+    "leaflet.markercluster": "^1.5.3",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "next": "15.1.4"
+    "react-leaflet": "^5.0.0-rc.2",
+    "react-leaflet-markercluster": "^5.0.0-rc.0"
   },
   "devDependencies": {
-    "typescript": "^5",
+    "@eslint/eslintrc": "^3",
+    "@eslint/js": "^9.18.0",
+    "@types/leaflet": "^1.9.16",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "eslint": "^9",
-    "eslint-config-next": "15.1.4",
-    "@eslint/eslintrc": "^3"
+    "eslint": "^9.18.0",
+    "parcel": "^2.13.3",
+    "typescript": "^5.7.3",
+    "typescript-eslint": "^8.19.1"
   }
 }
