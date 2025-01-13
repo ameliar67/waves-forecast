@@ -1,12 +1,9 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import LocationForm from './LocationForm';
-import '@/styles/globals.css';
-import dynamic from 'next/dynamic';
-
-// Dynamically import the MapComponent and disable SSR
-const MapComponent = dynamic(() => import('./MapComponent'), { ssr: false });
+import { LocationForm } from './LocationForm';
+import '../styles/globals.css';
+import { MapComponent } from './MapComponent';
 
 // Define the interface for BuoyStation
 interface BuoyStation {
@@ -15,7 +12,7 @@ interface BuoyStation {
   name: string;
 }
 
-const Page: React.FC = () => {
+export const HomePage: React.FC = () => {
   // State to store the fetched station data
   const [stations, setStations] = useState<Record<string, BuoyStation>>({});
   const [loading, setLoading] = useState<boolean>(true);  // To handle loading state
@@ -64,5 +61,3 @@ const Page: React.FC = () => {
     </div>
   );
 };
-
-export default Page;

@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState, FormEvent } from 'react';
-import { useRouter } from 'next/navigation';
+import React, { useState, FormEvent, useCallback, useRef } from 'react';
+import { useNavigate } from 'react-router';
 
 interface BuoyStation {
   latitude: number;
@@ -13,29 +13,28 @@ interface MapComponentProps {
   stations: { [key: string]: BuoyStation };
 }
 
-const LocationForm: React.FC<MapComponentProps> = ({stations}) => {
-  const router = useRouter();
-  const [location, setLocation] = useState('');
-
+export const LocationForm: React.FC<MapComponentProps> = ({ stations }) => {
+  const navigate = useNavigate();
+  const locationInput = useRef<HTMLInputElement>(null!);
   const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = useCallback((e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    
+
     // Find the selected location ID based on the name entered
     const selectedLocationId = Object.entries(stations).find(
-      ([_, loc]) => loc.name === location
+      ([_, loc]) => loc.name === locationInput.current?.value
     )?.[0];
 
     if (selectedLocationId) {
       // Navigate to the forecast page using the location_id as a path parameter
-      router.push(`/forecast/${encodeURIComponent(selectedLocationId)}`);
+      navigate(`/forecast/${encodeURIComponent(selectedLocationId)}`);
     } else {
       // Handle case where the location is not found
       console.error('Selected location not found');
       setError('Please select a valid location.');
     }
-  };
+  }, [navigate]);
 
   return (
     <form
@@ -49,8 +48,7 @@ const LocationForm: React.FC<MapComponentProps> = ({stations}) => {
         name="location"
         list="options"
         placeholder="Search or select a location"
-        value={location}
-        onChange={(e) => setLocation(e.target.value)}
+        ref={locationInput}
       />
       <datalist id="options">
         {Object.entries(stations).map(([locId, loc]) => (
@@ -61,10 +59,8 @@ const LocationForm: React.FC<MapComponentProps> = ({stations}) => {
       </datalist>
       <br /><br />
       <input id="submit_button" type="submit" value="Submit" />
-      
+
       {error && <p style={{ color: 'red' }}>{error}</p>} {/* Display error message */}
     </form>
   );
 };
-
-export default LocationForm;

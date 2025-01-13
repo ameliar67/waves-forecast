@@ -21,7 +21,7 @@ interface MapComponentProps {
 
 const center: LatLngExpression = [1, 1];
 
-const MapComponent: React.FC<MapComponentProps> = ({ stations }) => {
+export const MapComponent: React.FC<MapComponentProps> = ({ stations }) => {
     const zoom = 2.5;
 
     return (
@@ -47,5 +47,3 @@ const MapComponent: React.FC<MapComponentProps> = ({ stations }) => {
         </div>
     );
 };
-
-export default MapComponent;
