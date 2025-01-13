@@ -67,15 +67,23 @@ async def forecast(request: Request):
 
 
 async def not_found(request: Request, exc: HTTPException):
-     return JSONResponse({"detail": exc.detail, "status_code": exc.status_code})
+    return JSONResponse({
+        "detail": exc.detail or "The page you are looking for could not be found.",
+        "status_code": exc.status_code
+    }, status_code=exc.status_code)
 
-
+# General error handler for other HTTP exceptions (e.g. 500, 400)
 async def server_error(request: Request, exc: HTTPException):
-     return JSONResponse({"detail": exc.detail, "status_code": exc.status_code})
+    return JSONResponse({
+        "detail": exc.detail or "Internal server error.",
+        "status_code": exc.status_code
+    }, status_code=exc.status_code)
 
-
+# General error handler for all other HTTP exceptions
 async def handle_error(request: Request, exc: HTTPException):
-    return JSONResponse({"detail": exc.detail})
+    return JSONResponse({
+        "detail": exc.detail or "An error occurred.",
+    }, status_code=exc.status_code)
 
 
 routes = [
