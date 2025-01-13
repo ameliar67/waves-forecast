@@ -34,7 +34,7 @@ export async function getServerSideProps() {
         errorDetails: data.detail || '',
       },
     };
-  } catch (error) {
+  } catch {
     return {
       props: {
         errorMessage: 'The page you are looking for could not be found.',
