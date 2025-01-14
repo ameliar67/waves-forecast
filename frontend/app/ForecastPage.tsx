@@ -17,16 +17,31 @@ interface ForecastData {
 export const ForecastPage: React.FC<{ stations: Record<string, BuoyStation> }> = ({ stations }) => {
   const { locationId } = useParams();
   const [forecastData, setForecastData] = useState<ForecastData | null>(null);
+  const [locationName, setLocationName] = useState<string | null>(null); // Track the station name
+
 
   useEffect(() => {
-    setForecastData(null);
+    if (!locationId) return;
 
+    // Fetch forecast data and location name when locationId changes
     (async function () {
-      const response = await fetch(`/api/forecast/${locationId}`);
-      const data = await response.json();
-      setForecastData(data);
+      try {
+        const response = await fetch(`/api/forecast/${locationId}`);
+        const data = await response.json();
+        setForecastData(data);
+
+        const name = stations[locationId]?.name || 'Unknown Station';
+        setLocationName(name); // Set the location name
+      } catch (err) {
+        console.error('Error fetching data:', err);
+      }
     })();
-  }, [locationId]);
+  }, [locationId, stations]); // Include stations in dependency array in case they change
+
+  // Handle the case where no forecastData or locationName exists
+  if (!locationId) return <div>No location specified</div>;
+  if (!forecastData) return <div>Loading forecast...</div>;
+
 
   // check for forecast
 
@@ -36,7 +51,7 @@ export const ForecastPage: React.FC<{ stations: Record<string, BuoyStation> }> =
         <a href="/" className="wave_and_weather_title">
           Surf Forecast
         </a>
-        <p className="title_form_text">{locationId}</p>
+        <p className="title_form_text">{locationName}</p>
 
         <LocationForm stations={stations} />
       </div>

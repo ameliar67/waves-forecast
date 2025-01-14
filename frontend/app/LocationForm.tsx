@@ -34,7 +34,7 @@ export const LocationForm: React.FC<MapComponentProps> = ({ stations }) => {
       console.error('Selected location not found');
       setError('Please select a valid location.');
     }
-  }, [navigate]);
+  }, [stations, navigate]);
 
   return (
     <form
