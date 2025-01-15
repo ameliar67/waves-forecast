@@ -49,7 +49,7 @@ def get_wave_forecast(
         "air_temperature": forecast_data["air_temperature"],
         "short_forecast": forecast_data["short_forecast"],
         "wind_speed": forecast_data["wind_speed"],
-        "wind_direction": forecast_data["wind_direction"]
+        "wind_direction": forecast_data["wind_direction"],
     }
 
     # set_item in cache

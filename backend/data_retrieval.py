@@ -117,10 +117,10 @@ def retrieve_new_data(wave_model, hours_to_forecast, location) -> plt.Figure:
             "chart": None,
             "current_wave_height": 0,
             "alerts": "No forecast available",
-            "air_temperature": "No forecast available"
+            "air_temperature": "No forecast available",
         }
         return forecast_data
-    
+
     if weather_data[0].air_temperature:
         air_temperature = weather_data[0].air_temperature
     else:

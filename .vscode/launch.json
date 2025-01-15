@@ -7,18 +7,15 @@
             "processId": "${command:pickProcess}"
         },
         {
-            "name": "Python Debugger: uvicorn",
+            "name": "Attach to Python Functions",
             "type": "debugpy",
-            "request": "launch",
-            "cwd": "${workspaceFolder}/src",
-            "module": "uvicorn",
-            "args": [
-                "main:app"
-            ],
-            "env": {
-                "CACHE_BLOB_ACCOUNT_URL": "https://localhost:10000/devstoreaccount1",
-                "REQUESTS_CA_BUNDLE": "/etc/ssl/certs/ca-certificates.crt"
-            }
+            "request": "attach",
+            "connect": {
+                "host": "localhost",
+                "port": 9091
+            },
+            "preLaunchTask": "func: host start"
         }
-    ]
+    ],
+    "version": "0.2.0"
 }
