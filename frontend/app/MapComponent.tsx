@@ -7,6 +7,7 @@ import { LatLngExpression } from 'leaflet';
 import "leaflet/dist/leaflet.css"
 import "leaflet-defaulticon-compatibility"
 import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css"
+import "react-leaflet-markercluster/dist/styles.min.css";
 
 
 interface BuoyStation {
@@ -19,7 +20,7 @@ interface MapComponentProps {
     stations: { [key: string]: BuoyStation };
 }
 
-const center: LatLngExpression = [1, 1];
+const center: LatLngExpression = [21.505, -25.09];
 
 export const MapComponent: React.FC<MapComponentProps> = ({ stations }) => {
     const zoom = 2.5;
