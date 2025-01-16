@@ -24,7 +24,7 @@ img, .forecast_header {
     width: 100%;
 }
 
-#current-wave-height, .wave_and_weather_title, .wave_height, .alerts  {
+#current-wave-height, .wave_and_weather_title, .wave_height, .data  {
     font-weight: bold;
 }
 
@@ -74,7 +74,7 @@ img, .forecast_header {
 
 .individual_data_fields {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     justify-content: space-around;
     width: 80%;
     margin: 5%;
@@ -85,9 +85,8 @@ img, .forecast_header {
     flex-direction: column;
 }
 
-.alerts_layout {
+.wind_layout, .forecast_layout, .alerts_layout {
     flex-direction: column;
-    max-width: 30%;
 }
 
 
@@ -97,7 +96,7 @@ img, .forecast_header {
     margin-bottom: 0;
 }
 
-.alerts {
+.data {
     font-size: 1.5em;
 }
 
@@ -110,8 +109,9 @@ img, .forecast_header {
     font-weight: bold;
 }
 
-.current_weather_warnings_text   {
+.label   {
     font-size: 1.3em;
+    width: 300px;
 }
 
 .form-group  {
@@ -173,6 +173,15 @@ datalist {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    width: 50%;
+}
+
+.wave_wind_air  {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 50%;
+    height: 400px;
 }
   
   datalist option {

@@ -57,41 +57,44 @@ export const ForecastPage: React.FC<{ stations: Record<string, BuoyStation> }> =
       </div>
 
       <div className="individual_data_fields">
+        <div className="wave_wind_air">
         <div className="wave_data_fields">
           <div className="wave_height_layout">
             <p className="wave_height">
               {forecastData ? `${forecastData.current_wave_height} ${forecastData.units}` : "Loading..."}
             </p>
             <p className="current_wave_height_text" id="current_wave_height">
-              Current Wave Height
+              Wave Height
             </p>
           </div>
         </div>
 
         <div className="wind_data_fields">
-          <div className="alerts_layout">
-            <p className="alerts">{forecastData ? forecastData.wind_speed : "Loading..."}</p>
-            <p className="current_weather_warnings_text">Current Wind Speed</p>
+          <div className="wind_layout">
+            <p className="data">{forecastData ? forecastData.wind_speed : "Loading..."}</p>
+            <p className="label">Wind Speed</p>
           </div>
-          <div className="alerts_layout">
-            <p className="alerts">{forecastData ? forecastData.wind_direction : "Loading..."}</p>
-            <p className="current_weather_warnings_text">Current Wind Direction</p>
+          <div className="wind_layout">
+            <p className="data">{forecastData ? forecastData.wind_direction : "Loading..."}</p>
+            <p className="label">Wind Direction</p>
           </div>
         </div>
 
         <div className="general_weather_data_fields">
-          <div className="alerts_layout">
-            <p className="alerts">{forecastData ? forecastData.short_forecast : "Loading..."}</p>
-            <p className="current_weather_warnings_text">Current Forecast</p>
+          <div className="forecast_layout">
+            <p className="data">{forecastData ? forecastData.short_forecast : "Loading..."}</p>
+            <p className="label">Forecast</p>
           </div>
-          <div className="alerts_layout">
-            <p className="alerts">{forecastData ? forecastData.weather_alerts : "Loading..."}</p>
-            <p className="current_weather_warnings_text">Current Weather Warnings</p>
+          <div className="forecast_layout">
+            <p className="data">{forecastData ? forecastData.air_temperature : "Loading..."}</p>
+            <p className="label">Air Temperature</p>
           </div>
-          <div className="alerts_layout">
-            <p className="alerts">{forecastData ? forecastData.air_temperature : "Loading..."}</p>
-            <p className="current_weather_warnings_text">Current Air Temperature</p>
-          </div>
+        </div>
+        </div>
+
+        <div className="alerts_layout">
+            <p className="data">{forecastData ? forecastData.weather_alerts : "Loading..."}</p>
+            <p className="label">Current Weather Warnings</p>
         </div>
       </div>
 
