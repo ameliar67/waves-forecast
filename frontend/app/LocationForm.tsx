@@ -1,5 +1,3 @@
-"use client";
-
 import React, { useState, FormEvent, useCallback, useRef } from "react";
 import { useNavigate } from "react-router";
 

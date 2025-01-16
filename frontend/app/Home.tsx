@@ -1,5 +1,3 @@
-"use client";
-
 import React from "react";
 import { LocationForm } from "./LocationForm";
 import { MapComponent } from "./MapComponent";
