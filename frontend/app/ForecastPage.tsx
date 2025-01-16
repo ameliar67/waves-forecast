@@ -19,13 +19,12 @@ export const ForecastPage: React.FC<{
 }> = ({ stations }) => {
   const { locationId } = useParams();
   const [forecastData, setForecastData] = useState<ForecastData | null>(null);
-  const [locationName, setLocationName] = useState<string | null>(null); // Track the station name
-  const [loading, setLoading] = useState<boolean>(false); // Track loading state
+  const [locationName, setLocationName] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     if (!locationId) return;
 
-    // Show loading state while fetching
     setLoading(true);
 
     // Fetch forecast data and location name when locationId changes
@@ -36,20 +35,19 @@ export const ForecastPage: React.FC<{
         setForecastData(data);
 
         const name = stations[locationId]?.name || "Unknown Station";
-        setLocationName(name); // Set location name
+        setLocationName(name);
 
-        setLoading(false); // Set loading to false when data is fetched
+        setLoading(false);
       } catch (err) {
         console.error("Error fetching data:", err);
-        setLoading(false); // Set loading to false if there is an error
+        setLoading(false);
       }
     })();
-  }, [locationId, stations]); // Fetch again when locationId changes
+  }, [locationId, stations]);
 
   // Handle the case where no forecastData or locationName exists
   if (!locationId) return <div>No location specified</div>;
 
-  // Show loading state while fetching
   if (loading) return <div>Loading forecast...</div>;
 
   if (!forecastData) return <div>No data available</div>;

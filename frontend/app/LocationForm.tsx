@@ -20,16 +20,13 @@ export const LocationForm: React.FC<MapComponentProps> = ({ stations }) => {
     (e: FormEvent<HTMLFormElement>) => {
       e.preventDefault();
 
-      // Find the selected location ID based on the name entered
       const selectedLocationId = Object.entries(stations).find(
         ([_, loc]) => loc.name === locationInput.current?.value,
       )?.[0];
 
       if (selectedLocationId) {
-        // Navigate to the forecast page using the location_id as a path parameter
         navigate(`/forecast/${encodeURIComponent(selectedLocationId)}`);
       } else {
-        // Handle case where the location is not found
         console.error("Selected location not found");
         setError("Please select a valid location.");
       }
