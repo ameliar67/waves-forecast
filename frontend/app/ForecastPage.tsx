@@ -71,7 +71,7 @@ export const ForecastPage: React.FC<{ stations: Record<string, BuoyStation> }> =
 
           <div className="wind_data_fields">
             <div className="wind_layout">
-              <p className="data">{forecastData ? forecastData.wind_speed : "Loading..."}</p>
+              <p className="data">{forecastData ? forecastData.wind_speed : "Loading..."} knots</p>
               <p className="label">Wind Speed</p>
             </div>
             <div className="wind_layout">
@@ -86,7 +86,7 @@ export const ForecastPage: React.FC<{ stations: Record<string, BuoyStation> }> =
               <p className="label">Forecast</p>
             </div>
             <div className="forecast_layout">
-              <p className="data">{forecastData ? forecastData.air_temperature : "Loading..."}</p>
+              <p className="data">{forecastData ? forecastData.air_temperature : "Loading..."}° Celsius</p>
               <p className="label">Air Temperature</p>
             </div>
           </div>
