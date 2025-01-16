@@ -110,8 +110,6 @@ def retrieve_new_data(wave_model, hours_to_forecast, location) -> plt.Figure:
     buoy_data = wave_model.to_buoy_data(raw_wave_data)
     weather_data = surfpy.WeatherApi.fetch_hourly_forecast(location)
 
-    print("air temp", type(weather_data[0]), weather_data[0].air_temperature)
-
     if len(weather_data) == 0:
         forecast_data = {
             "chart": None,
