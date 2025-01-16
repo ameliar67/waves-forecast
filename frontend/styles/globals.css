@@ -1,210 +1,225 @@
-html *  {
-    font-family: "Inter";
+html * {
+  font-family: "Inter";
 }
 
-html, body  {
-    height: 100%;
+html,
+body {
+  height: 100%;
 }
 
-h1  {
-    font-size: 3.5em;
+h1 {
+  font-size: 3.5em;
 }
 
-p  {
-    font-size: 2em;
-    margin-top: 0; 
-    margin-bottom: 0;
+p {
+  font-size: 2em;
+  margin-top: 0;
+  margin-bottom: 0;
 }
 
-h1, html, body, .current_wave_height_text, .current_weather_warnings_text, #submit_button  {
-    margin: 0;
+h1,
+html,
+body,
+.current_wave_height_text,
+.current_weather_warnings_text,
+#submit_button {
+  margin: 0;
 }
 
-img, .forecast_header {
-    width: 100%;
+img,
+.forecast_header {
+  width: 100%;
 }
 
-#current-wave-height, .wave_and_weather_title, .wave_height, .data  {
-    font-weight: bold;
+#current-wave-height,
+.wave_and_weather_title,
+.wave_height,
+.data {
+  font-weight: bold;
 }
 
-
-#main-container, .location_form  {
-    display: flex;
-    align-items: center;
-    flex-direction: column;
+#main-container,
+.location_form {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
 }
 
 #main-container {
-    height: 100%;
+  height: 100%;
 }
 
 #header {
-    height: 30%;
-    width: 100%;
-    align-items: center;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+  height: 30%;
+  width: 100%;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
-#current-wave-height  {
-    margin-top: 50px;
-    font-size: 1em;
+#current-wave-height {
+  margin-top: 50px;
+  font-size: 1em;
 }
 
-.forecast_header  {
-    display: flex;
-    justify-content: space-between;
-    height: 20%;
-    align-items: center;
-    box-shadow: 2px 2px 10px #d6d6d6;
+.forecast_header {
+  display: flex;
+  justify-content: space-between;
+  height: 20%;
+  align-items: center;
+  box-shadow: 2px 2px 10px #d6d6d6;
 }
 
-.wave_and_weather_title  {
-    font-size: 1.5em;
-    padding-left: 1em;
-    color: black;
-    text-decoration: none;
+.wave_and_weather_title {
+  font-size: 1.5em;
+  padding-left: 1em;
+  color: black;
+  text-decoration: none;
 }
 
-.title_form_text  {
-    font-size: 1.2em;
+.title_form_text {
+  font-size: 1.2em;
 }
 
 .individual_data_fields {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-    width: 80%;
-    margin: 5%;
-    gap: 3em;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  width: 80%;
+  margin: 5%;
+  gap: 3em;
 }
 
 .wave_height_layout {
-    flex-direction: column;
+  flex-direction: column;
 }
 
-.wind_layout, .forecast_layout, .alerts_layout {
-    flex-direction: column;
+.wind_layout,
+.forecast_layout,
+.alerts_layout {
+  flex-direction: column;
 }
 
-.alerts_layout  {
-    padding: 20px;
-    box-shadow: 2px 2px 10px #d6d6d6;
+.alerts_layout {
+  padding: 20px;
+  box-shadow: 2px 2px 10px #d6d6d6;
 }
 
-
-.wave_height  {
-    font-size: 7em;
-    margin-top: 0;
-    margin-bottom: 0;
+.wave_height {
+  font-size: 7em;
+  margin-top: 0;
+  margin-bottom: 0;
 }
 
 .data {
-    font-size: 1.5em;
+  font-size: 1.5em;
 }
 
-.current_wave_height_text  {
-    font-size: 1.3em;
+.current_wave_height_text {
+  font-size: 1.3em;
 }
 
-.landing_page_title   {
-    font-size: 3.5em;
-    font-weight: bold;
+.landing_page_title {
+  font-size: 3.5em;
+  font-weight: bold;
 }
 
-.label   {
-    font-size: 1.3em;
-    width: 300px;
+.label {
+  font-size: 1.3em;
+  width: 300px;
 }
 
-.form-group  {
-    display: flex;
-    align-items: center;
+.form-group {
+  display: flex;
+  align-items: center;
 }
 
-#location_list  {
-    padding: 10px;
-    width: 100%;
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+#location_list {
+  padding: 10px;
+  width: 100%;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.location_form  {
-    flex-direction: row;
-    width: 40%;
+.location_form {
+  flex-direction: row;
+  width: 40%;
 }
 
-#text_container_404, #text_container_500 {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+#text_container_404,
+#text_container_500 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-#body_404, #body_500   {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+#body_404,
+#body_500 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-  #submit_button  {
-    width: 30%;
-    padding: 12px;
-    background-color: #00b5bb;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    margin: 10px;
-    text-align: center;
+#submit_button {
+  width: 30%;
+  padding: 12px;
+  background-color: #00b5bb;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin: 10px;
+  text-align: center;
 }
 
-  #submit_button:hover  {
-    background-color: #006381;
+#submit_button:hover {
+  background-color: #006381;
 }
 
 datalist {
-    position: absolute;
-    max-height: 20em;
-    border: 0 none;
-    overflow-x: hidden;
-    overflow-y: auto;
-  }
-
-.wave_data_fields, .wind_data_fields, .general_weather_data_fields  {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    width: 50%;
+  position: absolute;
+  max-height: 20em;
+  border: 0 none;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
-.wave_wind_air  {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    width: 50%;
-    height: 400px;
-}
-  
-  datalist option {
-    font-size: 0.8em;
-    padding: 0.3em 1em;
-    background-color: #ccc;
-    cursor: pointer;
-  }
-  
-  datalist option:hover, datalist option:focus {
-    color: #fff;
-    background-color: #036;
-    outline: 0 none;
-  }
-
-  @media (max-width: 500px)  {
-    .location_form  {
-      padding: 20px;
-  }
+.wave_data_fields,
+.wind_data_fields,
+.general_weather_data_fields {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 50%;
 }
 
+.wave_wind_air {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 50%;
+  height: 400px;
+}
+
+datalist option {
+  font-size: 0.8em;
+  padding: 0.3em 1em;
+  background-color: #ccc;
+  cursor: pointer;
+}
+
+datalist option:hover,
+datalist option:focus {
+  color: #fff;
+  background-color: #036;
+  outline: 0 none;
+}
+
+@media (max-width: 500px) {
+  .location_form {
+    padding: 20px;
+  }
+}

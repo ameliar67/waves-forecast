@@ -14,7 +14,9 @@ interface ForecastData {
   air_temperature: string;
 }
 
-export const ForecastPage: React.FC<{ stations: Record<string, BuoyStation> }> = ({ stations }) => {
+export const ForecastPage: React.FC<{
+  stations: Record<string, BuoyStation>;
+}> = ({ stations }) => {
   const { locationId } = useParams();
   const [forecastData, setForecastData] = useState<ForecastData | null>(null);
   const [locationName, setLocationName] = useState<string | null>(null); // Track the station name
@@ -68,7 +70,9 @@ export const ForecastPage: React.FC<{ stations: Record<string, BuoyStation> }> =
           <div className="wave_data_fields">
             <div className="wave_height_layout">
               <p className="wave_height">
-                {forecastData ? `${forecastData.current_wave_height} ${forecastData.units}` : "Loading..."}
+                {forecastData
+                  ? `${forecastData.current_wave_height} ${forecastData.units}`
+                  : "Loading..."}
               </p>
               <p className="current_wave_height_text" id="current_wave_height">
                 Wave Height
@@ -78,29 +82,40 @@ export const ForecastPage: React.FC<{ stations: Record<string, BuoyStation> }> =
 
           <div className="wind_data_fields">
             <div className="wind_layout">
-              <p className="data">{forecastData ? forecastData.wind_speed : "Loading..."} knots</p>
+              <p className="data">
+                {forecastData ? forecastData.wind_speed : "Loading..."} knots
+              </p>
               <p className="label">Wind Speed</p>
             </div>
             <div className="wind_layout">
-              <p className="data">{forecastData ? forecastData.wind_direction : "Loading..."}</p>
+              <p className="data">
+                {forecastData ? forecastData.wind_direction : "Loading..."}
+              </p>
               <p className="label">Wind Direction</p>
             </div>
           </div>
 
           <div className="general_weather_data_fields">
             <div className="forecast_layout">
-              <p className="data">{forecastData ? forecastData.short_forecast : "Loading..."}</p>
+              <p className="data">
+                {forecastData ? forecastData.short_forecast : "Loading..."}
+              </p>
               <p className="label">Forecast</p>
             </div>
             <div className="forecast_layout">
-              <p className="data">{forecastData ? forecastData.air_temperature : "Loading..."}° Celsius</p>
+              <p className="data">
+                {forecastData ? forecastData.air_temperature : "Loading..."}°
+                Celsius
+              </p>
               <p className="label">Air Temperature</p>
             </div>
           </div>
         </div>
 
         <div className="alerts_layout">
-          <p className="data">{forecastData ? forecastData.weather_alerts : "Loading..."}</p>
+          <p className="data">
+            {forecastData ? forecastData.weather_alerts : "Loading..."}
+          </p>
           <p className="label">Current Weather Warnings</p>
         </div>
       </div>
@@ -108,7 +123,10 @@ export const ForecastPage: React.FC<{ stations: Record<string, BuoyStation> }> =
       <p className="wave_height_graph_label">Wave Height</p>
       <div className="wave_height_graph">
         {forecastData ? (
-          <img src={`data:image/png;base64,${forecastData.wave_height_graph}`} alt="Wave Height Graph" />
+          <img
+            src={`data:image/png;base64,${forecastData.wave_height_graph}`}
+            alt="Wave Height Graph"
+          />
         ) : (
           "Loading..."
         )}

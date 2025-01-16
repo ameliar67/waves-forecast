@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState, FormEvent, useCallback, useRef } from 'react';
-import { useNavigate } from 'react-router';
+import React, { useState, FormEvent, useCallback, useRef } from "react";
+import { useNavigate } from "react-router";
 
 interface BuoyStation {
   latitude: number;
@@ -18,23 +18,26 @@ export const LocationForm: React.FC<MapComponentProps> = ({ stations }) => {
   const locationInput = useRef<HTMLInputElement>(null!);
   const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = useCallback((e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const handleSubmit = useCallback(
+    (e: FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
 
-    // Find the selected location ID based on the name entered
-    const selectedLocationId = Object.entries(stations).find(
-      ([_, loc]) => loc.name === locationInput.current?.value
-    )?.[0];
+      // Find the selected location ID based on the name entered
+      const selectedLocationId = Object.entries(stations).find(
+        ([_, loc]) => loc.name === locationInput.current?.value,
+      )?.[0];
 
-    if (selectedLocationId) {
-      // Navigate to the forecast page using the location_id as a path parameter
-      navigate(`/forecast/${encodeURIComponent(selectedLocationId)}`);
-    } else {
-      // Handle case where the location is not found
-      console.error('Selected location not found');
-      setError('Please select a valid location.');
-    }
-  }, [stations, navigate]);
+      if (selectedLocationId) {
+        // Navigate to the forecast page using the location_id as a path parameter
+        navigate(`/forecast/${encodeURIComponent(selectedLocationId)}`);
+      } else {
+        // Handle case where the location is not found
+        console.error("Selected location not found");
+        setError("Please select a valid location.");
+      }
+    },
+    [stations, navigate],
+  );
 
   return (
     <form
@@ -57,10 +60,11 @@ export const LocationForm: React.FC<MapComponentProps> = ({ stations }) => {
           </option>
         ))}
       </datalist>
-      <br /><br />
+      <br />
+      <br />
       <input id="submit_button" type="submit" value="Submit" />
-
-      {error && <p style={{ color: 'red' }}>{error}</p>} {/* Display error message */}
+      {error && <p style={{ color: "red" }}>{error}</p>}{" "}
+      {/* Display error message */}
     </form>
   );
 };
