@@ -25,11 +25,12 @@ app = func.FunctionApp(http_auth_level=func.AuthLevel.ANONYMOUS)
 
 @app.function_name(name="LocationsList")
 @app.route(route="locations", methods=["GET"])
-def homePage(req: func.HttpRequest) -> func.HttpResponse:
+def home_page(req: func.HttpRequest) -> func.HttpResponse:
     return func.HttpResponse(
         json.dumps({"locations": locations_dict}),
         mimetype="application/json",
         status_code=200,
+        headers={"Cache-Control": "public, max-age=7200"},
     )
 
 
@@ -73,4 +74,5 @@ def forecast(req: func.HttpRequest) -> func.HttpResponse:
         json.dumps(response_data),
         mimetype="application/json",
         status_code=200,
+        headers={"Cache-Control": "public, max-age=1800"},
     )
