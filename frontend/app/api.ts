@@ -15,8 +15,10 @@ export interface ForecastData {
   air_temperature: string;
 }
 
+const baseUrl = process.env.API_BASE_URL;
+
 export async function getLocations() {
-  const response = await fetch("/api/locations");
+  const response = await fetch(`${baseUrl}/locations`);
   if (!response.ok) {
     throw new Error("Failed to fetch station data");
   }
@@ -26,7 +28,7 @@ export async function getLocations() {
 }
 
 export async function getForecast(id: string): Promise<ForecastData> {
-  const response = await fetch(`/api/forecast/${id}`);
+  const response = await fetch(`${baseUrl}/forecast/${id}`);
   if (!response.ok) {
     // TODO
   }

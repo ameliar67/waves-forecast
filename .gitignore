@@ -1,4 +1,3 @@
 __pycache__/
 .python_packages/
-backend/local.settings.json
 run-azurite-emulator.sh

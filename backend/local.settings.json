@@ -1,0 +1,13 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "FUNCTIONS_WORKER_RUNTIME": "python",
+    "CACHE_BLOB_ACCOUNT_URL": "https://localhost:10000/devstoreaccount1",
+    "REQUESTS_CA_BUNDLE": "/etc/ssl/certs/ca-certificates.crt"
+  },
+  "Host": {
+    "LocalHttpPort": 8000,
+    "CORS": "*"
+  }
+}
