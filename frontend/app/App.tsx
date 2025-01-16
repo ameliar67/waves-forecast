@@ -2,28 +2,16 @@ import { useEffect, useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router";
 import { ForecastPage } from "./ForecastPage";
 import { HomePage } from "./Home";
-import { BuoyStation } from "./LocationData";
+import { BuoyStation, getLocations } from "./api";
 
 export function App() {
   const [stations, setStations] = useState<Record<string, BuoyStation>>({});
 
   // Fetch station data from the backend API when the component loads
   useEffect(() => {
-    const fetchStations = async () => {
-      try {
-        const response = await fetch("/api/locations");
-        if (!response.ok) {
-          throw new Error("Failed to fetch station data");
-        }
-
-        const data = await response.json();
-        setStations(data?.locations || {});
-      } catch (error) {
-        console.error("Error fetching station data:", error);
-      }
-    };
-
-    fetchStations();
+    getLocations()
+      .then((l) => setStations(l))
+      .catch((err) => console.error("Error fetching station data:", err));
   }, []);
 
   return (

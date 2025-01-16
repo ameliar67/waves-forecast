@@ -1,18 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router";
-import { BuoyStation } from "./LocationData";
+import { BuoyStation, ForecastData, getForecast } from "./api";
 import { LocationForm } from "./LocationForm";
-
-interface ForecastData {
-  wave_height_graph: string;
-  current_wave_height: string;
-  units: string;
-  wind_speed: string;
-  wind_direction: string;
-  short_forecast: string;
-  weather_alerts: string;
-  air_temperature: string;
-}
 
 export const ForecastPage: React.FC<{
   stations: Record<string, BuoyStation>;
@@ -26,23 +15,13 @@ export const ForecastPage: React.FC<{
     if (!locationId) return;
 
     setLoading(true);
+    setLocationName(stations[locationId]?.name || "Unknown Station");
 
     // Fetch forecast data and location name when locationId changes
-    (async function () {
-      try {
-        const response = await fetch(`/api/forecast/${locationId}`);
-        const data = await response.json();
-        setForecastData(data);
-
-        const name = stations[locationId]?.name || "Unknown Station";
-        setLocationName(name);
-
-        setLoading(false);
-      } catch (err) {
-        console.error("Error fetching data:", err);
-        setLoading(false);
-      }
-    })();
+    getForecast(locationId)
+      .then((f) => setForecastData(f))
+      .catch((err) => console.error("Error fetching data:", err))
+      .finally(() => setLoading(false));
   }, [locationId, stations]);
 
   // Handle the case where no forecastData or locationName exists
