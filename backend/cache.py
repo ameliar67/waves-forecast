@@ -14,8 +14,7 @@ class Cache:
             valid_from = datetime.datetime.now(datetime.timezone.utc) - max_age
             blob_response = blob_client.download_blob(if_modified_since=valid_from)
             return blob_response.readall()
-        except AzureError as ex:
-            print(ex)
+        except AzureError:
             return None
 
     def set_item(self, key: str, data: bytes) -> None:

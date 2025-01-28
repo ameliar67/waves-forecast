@@ -1,4 +1,5 @@
 import json
+import logging
 
 import azure.functions as func
 import surf_data
@@ -76,3 +77,10 @@ def forecast(req: func.HttpRequest) -> func.HttpResponse:
         status_code=200,
         headers={"Cache-Control": "public, max-age=1800"},
     )
+
+
+@app.function_name("RefreshLocations")
+@app.timer_trigger(schedule="15 3 * * *", run_on_startup=False, arg_name="timer")
+def refresh_locations(timer: func.TimerRequest) -> None:
+    logging.info("Refreshing locations cache entry")
+    get_coastal_locations(cache, force_refresh=True)
