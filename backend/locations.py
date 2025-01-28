@@ -32,6 +32,7 @@ def get_coastal_locations(cache: Cache, force_refresh: bool = False):
             or buoyStation.owner
             == "Prediction and Research Moored Array in the Atlantic"
             or not buoyStation.location.name
+            or buoyStation.location.name == "Drifting Buoy"
         ):
             continue
         locations_dict[buoyStation.station_id] = {
