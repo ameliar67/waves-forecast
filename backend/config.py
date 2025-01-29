@@ -5,11 +5,13 @@ from urllib.parse import urlparse
 class Config:
     def __init__(self):
         self.cache_blob_account_url = None
+        self.is_development = False
 
     @staticmethod
     def from_environment():
         conf = Config()
         conf.cache_blob_account_url = os.environ.get("CACHE_BLOB_ACCOUNT_URL")
+        conf.is_development = os.environ.get("IS_DEVELOPMENT") in ('1', 'True', 'true')
 
         conf.validate()
         return conf

@@ -17,6 +17,10 @@ cache_container_client = ContainerClient(
     "forecast-cache",
     DefaultAzureCredential(),
 )
+
+if app_config.is_development and not cache_container_client.exists():
+    cache_container_client.create_container(public_access=PublicAccess.OFF)
+
 cache = Cache(cache_container_client)
 
 locations_dict = get_coastal_locations(cache)
