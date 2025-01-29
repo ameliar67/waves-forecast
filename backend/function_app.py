@@ -5,21 +5,25 @@ import azure.functions as func
 import surf_data
 import surfpy
 from azure.identity import DefaultAzureCredential
-from azure.storage.blob import ContainerClient
+from azure.storage.blob import BlobServiceClient, ContentSettings, PublicAccess
 from cache import Cache
 from config import Config
 from locations import get_coastal_locations
 
 app_config = Config.from_environment()
 
-cache_container_client = ContainerClient(
-    app_config.cache_blob_account_url,
-    "forecast-cache",
-    DefaultAzureCredential(),
+blob_account = BlobServiceClient(
+    app_config.cache_blob_account_url, DefaultAzureCredential()
 )
+cache_container_client = blob_account.get_container_client("forecast-cache")
+data_container_client = blob_account.get_container_client("data")
 
-if app_config.is_development and not cache_container_client.exists():
-    cache_container_client.create_container(public_access=PublicAccess.OFF)
+if app_config.is_development:
+    if not cache_container_client.exists():
+        cache_container_client.create_container(public_access=PublicAccess.OFF)
+
+    if not data_container_client.exists():
+        data_container_client.create_container(public_access=PublicAccess.BLOB)
 
 cache = Cache(cache_container_client)
 
@@ -86,5 +90,14 @@ def forecast(req: func.HttpRequest) -> func.HttpResponse:
 @app.function_name("RefreshLocations")
 @app.timer_trigger(schedule="15 3 * * *", run_on_startup=False, arg_name="timer")
 def refresh_locations(timer: func.TimerRequest) -> None:
-    logging.info("Refreshing locations cache entry")
-    get_coastal_locations(cache, force_refresh=True)
+    logging.info("Refreshing locations cache entry and response blob")
+    locations_data = get_coastal_locations(cache, force_refresh=True)
+    response_content = json.dumps({"locations": locations_data}).encode("utf-8")
+
+    locations_blob = data_container_client.get_blob_client("locations")
+    content_settings = ContentSettings(
+        content_type="application/json", cache_control="public, max-age=7200"
+    )
+    locations_blob.upload_blob(
+        response_content, overwrite=True, content_settings=content_settings
+    )
