@@ -15,10 +15,14 @@ export interface ForecastData {
   air_temperature: string;
 }
 
-const baseUrl = process.env.API_BASE_URL;
+// Base url for Azure function endpoints
+const apiBaseUrl = process.env.API_BASE_URL;
+
+// Base url for blob storage direct access endpoints
+const storageBaseUrl = process.env.STORAGE_BASE_URL;
 
 export async function getLocations() {
-  const response = await fetch(`${baseUrl}/locations`);
+  const response = await fetch(`${storageBaseUrl}/locations`);
   if (!response.ok) {
     throw new Error("Failed to fetch station data");
   }
@@ -28,7 +32,7 @@ export async function getLocations() {
 }
 
 export async function getForecast(id: string): Promise<ForecastData> {
-  const response = await fetch(`${baseUrl}/forecast/${id}`);
+  const response = await fetch(`${apiBaseUrl}/forecast/${id}`);
   if (!response.ok) {
     // TODO
   }
