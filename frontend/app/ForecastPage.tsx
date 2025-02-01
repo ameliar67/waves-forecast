@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { BuoyStation, ForecastData, getForecast } from "./api";
 import { LocationForm } from "./LocationForm";
+import ProgressBar from "./ProgressBar"
 
 export const ForecastPage: React.FC<{
   stations: Record<string, BuoyStation>;
@@ -14,8 +15,9 @@ export const ForecastPage: React.FC<{
   useEffect(() => {
     if (!locationId) return;
 
-    setLoading(true);
     setLocationName(stations[locationId]?.name || "Unknown Station");
+    setLoading(true);
+    setForecastData(null);
 
     // Fetch forecast data and location name when locationId changes
     getForecast(locationId)
@@ -24,12 +26,7 @@ export const ForecastPage: React.FC<{
       .finally(() => setLoading(false));
   }, [locationId, stations]);
 
-  // Handle the case where no forecastData or locationName exists
-  if (!locationId) return <div>No location specified</div>;
-
-  if (loading) return <div>Loading forecast...</div>;
-
-  if (!forecastData) return <div>No data available</div>;
+  if (!loading && !forecastData) return <div>No data available</div>;
 
   return (
     <div id="main-container">
@@ -49,7 +46,7 @@ export const ForecastPage: React.FC<{
               <p className="wave_height">
                 {forecastData
                   ? `${forecastData.current_wave_height} ${forecastData.units}`
-                  : "Loading..."}
+                  : <ProgressBar containerHeight={100}></ProgressBar>}
               </p>
               <p className="current_wave_height_text" id="current_wave_height">
                 Wave Height
@@ -60,13 +57,13 @@ export const ForecastPage: React.FC<{
           <div className="wind_data_fields">
             <div className="wind_layout">
               <p className="data">
-                {forecastData ? forecastData.wind_speed : "Loading..."} knots
+                {forecastData ? forecastData.wind_speed : <ProgressBar containerHeight={20}></ProgressBar>} knots
               </p>
               <p className="label">Wind Speed</p>
             </div>
             <div className="wind_layout">
               <p className="data">
-                {forecastData ? forecastData.wind_direction : "Loading..."}
+                {forecastData ? forecastData.wind_direction : <ProgressBar containerHeight={20}></ProgressBar>}
               </p>
               <p className="label">Wind Direction</p>
             </div>
@@ -75,13 +72,13 @@ export const ForecastPage: React.FC<{
           <div className="general_weather_data_fields">
             <div className="forecast_layout">
               <p className="data">
-                {forecastData ? forecastData.short_forecast : "Loading..."}
+                {forecastData ? forecastData.short_forecast : <ProgressBar containerHeight={20}></ProgressBar>}
               </p>
               <p className="label">Forecast</p>
             </div>
             <div className="forecast_layout">
               <p className="data">
-                {forecastData ? forecastData.air_temperature : "Loading..."}°
+                {forecastData ? forecastData.air_temperature : <ProgressBar containerHeight={20}></ProgressBar>}°
                 Celsius
               </p>
               <p className="label">Air Temperature</p>
@@ -91,7 +88,7 @@ export const ForecastPage: React.FC<{
 
         <div className="alerts_layout">
           <p className="data">
-            {forecastData ? forecastData.weather_alerts : "Loading..."}
+            {forecastData ? forecastData.weather_alerts : <ProgressBar containerHeight={20}></ProgressBar>}
           </p>
           <p className="label">Current Weather Warnings</p>
         </div>
