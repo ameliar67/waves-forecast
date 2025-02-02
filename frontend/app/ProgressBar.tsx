@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import "./ProgressBar.css";  // Import the CSS file for styling
+import "./ProgressBar.css";
 
 interface ProgressBarProps {
   containerHeight: number | string;
