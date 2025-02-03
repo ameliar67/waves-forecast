@@ -57,13 +57,13 @@ export const ForecastPage: React.FC<{
           <div className="wind_data_fields">
             <div className="wind_layout">
               <p className="data">
-                {forecastData ? forecastData.wind_speed : <ProgressBar containerHeight={20}></ProgressBar>} knots
+                {forecastData ? forecastData.wind_speed + "knots" : ""}
               </p>
               <p className="label">Wind Speed</p>
             </div>
             <div className="wind_layout">
               <p className="data">
-                {forecastData ? forecastData.wind_direction : <ProgressBar containerHeight={20}></ProgressBar>}
+                {forecastData ? forecastData.wind_direction : ""}
               </p>
               <p className="label">Wind Direction</p>
             </div>
@@ -72,14 +72,13 @@ export const ForecastPage: React.FC<{
           <div className="general_weather_data_fields">
             <div className="forecast_layout">
               <p className="data">
-                {forecastData ? forecastData.short_forecast : <ProgressBar containerHeight={20}></ProgressBar>}
+                {forecastData ? forecastData.short_forecast : ""}
               </p>
               <p className="label">Forecast</p>
             </div>
             <div className="forecast_layout">
               <p className="data">
-                {forecastData ? forecastData.air_temperature : <ProgressBar containerHeight={20}></ProgressBar>}°
-                Celsius
+                {forecastData ? forecastData.air_temperature + "° Fahrenheit" : ""}
               </p>
               <p className="label">Air Temperature</p>
             </div>
@@ -94,7 +93,7 @@ export const ForecastPage: React.FC<{
         </div>
       </div>
 
-      <p className="wave_height_graph_label">Wave Height</p>
+      <p className="wave_height_graph_label">{forecastData ? ("Wave Height") : ("")}</p>
       <div className="wave_height_graph">
         {forecastData ? (
           <img
@@ -102,7 +101,7 @@ export const ForecastPage: React.FC<{
             alt="Wave Height Graph"
           />
         ) : (
-          "Loading..."
+          ""
         )}
       </div>
     </div>

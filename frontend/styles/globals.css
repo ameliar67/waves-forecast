@@ -93,6 +93,7 @@ img,
 
 .wave_height_layout {
   flex-direction: column;
+  width: 100%;
 }
 
 .wind_layout,
@@ -110,6 +111,7 @@ img,
   font-size: 7em;
   margin-top: 0;
   margin-bottom: 0;
+  width: 100%;
 }
 
 .data {
@@ -193,7 +195,6 @@ datalist {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  width: 50%;
 }
 
 .wave_wind_air {
