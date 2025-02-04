@@ -23,7 +23,7 @@ export const MapComponent: React.FC<MapComponentProps> = ({ stations }) => {
   const zoom = 2.5;
 
   return (
-    <div style={{ position: "relative", height: "400px", width: "100%" }}>
+    <div style={{ position: "relative", height: "500px", width: "100%" }}>
       <MapContainer
         center={center}
         zoom={zoom}
