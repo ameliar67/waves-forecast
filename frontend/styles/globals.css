@@ -56,6 +56,8 @@ img,
   display: flex;
   flex-direction: column;
   justify-content: center;
+  margin-bottom: 3vw;
+  margin-top: 3vw;
 }
 
 #current-wave-height {
