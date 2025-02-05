@@ -139,18 +139,67 @@ img,
   align-items: center;
 }
 
-#location_list {
-  padding: 10px;
-  width: 100%;
-  background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
 .location_form {
   flex-direction: row;
   width: 40%;
+  max-width: 500px;
+  margin: 0 auto;
 }
+
+.input-wrapper {
+  position: relative;
+}
+
+#location_list {
+  padding: 10px;
+  padding-right: 30px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  font-size: 1em;
+}
+
+.clear-button {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  font-size: 1.2em;
+  color: #999;
+  cursor: pointer;
+}
+
+.clear-button:hover {
+  color: #333;
+}
+
+#submit_button {
+  width: 100%;
+  padding: 12px;
+  background-color: #00b5bb;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin: 10px;
+  text-align: center;
+  font-size: 1em;
+}
+
+#submit_button:hover {
+  background-color: #006381;
+}
+
+.error-message {
+  color: red;
+  margin-top: 10px;
+  font-size: 0.9em;
+}
+/* LocationForm styles end here */
 
 #text_container_404,
 #text_container_500 {
@@ -164,23 +213,6 @@ img,
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-#submit_button {
-  width: 30%;
-  padding: 12px;
-  background-color: #00b5bb;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  margin: 10px;
-  text-align: center;
-}
-
-#submit_button:hover {
-  background-color: #006381;
 }
 
 datalist {
@@ -223,6 +255,6 @@ datalist option:focus {
 
 @media (max-width: 500px) {
   .location_form {
-    padding: 20px;
+    width: 90%;
   }
 }
