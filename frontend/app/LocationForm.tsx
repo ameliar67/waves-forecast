@@ -31,7 +31,7 @@ export const LocationForm: React.FC<MapComponentProps> = ({ stations }) => {
       e.preventDefault();
 
       const selectedLocationId = Object.entries(stations).find(
-        ([_, loc]) => loc.name === inputValue
+        ([_, loc]) => loc.name === inputValue,
       )?.[0];
 
       if (selectedLocationId) {
@@ -41,7 +41,7 @@ export const LocationForm: React.FC<MapComponentProps> = ({ stations }) => {
         setError("Please select a valid location.");
       }
     },
-    [stations, navigate, inputValue]
+    [stations, navigate, inputValue],
   );
 
   return (

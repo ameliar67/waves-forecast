@@ -1,17 +1,16 @@
 .progress-container {
-    width: 100%;
-    background-color: white;
-    overflow: hidden;
-    position: relative;
-  }
-  
-  .progress-filler {
-    height: 100%;
-    width: 100%;
-    position: absolute;
-    top: 0;
-    left: -100%;
-    background-color: #e3e3e3;
-    transition: left 0.03s linear;
-  }
-  
+  width: 100%;
+  background-color: white;
+  overflow: hidden;
+  position: relative;
+}
+
+.progress-filler {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: -100%;
+  background-color: #e3e3e3;
+  transition: left 0.03s linear;
+}

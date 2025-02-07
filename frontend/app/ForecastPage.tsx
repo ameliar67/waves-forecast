@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { BuoyStation, ForecastData, getForecast } from "./api";
 import { LocationForm } from "./LocationForm";
-import ProgressBar from "./ProgressBar"
+import ProgressBar from "./ProgressBar";
 
 export const ForecastPage: React.FC<{
   stations: Record<string, BuoyStation>;
@@ -44,9 +44,11 @@ export const ForecastPage: React.FC<{
           <div className="wave_data_fields">
             <div className="wave_height_layout">
               <p className="wave_height">
-                {forecastData
-                  ? `${forecastData.current_wave_height} ${forecastData.units}`
-                  : <ProgressBar containerHeight={100}></ProgressBar>}
+                {forecastData ? (
+                  `${forecastData.current_wave_height} ${forecastData.units}`
+                ) : (
+                  <ProgressBar containerHeight={100}></ProgressBar>
+                )}
               </p>
               <p className="current_wave_height_text" id="current_wave_height">
                 Wave Height
@@ -78,7 +80,9 @@ export const ForecastPage: React.FC<{
             </div>
             <div className="forecast_layout">
               <p className="data">
-                {forecastData ? forecastData.air_temperature + "° Fahrenheit" : ""}
+                {forecastData
+                  ? forecastData.air_temperature + "° Fahrenheit"
+                  : ""}
               </p>
               <p className="label">Air Temperature</p>
             </div>
@@ -87,13 +91,19 @@ export const ForecastPage: React.FC<{
 
         <div className="alerts_layout">
           <p className="data">
-            {forecastData ? forecastData.weather_alerts : <ProgressBar containerHeight={20}></ProgressBar>}
+            {forecastData ? (
+              forecastData.weather_alerts
+            ) : (
+              <ProgressBar containerHeight={20}></ProgressBar>
+            )}
           </p>
           <p className="label">Current Weather Warnings</p>
         </div>
       </div>
 
-      <p className="wave_height_graph_label">{forecastData ? ("Wave Height") : ("")}</p>
+      <p className="wave_height_graph_label">
+        {forecastData ? "Wave Height" : ""}
+      </p>
       <div className="wave_height_graph">
         {forecastData ? (
           <img
