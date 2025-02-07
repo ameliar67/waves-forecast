@@ -141,14 +141,8 @@ img,
 
 .location_form {
   flex-direction: row;
-  width: 40%;
-  max-width: 500px;
-  margin: 0 auto;
 }
 
-.input-wrapper {
-  position: relative;
-}
 
 #location_list {
   padding: 10px;
@@ -177,7 +171,6 @@ img,
 }
 
 #submit_button {
-  width: 100%;
   padding: 12px;
   background-color: #00b5bb;
   color: white;

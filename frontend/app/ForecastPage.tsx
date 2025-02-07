@@ -57,7 +57,7 @@ export const ForecastPage: React.FC<{
           <div className="wind_data_fields">
             <div className="wind_layout">
               <p className="data">
-                {forecastData ? forecastData.wind_speed + "knots" : ""}
+                {forecastData ? forecastData.wind_speed + " knots" : ""}
               </p>
               <p className="label">Wind Speed</p>
             </div>
