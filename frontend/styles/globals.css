@@ -26,6 +26,21 @@ body,
   margin: 0;
 }
 
+#header {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 3vw;
+  margin-top: 3vw;
+}
+
+.forecast_header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 2px 2px 10px #d6d6d6;
+}
+
 img,
 .forecast_header {
   width: 100%;
@@ -38,6 +53,11 @@ img,
   font-weight: bold;
 }
 
+.landing_page_title {
+  font-size: 3.5em;
+  font-weight: bold;
+}
+
 #main-container,
 .location_form {
   display: flex;
@@ -45,32 +65,9 @@ img,
   flex-direction: column;
 }
 
-#main-container {
-  height: 100%;
-}
-
-#header {
-  height: 30%;
-  width: 100%;
-  align-items: center;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  margin-bottom: 3vw;
-  margin-top: 3vw;
-}
-
 #current-wave-height {
   margin-top: 50px;
   font-size: 1em;
-}
-
-.forecast_header {
-  display: flex;
-  justify-content: space-between;
-  height: 20%;
-  align-items: center;
-  box-shadow: 2px 2px 10px #d6d6d6;
 }
 
 .wave_and_weather_title {
@@ -86,21 +83,16 @@ img,
 
 .individual_data_fields {
   display: flex;
-  flex-direction: row;
   justify-content: space-around;
   width: 80%;
   margin: 5%;
   gap: 3em;
 }
 
-.wave_height_layout {
-  flex-direction: column;
-  width: 100%;
-}
-
 .wind_layout,
 .forecast_layout,
-.alerts_layout {
+.alerts_layout,
+.wave_height_layout {
   flex-direction: column;
 }
 
@@ -111,9 +103,6 @@ img,
 
 .wave_height {
   font-size: 7em;
-  margin-top: 0;
-  margin-bottom: 0;
-  width: 100%;
 }
 
 .data {
@@ -122,11 +111,6 @@ img,
 
 .current_wave_height_text {
   font-size: 1.3em;
-}
-
-.landing_page_title {
-  font-size: 3.5em;
-  font-weight: bold;
 }
 
 .label {
@@ -151,6 +135,43 @@ img,
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   font-size: 1em;
+}
+
+.wave_data_fields,
+.wind_data_fields,
+.general_weather_data_fields {
+  display: flex;
+  justify-content: space-between;
+}
+
+.wave_wind_air {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 50%;
+  height: 400px;
+}
+
+datalist {
+  position: absolute;
+  max-height: 20em;
+  border: 0 none;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+datalist option {
+  font-size: 0.8em;
+  padding: 0.3em 1em;
+  background-color: #ccc;
+  cursor: pointer;
+}
+
+datalist option:hover,
+datalist option:focus {
+  color: #fff;
+  background-color: #036;
+  outline: 0 none;
 }
 
 .clear-button {
@@ -186,71 +207,6 @@ img,
   background-color: #006381;
 }
 
-.error-message {
-  color: red;
-  margin-top: 10px;
-  font-size: 0.9em;
-}
-
-#text_container_404,
-#text_container_500 {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-#body_404,
-#body_500 {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-datalist {
-  position: absolute;
-  max-height: 20em;
-  border: 0 none;
-  overflow-x: hidden;
-  overflow-y: auto;
-}
-
-.wave_data_fields,
-.wind_data_fields,
-.general_weather_data_fields {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-}
-
-.wave_wind_air {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  width: 50%;
-  height: 400px;
-}
-
-datalist option {
-  font-size: 0.8em;
-  padding: 0.3em 1em;
-  background-color: #ccc;
-  cursor: pointer;
-}
-
-datalist option:hover,
-datalist option:focus {
-  color: #fff;
-  background-color: #036;
-  outline: 0 none;
-}
-
-@media (max-width: 500px) {
-  .location_form {
-    width: 90%;
-  }
-}
-
-
 .progress-container {
   width: 100%;
   background-color: white;
@@ -266,4 +222,30 @@ datalist option:focus {
   left: -100%;
   background-color: #e3e3e3;
   transition: left 0.03s linear;
+}
+
+.error-message {
+  color: red;
+  margin-top: 10px;
+  font-size: 0.9em;
+}
+
+#body_404,
+#body_500 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#text_container_404,
+#text_container_500 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+@media (max-width: 500px) {
+  .location_form {
+    width: 90%;
+  }
 }
