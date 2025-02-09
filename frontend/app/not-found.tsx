@@ -1,6 +1,5 @@
 import React from "react";
 
-// Define the type for the props passed to the 404 page
 interface ErrorPageProps {
   errorMessage: string;
   statusCode: number;

@@ -1,6 +1,5 @@
 import React from "react";
 
-// Define the type for the props passed to the 500/error page
 interface ErrorPageProps {
   errorMessage: string;
   statusCode: number;
