@@ -45,7 +45,7 @@ export const ForecastPage: React.FC<{
             <div className="wave_height_layout">
               <p className="wave_height">
                 {forecastData ? (
-                  `${forecastData.current_wave_height} ${forecastData.units}`
+                  `${forecastData.current_wave_height} ft`
                 ) : (
                   <ProgressBar containerHeight={100}></ProgressBar>
                 )}
