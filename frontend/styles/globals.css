@@ -96,6 +96,10 @@ img,
   flex-direction: column;
 }
 
+.wave_height_layout {
+  width: 100%;
+}
+
 .alerts_layout {
   padding: 20px;
   box-shadow: 2px 2px 10px #d6d6d6;
@@ -220,8 +224,8 @@ datalist option:focus {
   position: absolute;
   top: 0;
   left: -100%;
-  background-color: #e3e3e3;
-  transition: left 0.03s linear;
+  background-color: #36a8ac;
+  transition: left 0s linear;
 }
 
 .error-message {
