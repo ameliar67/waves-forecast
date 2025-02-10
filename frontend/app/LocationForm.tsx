@@ -60,7 +60,7 @@ export const LocationForm: React.FC<MapComponentProps> = ({ stations }) => {
           value={inputValue}
           onChange={handleInputChange}
         />
-        {inputValue && (
+        {(
           <button type="button" className="clear-button" onClick={handleClear}>
             ×
           </button>

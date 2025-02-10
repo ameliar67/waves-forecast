@@ -127,13 +127,26 @@ img,
   align-items: center;
 }
 
+#location_list  {
+  border: 0;
+  width: 100%;
+}
+
+#location_list:focus {
+  outline: none;
+  border: none;
+}
+
 .location_form {
   flex-direction: row;
 }
 
-#location_list {
+.input-wrapper {
+  display: flex;
+  justify-content: space-between;
   padding: 10px;
-  padding-right: 30px;
+  min-width: 220px;
+  padding-right: 10px;
   background-color: #fff;
   border: 1px solid #ccc;
   border-radius: 8px;
@@ -179,10 +192,6 @@ datalist option:focus {
 }
 
 .clear-button {
-  position: absolute;
-  right: 10px;
-  top: 50%;
-  transform: translateY(-50%);
   background: none;
   border: none;
   font-size: 1.2em;
