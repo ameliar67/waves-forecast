@@ -2,8 +2,8 @@ from math import isnan
 
 import matplotlib.dates as mdates
 import matplotlib.pyplot as plt
-import requests
 import surfpy
+from config import app_session
 from surfpy import units
 from surfpy.location import Location
 
@@ -94,7 +94,11 @@ def fetch_active_weather_alerts(location: Location, api_root_url: str) -> dict:
     # https://api.weather.gov/alerts/active?point=46.221924,-123.816882
 
     url = f"{api_root_url}alerts/active?point={location.latitude},{location.longitude}"
-    resp = requests.get(url)
+    resp = app_session.get(url)
+    if not resp.ok:
+        # TODO - error handling
+        pass
+
     resp_json = resp.json()
     return resp_json
 

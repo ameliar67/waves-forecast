@@ -1,5 +1,9 @@
 import os
+from requests import Session
 from urllib.parse import urlparse
+
+app_session = Session()
+app_session.headers["User-Agent"] = "waves-forecast/1.0.0"
 
 
 class Config:
@@ -11,7 +15,7 @@ class Config:
     def from_environment():
         conf = Config()
         conf.cache_blob_account_url = os.environ.get("CACHE_BLOB_ACCOUNT_URL")
-        conf.is_development = os.environ.get("IS_DEVELOPMENT") in ('1', 'True', 'true')
+        conf.is_development = os.environ.get("IS_DEVELOPMENT") in ("1", "True", "true")
 
         conf.validate()
         return conf
