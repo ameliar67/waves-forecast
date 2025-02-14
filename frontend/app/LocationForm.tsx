@@ -1,14 +1,9 @@
 import React, { useState, FormEvent, useCallback } from "react";
 import { useNavigate } from "react-router";
-
-interface BuoyStation {
-  latitude: number;
-  longitude: number;
-  name: string;
-}
+import { BuoyStation } from "./api";
 
 interface MapComponentProps {
-  stations: { [key: string]: BuoyStation };
+  stations: Record<string, BuoyStation>;
 }
 
 export const LocationForm: React.FC<MapComponentProps> = ({ stations }) => {
@@ -60,11 +55,11 @@ export const LocationForm: React.FC<MapComponentProps> = ({ stations }) => {
           value={inputValue}
           onChange={handleInputChange}
         />
-        {(
+        {
           <button type="button" className="clear-button" onClick={handleClear}>
             ×
           </button>
-        )}
+        }
         <datalist id="options">
           {Object.entries(stations).map(([locId, loc]) => (
             <option key={locId} value={loc.name} data-locid={locId}>

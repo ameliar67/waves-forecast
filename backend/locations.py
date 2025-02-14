@@ -31,8 +31,6 @@ def get_coastal_locations(cache: Cache, force_refresh: bool = False):
             buoyStation.buoy_type in ("tao", "oilrig", "dart")
             or buoyStation.owner
             == "Prediction and Research Moored Array in the Atlantic"
-            or not buoyStation.location.name
-            or buoyStation.location.name in ("Drifting Buoy", "Stratus")
         ):
             continue
 
@@ -40,7 +38,11 @@ def get_coastal_locations(cache: Cache, force_refresh: bool = False):
             buoyStation.location.latitude, buoyStation.location.longitude, cache=cache
         )
 
+        if loc_country is None:
+            continue
+
         locations_dict[buoyStation.station_id] = {
+            "id": buoyStation.station_id,
             "name": buoyStation.location.name,
             "longitude": float(buoyStation.location.longitude),
             "latitude": float(buoyStation.location.latitude),
