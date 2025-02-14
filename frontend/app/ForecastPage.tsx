@@ -36,7 +36,7 @@ export const ForecastPage: React.FC<{
         </a>
         <p className="title_form_text">{locationName}</p>
 
-        <LocationForm stations={stations} />
+        <LocationForm activeStationId={locationId} stations={stations} />
       </div>
 
       <div className="individual_data_fields">

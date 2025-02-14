@@ -1,23 +1,26 @@
-import React, { useState, FormEvent, useCallback } from "react";
+import React, { FormEvent, useCallback, useMemo, useState } from "react";
 import { useNavigate } from "react-router";
 import { BuoyStation } from "./api";
 
 interface MapComponentProps {
+  activeStationId?: string;
   stations: Record<string, BuoyStation>;
 }
 
-export const LocationForm: React.FC<MapComponentProps> = ({ stations }) => {
+const placeholderOption = "placeholder";
+
+export const LocationForm: React.FC<MapComponentProps> = ({
+  activeStationId,
+  stations,
+}) => {
   const navigate = useNavigate();
-  const [inputValue, setInputValue] = useState("");
+  const [selectedLocationId, setSelectedLocationId] = useState(
+    activeStationId || placeholderOption
+  );
   const [error, setError] = useState<string | null>(null);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInputValue(e.target.value);
-    setError(null);
-  };
-
-  const handleClear = () => {
-    setInputValue("");
+  const handleInputChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedLocationId(e.target.value);
     setError(null);
   };
 
@@ -25,19 +28,38 @@ export const LocationForm: React.FC<MapComponentProps> = ({ stations }) => {
     (e: FormEvent<HTMLFormElement>) => {
       e.preventDefault();
 
-      const selectedLocationId = Object.entries(stations).find(
-        ([_, loc]) => loc.name === inputValue,
-      )?.[0];
-
-      if (selectedLocationId) {
+      if (stations[selectedLocationId]) {
         navigate(`/forecast/${encodeURIComponent(selectedLocationId)}`);
       } else {
         console.error("Selected location not found");
         setError("Please select a valid location.");
       }
     },
-    [stations, navigate, inputValue],
+    [stations, navigate, selectedLocationId]
   );
+
+  const groupedStations = useMemo(() => {
+    const groups = [];
+    const sortedStations = Object.values(stations).sort((a, b) => {
+      if (a.country !== b.country) {
+        return a.country.localeCompare(b.country);
+      }
+
+      return a.name.localeCompare(b.name);
+    });
+
+    let current: BuoyStation[] = [];
+    for (const s of sortedStations) {
+      if (current[0]?.country !== s.country) {
+        current = [];
+        groups.push(current);
+      }
+
+      current.push(s);
+    }
+
+    return groups;
+  }, [stations]);
 
   return (
     <form
@@ -46,27 +68,26 @@ export const LocationForm: React.FC<MapComponentProps> = ({ stations }) => {
       onSubmit={handleSubmit}
     >
       <div className="input-wrapper">
-        <input
+        <select
           id="location_list"
-          type="text"
           name="location"
-          list="options"
-          placeholder="Search or select a location"
-          value={inputValue}
+          value={selectedLocationId}
           onChange={handleInputChange}
-        />
-        {
-          <button type="button" className="clear-button" onClick={handleClear}>
-            ×
-          </button>
-        }
-        <datalist id="options">
-          {Object.entries(stations).map(([locId, loc]) => (
-            <option key={locId} value={loc.name} data-locid={locId}>
-              {loc.name}
-            </option>
+        >
+          <option value={placeholderOption} disabled>
+            Search or select a location
+          </option>
+
+          {groupedStations.map((g) => (
+            <optgroup key={g[0].country} label={g[0].country}>
+              {g.map((b) => (
+                <option key={b.id} value={b.id}>
+                  {b.name}
+                </option>
+              ))}
+            </optgroup>
           ))}
-        </datalist>
+        </select>
       </div>
       <input id="submit_button" type="submit" value="Submit" />
       {error && <p className="error-message">{error}</p>}
