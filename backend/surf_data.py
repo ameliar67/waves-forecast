@@ -24,7 +24,7 @@ def get_wave_forecast(
     hours_to_forecast=24,
 ) -> WaveForecastData:
     cache_encoding = "utf-8"
-    key = f"forecast/v1/{location_id}"
+    key = f"ttl-short/forecast/v1/{location_id}"
     cache_item = cache.get_item(key, max_age=datetime.timedelta(days=1))
     if cache_item is not None:
         return json.loads(cache_item.decode(cache_encoding))

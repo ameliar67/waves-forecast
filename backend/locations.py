@@ -8,7 +8,7 @@ from geocode import get_location_country
 
 def get_coastal_locations(cache: Cache, force_refresh: bool = False):
 
-    key = "buoy_locations/v1"
+    key = "ttl-short/buoy_locations/v1"
     cache_encoding = "utf-8"
 
     # check cache if not forcing refresh

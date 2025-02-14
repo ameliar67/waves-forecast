@@ -14,7 +14,7 @@ def get_location_country(latitude: str, longitude: str, cache: Cache) -> str | N
 
 
 def reverse_geocode(latitude: str, longitude: str, cache: Cache) -> str | None:
-    cache_key = f"geocode/v1/{latitude},{longitude}"
+    cache_key = f"ttl-long/geocode/v1/{latitude},{longitude}"
     cache_encoding = "utf-8"
 
     cache_item = cache.get_item(cache_key, max_age=timedelta(weeks=52))
