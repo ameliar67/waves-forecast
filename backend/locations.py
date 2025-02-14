@@ -2,8 +2,8 @@ import datetime
 import json
 
 import surfpy
-
 from cache import Cache
+from geocode import get_location_country
 
 
 def get_coastal_locations(cache: Cache, force_refresh: bool = False):
@@ -32,13 +32,19 @@ def get_coastal_locations(cache: Cache, force_refresh: bool = False):
             or buoyStation.owner
             == "Prediction and Research Moored Array in the Atlantic"
             or not buoyStation.location.name
-            or buoyStation.location.name == "Drifting Buoy"
+            or buoyStation.location.name in ("Drifting Buoy", "Stratus")
         ):
             continue
+
+        loc_country = get_location_country(
+            buoyStation.location.latitude, buoyStation.location.longitude, cache=cache
+        )
+
         locations_dict[buoyStation.station_id] = {
             "name": buoyStation.location.name,
             "longitude": float(buoyStation.location.longitude),
             "latitude": float(buoyStation.location.latitude),
+            "country": loc_country,
         }
 
     # set cache
