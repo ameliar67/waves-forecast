@@ -35,7 +35,7 @@ export const ForecastPage: React.FC<{
         return (
           <Custom500Page
             errorMessage="Error"
-            errorDetails="Errors"
+            errorDetails={err}
             stations={stations}
             statusCode={500}
             locationId={locationId}
@@ -49,8 +49,8 @@ export const ForecastPage: React.FC<{
   if (!loading && !forecastData) {
     return (
       <Custom500Page
-      errorMessage="Error"
-      errorDetails="Errors"
+      errorMessage="No forecast data currently available for selected location"
+      errorDetails="Please select another location"
       stations={stations}
       statusCode={500}
       locationId={locationId || "Unknown"}
