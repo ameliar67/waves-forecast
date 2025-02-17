@@ -36,7 +36,7 @@ export async function getLocations() {
 export async function getForecast(id: string): Promise<ForecastData> {
   const response = await fetch(`${apiBaseUrl}/forecast/${id}`);
   if (!response.ok) {
-    // TODO
+    throw new Error("Failed to fetch forecast data");
   }
 
   const data = await response.json();
