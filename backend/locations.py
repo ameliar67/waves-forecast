@@ -31,6 +31,7 @@ def get_coastal_locations(cache: Cache, force_refresh: bool = False):
             buoyStation.buoy_type in ("tao", "oilrig", "dart")
             or buoyStation.owner
             == "Prediction and Research Moored Array in the Atlantic"
+            or buoyStation.name == ""
         ):
             continue
 
