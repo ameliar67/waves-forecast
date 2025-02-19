@@ -10,6 +10,8 @@ from cache import Cache
 from config import Config
 from locations import get_coastal_locations
 
+from wave_model import get_wave_model
+
 app_config = Config.from_environment()
 
 blob_account = BlobServiceClient(
@@ -41,8 +43,11 @@ def forecast(req: func.HttpRequest) -> func.HttpResponse:
         return func.HttpResponse(error, status_code=404)
 
     selected_location = locations_dict[location_id]
+    wave_model = get_wave_model(
+        selected_location["latitude"], selected_location["longitude"]
+    )
     wave_forecast = surf_data.get_wave_forecast(
-        wave_model=surfpy.wavemodel.us_west_coast_gfs_wave_model(),
+        wave_model=wave_model,
         cache=cache,
         location_id=location_id,
         selected_location=selected_location["name"],
