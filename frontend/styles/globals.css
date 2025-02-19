@@ -238,9 +238,18 @@ datalist option:focus {
 }
 
 .error-message {
-  color: red;
-  margin-top: 10px;
-  font-size: 0.9em;
+  font-size: 2em;
+  font-weight: bold;
+}
+
+.error-details {
+  font-size: 1.5em;
+}
+
+.error-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 #body_404,
