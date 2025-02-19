@@ -7,7 +7,7 @@ import {
 } from "./api";
 import { ForecastData } from "./ForecastData";
 import { ForecastLoading } from "./ForecastLoading";
-import { Custom500Page } from "./error";
+import { ForecastUnavailable } from "./NotFound";
 
 export const ForecastPage: React.FC<{
   stations: Record<string, BuoyStation>;
@@ -32,30 +32,19 @@ export const ForecastPage: React.FC<{
       .then((f) => setForecastData(f))
       .catch((err) => {
         console.error("Error fetching data:", err);
-        return (
-          <Custom500Page
-            errorMessage="Error"
-            errorDetails={err}
-            stations={stations}
-            statusCode={500}
-            locationId={locationId}
-            locationName={locationName || "Unknown"}
-          />
-        );
       })
       .finally(() => setLoading(false));
   }, [locationId, stations, navigate]);
 
   if (!loading && !forecastData) {
     return (
-      <Custom500Page
-      errorMessage="No forecast data currently available for selected location"
-      errorDetails="Please select another location"
-      stations={stations}
-      statusCode={500}
-      locationId={locationId || "Unknown"}
-      locationName={locationName || "Unknown"}
-    />
+      <ForecastUnavailable
+        errorMessage="No forecast data currently available for selected location"
+        stations={stations}
+        errorDetails="Please select another location"
+        locationId={locationId || "Unknown"}
+        locationName={locationName || "Unknown"}
+      />
     );
   }
 
