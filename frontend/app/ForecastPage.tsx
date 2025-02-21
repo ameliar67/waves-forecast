@@ -14,7 +14,7 @@ export const ForecastPage: React.FC<{
 }> = ({ stations }) => {
   const { locationId } = useParams();
   const [forecastData, setForecastData] = useState<ForecastDataModel | null>(
-    null
+    null,
   );
   const [locationName, setLocationName] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);

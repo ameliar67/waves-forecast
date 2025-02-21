@@ -15,10 +15,10 @@ export const ForecastUnavailable: React.FC<NoForecastProps> = ({
   stations,
   locationId,
   errorMessage,
-  errorDetails
+  errorDetails,
 }) => {
   return (
-    <div id="main-container">
+    <>
       <div className="forecast_header">
         <a href="/" className="wave_and_weather_title">
           Surf Forecast
@@ -31,6 +31,6 @@ export const ForecastUnavailable: React.FC<NoForecastProps> = ({
         <p>{errorMessage}</p>
         <p className="error-details">{errorDetails}</p>
       </div>
-    </div>
+    </>
   );
 };

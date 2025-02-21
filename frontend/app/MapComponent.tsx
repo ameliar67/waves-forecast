@@ -1,20 +1,15 @@
-import React from "react";
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
-import MarkerCluster from "react-leaflet-markercluster";
 import { LatLngExpression } from "leaflet";
-import "leaflet/dist/leaflet.css";
 import "leaflet-defaulticon-compatibility";
 import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css";
+import "leaflet/dist/leaflet.css";
+import React from "react";
+import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
+import MarkerCluster from "react-leaflet-markercluster";
 import "react-leaflet-markercluster/dist/styles.min.css";
-
-interface BuoyStation {
-  latitude: number;
-  longitude: number;
-  name: string;
-}
+import { BuoyStation } from "./api";
 
 interface MapComponentProps {
-  stations: { [key: string]: BuoyStation };
+  stations: Record<string, BuoyStation>;
 }
 
 const center: LatLngExpression = [21.505, -25.09];

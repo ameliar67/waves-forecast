@@ -15,7 +15,7 @@ export const ForecastData: React.FC<ForecastDataProps> = ({
   ...forecastData
 }) => {
   return (
-    <div id="main-container">
+    <>
       <div className="forecast_header">
         <a href="/" className="wave_and_weather_title">
           Surf Forecast
@@ -74,6 +74,6 @@ export const ForecastData: React.FC<ForecastDataProps> = ({
           alt="Wave Height Graph"
         />
       </div>
-    </div>
+    </>
   );
 };

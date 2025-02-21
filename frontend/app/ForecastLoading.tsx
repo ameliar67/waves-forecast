@@ -1,7 +1,7 @@
 import React from "react";
 import { BuoyStation } from "./api";
 import { LocationForm } from "./LocationForm";
-import ProgressBar from "./ProgressBar"
+import ProgressBar from "./ProgressBar";
 
 export interface ForecastLoadingProps {
   stations: Record<string, BuoyStation>;
@@ -15,7 +15,7 @@ export const ForecastLoading: React.FC<ForecastLoadingProps> = ({
   stations,
 }) => {
   return (
-    <div id="main-container">
+    <>
       <div className="forecast_header">
         <a href="/" className="wave_and_weather_title">
           Surf Forecast
@@ -26,6 +26,6 @@ export const ForecastLoading: React.FC<ForecastLoadingProps> = ({
       </div>
       <ProgressBar containerHeight={100}></ProgressBar>
       <p>Loading Forecast...</p>
-    </div>
+    </>
   );
 };

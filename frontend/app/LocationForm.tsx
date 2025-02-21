@@ -15,7 +15,7 @@ export const LocationForm: React.FC<MapComponentProps> = ({
 }) => {
   const navigate = useNavigate();
   const [selectedLocationId, setSelectedLocationId] = useState(
-    activeStationId || placeholderOption
+    activeStationId || placeholderOption,
   );
   const [error, setError] = useState<string | null>(null);
 
@@ -35,7 +35,7 @@ export const LocationForm: React.FC<MapComponentProps> = ({
         setError("Please select a valid location.");
       }
     },
-    [stations, navigate, selectedLocationId]
+    [stations, navigate, selectedLocationId],
   );
 
   const groupedStations = useMemo(() => {

@@ -58,7 +58,7 @@ img,
   font-weight: bold;
 }
 
-#main-container,
+#root,
 .location_form {
   display: flex;
   align-items: center;
