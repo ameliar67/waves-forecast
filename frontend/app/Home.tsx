@@ -12,6 +12,6 @@ export const HomePage: React.FC<{ stations: Record<string, BuoyStation> }> = ({
       <LocationForm stations={stations} />
     </div>
 
-    <MapComponent stations={stations} />
+    <MapComponent className={"home-map"} stations={stations} />
   </>
 );

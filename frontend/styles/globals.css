@@ -58,7 +58,14 @@ img,
   font-weight: bold;
 }
 
-#root,
+#root {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+
+  min-height: 100vh;
+}
+
 .location_form {
   display: flex;
   align-items: center;
@@ -68,6 +75,11 @@ img,
 #current-wave-height {
   margin-top: 50px;
   font-size: 1em;
+}
+
+.home-map {
+  width: 100%;
+  flex: 1;
 }
 
 .wave_and_weather_title {
