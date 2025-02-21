@@ -43,7 +43,6 @@ export const ForecastPage: React.FC<{
         stations={stations}
         errorDetails="Please select another location"
         locationId={locationId || "Unknown"}
-        locationName={locationName || "Unknown"}
       />
     );
   }
@@ -59,11 +58,7 @@ export const ForecastPage: React.FC<{
           {...forecastData}
         />
       ) : (
-        <ForecastLoading
-          locationId={locationId!}
-          locationName={locationName!}
-          stations={stations}
-        />
+        <ForecastLoading locationId={locationId!} stations={stations} />
       )}
     </div>
   );

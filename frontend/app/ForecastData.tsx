@@ -20,7 +20,6 @@ export const ForecastData: React.FC<ForecastDataProps> = ({
         <a href="/" className="wave_and_weather_title">
           Surf Forecast
         </a>
-        <p className="title_form_text">{locationName}</p>
 
         <LocationForm activeStationId={locationId} stations={stations} />
       </div>

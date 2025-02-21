@@ -77,10 +77,6 @@ img,
   text-decoration: none;
 }
 
-.title_form_text {
-  font-size: 1.2em;
-}
-
 .individual_data_fields {
   display: flex;
   justify-content: space-around;
