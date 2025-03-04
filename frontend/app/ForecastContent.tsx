@@ -2,13 +2,13 @@ import React from "react";
 import { BuoyStation, ForecastData as ForecastDataModel } from "./api";
 import { LocationForm } from "./LocationForm";
 
-export interface ForecastDataProps extends ForecastDataModel {
+export interface ForecastContentProps extends ForecastDataModel {
   stations: Record<string, BuoyStation>;
   locationId: string;
   locationName: string;
 }
 
-export const ForecastData: React.FC<ForecastDataProps> = ({
+export const ForecastContent: React.FC<ForecastContentProps> = ({
   locationId,
   locationName,
   stations,
@@ -66,7 +66,6 @@ export const ForecastData: React.FC<ForecastDataProps> = ({
         </div>
       </div>
 
-      <p className="wave_height_graph_label">Wave Height</p>
       <div className="wave_height_graph">
         <img
           src={`data:image/png;base64,${forecastData.wave_height_graph}`}
