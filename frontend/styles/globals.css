@@ -274,11 +274,60 @@ datalist option:focus {
   flex-direction: column;
   align-items: center;
 }
-.error-message {
 
 @media (max-width: 500px) {
   .location_form {
     width: 90%;
   }
 }
+
+@media (max-width: 450px) {
+
+  .forecast_header {
+    flex-direction: column;
+  }
+
+  .wave_and_weather_title {
+    padding-top: 1em;
+  }
+
+  .individual_data_fields {
+    flex-direction: column;
+  }
+
+  .wave_wind_air {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .wave_data_fields, .wind_data_fields, .general_weather_data_fields {
+    flex-direction: column;
+  }
+
+  .label {
+    font-size: 1em;
+  }
+
+  p {
+    font-size: 1em;
+  }
+
+  .landing_page_title {
+    font-size: 2.5em;
+  }
+
+  .error-message {
+    text-align: center;
+    padding: 10px;
+  }
+
+  #header {
+    flex-direction: column;
+    align-items: center;
+    padding-top: 4vh;
+    display: flex;
+    z-index: 2;
     background-color: white;
+  }
+  
+}
