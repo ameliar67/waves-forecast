@@ -85,6 +85,7 @@ def get_chart(forecast, units: str = surfpy.units.Units.metric):
     ax.xaxis.set_major_formatter(date_format)
     ax.set_xlabel("Date and Time")
     ax.set_ylabel(f"Breaking Wave Height ({forecast[0].unit})")
+    fig.suptitle('Wave Height', fontsize=16)
     ax.grid(True)
 
     return fig
