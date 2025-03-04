@@ -94,14 +94,15 @@ img,
   justify-content: space-around;
   width: 80%;
   margin: 5%;
-  gap: 3em;
 }
 
 .wind_layout,
 .forecast_layout,
 .alerts_layout,
 .wave_height_layout {
+  display: flex;
   flex-direction: column;
+  max-width: 100%;
 }
 
 .wave_height_layout {
@@ -111,6 +112,7 @@ img,
 .alerts_layout {
   padding: 20px;
   box-shadow: 2px 2px 10px #d6d6d6;
+  min-width: 30%
 }
 
 .wave_height {
@@ -167,6 +169,11 @@ img,
 .general_weather_data_fields {
   display: flex;
   justify-content: space-between;
+}
+
+.wind_data_fields,
+.general_weather_data_fields {
+  max-width: 50%;
 }
 
 .wave_wind_air {
@@ -229,11 +236,13 @@ datalist option:focus {
 }
 
 .progress-container {
-  width: 100%;
+  width: 30vw;
   background-color: white;
   overflow: hidden;
   position: relative;
+  margin-top: 35vh;
 }
+
 
 .progress-filler {
   height: 100%;
@@ -259,6 +268,7 @@ datalist option:focus {
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  margin-top: 20vh;
 }
 
 #body_404,
@@ -275,13 +285,15 @@ datalist option:focus {
   align-items: center;
 }
 
-@media (max-width: 500px) {
+.loadingForecastText {
+  margin-top: 2vh;
+}
+
+@media (max-width: 800px) {
+
   .location_form {
     width: 90%;
   }
-}
-
-@media (max-width: 450px) {
 
   .forecast_header {
     flex-direction: column;
