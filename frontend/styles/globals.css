@@ -258,6 +258,7 @@ datalist option:focus {
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-direction: column;
 }
 
 #body_404,
@@ -273,6 +274,7 @@ datalist option:focus {
   flex-direction: column;
   align-items: center;
 }
+.error-message {
 
 @media (max-width: 500px) {
   .location_form {
