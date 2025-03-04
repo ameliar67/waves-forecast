@@ -25,7 +25,7 @@ export const ForecastUnavailable: React.FC<NoForecastProps> = ({
       </div>
 
       <div className="error-container">
-        <p>{errorMessage}</p>
+        <p className="error-message">{errorMessage}</p>
         <p className="error-details">{errorDetails}</p>
       </div>
     </>
