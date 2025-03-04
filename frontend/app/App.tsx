@@ -7,7 +7,7 @@ import { BuoyStation, getLocations } from "./api";
 export function App() {
   const [stations, setStations] = useState<Record<string, BuoyStation>>({});
 
-  // Fetch station data from the backend API when the component loads
+  // Fetch locations from the backend API when the component loads
   useEffect(() => {
     getLocations()
       .then((l) => setStations(l))
