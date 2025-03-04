@@ -17,12 +17,17 @@ export interface ForecastData {
   air_temperature: string;
 }
 
+//Locations data is stored in blobs as it doesn't change often
+//Forecast data changes often and is regenerated via azure functions unless
+//already stored in cache
+
 // Base url for Azure function endpoints
 const apiBaseUrl = process.env.API_BASE_URL;
 
 // Base url for blob storage direct access endpoints
 const storageBaseUrl = process.env.STORAGE_BASE_URL;
 
+//Retreive location data from blob storage
 export async function getLocations() {
   const response = await fetch(`${storageBaseUrl}/locations`);
   if (!response.ok) {
@@ -33,6 +38,7 @@ export async function getLocations() {
   return data?.locations || {};
 }
 
+//Retrieve forecast data from Azure function API
 export async function getForecast(id: string): Promise<ForecastData> {
   const response = await fetch(`${apiBaseUrl}/forecast/${id}`);
   if (!response.ok) {
