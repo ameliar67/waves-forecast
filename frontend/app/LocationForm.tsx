@@ -2,14 +2,14 @@ import React, { FormEvent, useCallback, useMemo, useState } from "react";
 import { useNavigate } from "react-router";
 import { BuoyStation } from "./api";
 
-interface MapComponentProps {
+interface LocationFormProps {
   activeStationId?: string;
   stations: Record<string, BuoyStation>;
 }
 
 const placeholderOption = "placeholder";
 
-export const LocationForm: React.FC<MapComponentProps> = ({
+export const LocationForm: React.FC<LocationFormProps> = ({
   activeStationId,
   stations,
 }) => {
