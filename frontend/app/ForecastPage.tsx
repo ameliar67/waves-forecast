@@ -5,7 +5,7 @@ import {
   ForecastData as ForecastDataModel,
   getForecast,
 } from "./api";
-import { ForecastData } from "./ForecastData";
+import { ForecastContent } from "./ForecastContent";
 import { ForecastLoading } from "./ForecastLoading";
 import { ForecastUnavailable } from "./NotFound";
 
@@ -14,7 +14,7 @@ export const ForecastPage: React.FC<{
 }> = ({ stations }) => {
   const { locationId } = useParams();
   const [forecastData, setForecastData] = useState<ForecastDataModel | null>(
-    null,
+    null
   );
   const [locationName, setLocationName] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
@@ -23,6 +23,7 @@ export const ForecastPage: React.FC<{
   useEffect(() => {
     if (!locationId) return;
 
+    //Loading State
     setLocationName(stations[locationId]?.name || "Unknown Station");
     setLoading(true);
     setForecastData(null);
@@ -47,19 +48,14 @@ export const ForecastPage: React.FC<{
     );
   }
 
-  return (
-    <div>
-      {/* My common components */}
-      {stations && forecastData ? (
-        <ForecastData
-          locationId={locationId!}
-          locationName={locationName!}
-          stations={stations}
-          {...forecastData}
-        />
-      ) : (
-        <ForecastLoading locationId={locationId!} stations={stations} />
-      )}
-    </div>
+  return stations && forecastData ? (
+    <ForecastContent
+      locationId={locationId!}
+      locationName={locationName!}
+      stations={stations}
+      {...forecastData}
+    />
+  ) : (
+    <ForecastLoading locationId={locationId!} stations={stations} />
   );
 };
