@@ -2,7 +2,7 @@ import json
 import logging
 
 import azure.functions as func
-import surf_data
+import forecast_data
 import surfpy
 from azure.identity import DefaultAzureCredential
 from azure.storage.blob import BlobServiceClient, ContentSettings, PublicAccess
@@ -46,7 +46,7 @@ def forecast(req: func.HttpRequest) -> func.HttpResponse:
     wave_model = get_wave_model(
         selected_location["latitude"], selected_location["longitude"]
     )
-    wave_forecast = surf_data.get_wave_forecast(
+    wave_forecast = forecast_data.get_wave_forecast(
         wave_model=wave_model,
         cache=cache,
         location_id=location_id,
