@@ -1,13 +1,13 @@
 {
     "configurations": [
         {
-            "name": "Python Debugger: Attach using Process Id",
+            "name": "Attach using Process Id",
             "type": "debugpy",
             "request": "attach",
             "processId": "${command:pickProcess}"
         },
         {
-            "name": "Attach to Python Functions",
+            "name": "Run and Debug Python Functions",
             "type": "debugpy",
             "request": "attach",
             "connect": {
