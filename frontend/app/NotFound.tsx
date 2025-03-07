@@ -17,8 +17,8 @@ export const ForecastUnavailable: React.FC<NoForecastProps> = ({
 }) => {
   return (
     <>
-      <div className="forecast_header">
-        <a href="/" className="wave_and_weather_title">
+      <div className="forecast-header">
+        <a href="/" className="wave-and-weather-title">
           Surf Forecast
         </a>
         <LocationForm activeStationId={locationId} stations={stations} />

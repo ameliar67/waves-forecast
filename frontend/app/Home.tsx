@@ -8,7 +8,7 @@ export const HomePage: React.FC<{ stations: Record<string, BuoyStation> }> = ({
 }) => (
   <>
     <div id="header">
-      <p className="landing_page_title">Surf Forecast</p>
+      <p className="landing-page-title">Surf Forecast</p>
       <LocationForm stations={stations} />
     </div>
 

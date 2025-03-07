@@ -63,13 +63,13 @@ export const LocationForm: React.FC<LocationFormProps> = ({
 
   return (
     <form
-      className="location_form"
-      id="landing_page_location_form"
+      className="location-form"
+      id="landing-page-location-form"
       onSubmit={handleSubmit}
     >
       <div className="input-wrapper">
         <select
-          id="location_list"
+          id="location-list"
           name="location"
           value={selectedLocationId}
           onChange={handleInputChange}
@@ -89,7 +89,7 @@ export const LocationForm: React.FC<LocationFormProps> = ({
           ))}
         </select>
       </div>
-      <input id="submit_button" type="submit" value="Submit" />
+      <input id="submit-button" type="submit" value="Submit" />
       {error && <p className="error-message">{error}</p>}
     </form>
   );

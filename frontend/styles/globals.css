@@ -20,9 +20,8 @@ p {
 h1,
 html,
 body,
-.current_wave_height_text,
-.current_weather_warnings_text,
-#submit_button {
+.current-weather-warnings-text,
+#submit-button {
   margin: 0;
 }
 
@@ -34,7 +33,7 @@ body,
   margin-top: 3vw;
 }
 
-.forecast_header {
+.forecast-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -42,18 +41,19 @@ body,
 }
 
 img,
-.forecast_header {
+.forecast-header {
   width: 100%;
 }
 
 #current-wave-height,
-.wave_and_weather_title,
-.wave_height,
-.data {
+.wave-and-weather-title,
+.wave-height,
+.data,
+.no-alerts {
   font-weight: bold;
 }
 
-.landing_page_title {
+.landing-page-title {
   font-size: 3.5em;
   font-weight: bold;
 }
@@ -62,11 +62,10 @@ img,
   display: flex;
   align-items: center;
   flex-direction: column;
-
   min-height: 100vh;
 }
 
-.location_form {
+.location-form {
   display: flex;
   align-items: center;
   flex-direction: column;
@@ -82,49 +81,45 @@ img,
   flex: 1;
 }
 
-.wave_and_weather_title {
+.wave-and-weather-title {
   font-size: 1.5em;
   padding-left: 1em;
   color: black;
   text-decoration: none;
 }
 
-.individual_data_fields {
+.individual-data-fields {
   display: flex;
   justify-content: space-around;
   width: 80%;
   margin: 5%;
 }
 
-.wind_layout,
-.forecast_layout,
-.alerts_layout,
-.wave_height_layout {
+.wind-layout,
+.forecast-layout,
+.alerts-layout,
+.wave-height-layout {
   display: flex;
   flex-direction: column;
   max-width: 100%;
 }
 
-.wave_height_layout {
+.wave-height-layout {
   width: 100%;
 }
 
-.alerts_layout {
+.alerts-layout {
   padding: 20px;
   box-shadow: 2px 2px 10px #d6d6d6;
   min-width: 30%
 }
 
-.wave_height {
-  font-size: 7em;
+.wave-height {
+  font-size: 9em;
 }
 
 .data {
   font-size: 1.5em;
-}
-
-.current_wave_height_text {
-  font-size: 1.3em;
 }
 
 .label {
@@ -137,17 +132,17 @@ img,
   align-items: center;
 }
 
-#location_list  {
+#location-list  {
   border: 0;
   width: 100%;
 }
 
-#location_list:focus {
+#location-list:focus {
   outline: none;
   border: none;
 }
 
-.location_form {
+.location-form {
   flex-direction: row;
 }
 
@@ -164,19 +159,19 @@ img,
   font-size: 1em;
 }
 
-.wave_data_fields,
-.wind_data_fields,
-.general_weather_data_fields {
+.wave-data-fields,
+.wind-data-fields,
+.general-weather-data-fields {
   display: flex;
   justify-content: space-between;
 }
 
-.wind_data_fields,
-.general_weather_data_fields {
+.wind-data-fields,
+.general-weather-data-fields {
   max-width: 50%;
 }
 
-.wave_wind_air {
+.wave-wind-air {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -218,7 +213,7 @@ datalist option:focus {
   color: #333;
 }
 
-#submit_button {
+#submit-button {
   padding: 12px;
   background-color: #00b5bb;
   color: white;
@@ -231,7 +226,7 @@ datalist option:focus {
   font-size: 1em;
 }
 
-#submit_button:hover {
+#submit-button:hover {
   background-color: #006381;
 }
 
@@ -271,48 +266,49 @@ datalist option:focus {
   margin-top: 20vh;
 }
 
-#body_404,
-#body_500 {
+#body-404,
+#body-500 {
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-#text_container_404,
-#text_container_500 {
+#text-container-404,
+#text-container-500 {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-.loadingForecastText {
+.loading-forecast-text {
   margin-top: 2vh;
 }
 
 @media (max-width: 800px) {
 
-  .location_form {
+  .location-form {
     width: 90%;
   }
 
-  .forecast_header {
+  .forecast-header {
     flex-direction: column;
   }
 
-  .wave_and_weather_title {
+  .wave-and-weather-title {
     padding-top: 1em;
   }
 
-  .individual_data_fields {
+  .individual-data-fields {
     flex-direction: column;
+    gap: 10vh;
   }
 
-  .wave_wind_air {
+  .wave-wind-air {
     width: 100%;
     justify-content: space-between;
   }
 
-  .wave_data_fields, .wind_data_fields, .general_weather_data_fields {
+  .wave-data-fields, .wind-data-fields, .general-weather-data-fields {
     flex-direction: column;
   }
 
@@ -324,7 +320,7 @@ datalist option:focus {
     font-size: 1em;
   }
 
-  .landing_page_title {
+  .landing-page-title {
     font-size: 2.5em;
   }
 
@@ -341,5 +337,10 @@ datalist option:focus {
     z-index: 2;
     background-color: white;
   }
-  
+
+  .wave-height {
+    font-size: 6em;
+  }
+
+
 }

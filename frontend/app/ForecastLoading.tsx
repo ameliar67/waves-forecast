@@ -14,15 +14,15 @@ export const ForecastLoading: React.FC<ForecastLoadingProps> = ({
 }) => {
   return (
     <>
-      <div className="forecast_header">
-        <a href="/" className="wave_and_weather_title">
+      <div className="forecast-header">
+        <a href="/" className="wave-and-weather-title">
           Surf Forecast
         </a>
 
         <LocationForm activeStationId={locationId} stations={stations} />
       </div>
       <ProgressBar containerHeight={100}></ProgressBar>
-      <p>Loading Forecast...</p>
+      <p className="loading-forecast-text">Loading Forecast...</p>
     </>
   );
 };
