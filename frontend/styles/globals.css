@@ -2,27 +2,10 @@ html * {
   font-family: "Inter";
 }
 
-html,
-body {
-  height: 100%;
-}
-
-h1 {
-  font-size: 3.5em;
-}
-
 p {
   font-size: 2em;
   margin-top: 0;
   margin-bottom: 0;
-}
-
-h1,
-html,
-body,
-.current-weather-warnings-text,
-#submit-button {
-  margin: 0;
 }
 
 #header {
@@ -127,11 +110,6 @@ img,
   width: 300px;
 }
 
-.form-group {
-  display: flex;
-  align-items: center;
-}
-
 #location-list  {
   border: 0;
   width: 100%;
@@ -177,40 +155,6 @@ img,
   justify-content: space-between;
   width: 50%;
   height: 400px;
-}
-
-datalist {
-  position: absolute;
-  max-height: 20em;
-  border: 0 none;
-  overflow-x: hidden;
-  overflow-y: auto;
-}
-
-datalist option {
-  font-size: 0.8em;
-  padding: 0.3em 1em;
-  background-color: #ccc;
-  cursor: pointer;
-}
-
-datalist option:hover,
-datalist option:focus {
-  color: #fff;
-  background-color: #036;
-  outline: 0 none;
-}
-
-.clear-button {
-  background: none;
-  border: none;
-  font-size: 1.2em;
-  color: #999;
-  cursor: pointer;
-}
-
-.clear-button:hover {
-  color: #333;
 }
 
 #submit-button {
@@ -266,20 +210,6 @@ datalist option:focus {
   margin-top: 20vh;
 }
 
-#body-404,
-#body-500 {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-#text-container-404,
-#text-container-500 {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
 .loading-forecast-text {
   margin-top: 2vh;
 }
@@ -312,11 +242,7 @@ datalist option:focus {
     flex-direction: column;
   }
 
-  .label {
-    font-size: 1em;
-  }
-
-  p {
+  .label, p {
     font-size: 1em;
   }
 
@@ -341,6 +267,4 @@ datalist option:focus {
   .wave-height {
     font-size: 6em;
   }
-
-
 }
