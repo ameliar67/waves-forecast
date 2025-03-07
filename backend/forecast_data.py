@@ -15,7 +15,7 @@ class WaveForecastData(TypedDict):
 
 
 def get_wave_forecast(
-    wave_model: str,
+    wave_model: surfpy.WaveModel,
     cache: Cache,
     location_id: str,
     selected_location: str,
@@ -25,22 +25,31 @@ def get_wave_forecast(
 ) -> WaveForecastData:
     cache_encoding = "utf-8"
     key = f"ttl-short/forecast/v1/{location_id}"
+
+    # check cache for forecast data
     cache_item = cache.get_item(key, max_age=datetime.timedelta(days=1))
+
+    # cache hit
     if cache_item is not None:
         return json.loads(cache_item.decode(cache_encoding))
 
-    # call retrieve_new_data for new forecast
+    # cache miss
+    # create location object
     location = surfpy.Location(lat, lon, altitude=0, name=selected_location)
     location.depth = 10.0
     location.angle = 200.0
     location.slope = 0.28
 
+    # call retrieve_new_data for new forecast
     forecast_data = retrieve_new_data(wave_model, hours_to_forecast, location)
+    print("forecast_data", forecast_data)
 
+    # generate graph
     img = BytesIO()
     forecast_data["chart"].savefig(img, format="png")
     plot_base64_image = base64.b64encode(img.getvalue()).decode("utf8")
 
+    # organise forecast data
     wave_height = forecast_data["average_wave_height"]
     data = {
         "chart": plot_base64_image,
