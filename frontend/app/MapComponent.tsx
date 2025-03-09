@@ -20,7 +20,7 @@ export const MapComponent: React.FC<MapComponentProps> = ({
   stations,
 }) => {
   return (
-    <MapContainer className={className} center={center} zoom={2.5}>
+    <MapContainer className={className} center={[30.5, -95.5]} zoom={2.5}>
       <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
 
       <MarkerCluster>
