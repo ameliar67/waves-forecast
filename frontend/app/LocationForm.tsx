@@ -41,8 +41,8 @@ export const LocationForm: React.FC<LocationFormProps> = ({
   const groupedStations = useMemo(() => {
     const groups = [];
     const sortedStations = Object.values(stations).sort((a, b) => {
-      if (a.country !== b.country) {
-        return a.country.localeCompare(b.country);
+      if (a.state !== b.state) {
+        return a.state.localeCompare(b.state);
       }
 
       return a.name.localeCompare(b.name);
@@ -50,7 +50,7 @@ export const LocationForm: React.FC<LocationFormProps> = ({
 
     let current: BuoyStation[] = [];
     for (const s of sortedStations) {
-      if (current[0]?.country !== s.country) {
+      if (current[0]?.state !== s.state) {
         current = [];
         groups.push(current);
       }
@@ -79,7 +79,7 @@ export const LocationForm: React.FC<LocationFormProps> = ({
           </option>
 
           {groupedStations.map((g) => (
-            <optgroup key={g[0].country} label={g[0].country}>
+            <optgroup key={g[0].state} label={g[0].state}>
               {g.map((b) => (
                 <option key={b.id} value={b.id}>
                   {b.name}

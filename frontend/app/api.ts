@@ -4,6 +4,7 @@ export interface BuoyStation {
   longitude: number;
   name: string;
   country: string;
+  state: string;
 }
 
 export interface ForecastData {

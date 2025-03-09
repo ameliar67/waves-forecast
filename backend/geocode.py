@@ -11,6 +11,13 @@ def get_location_country(latitude: str, longitude: str, cache: Cache) -> str | N
         return response_data["features"][0]["properties"]["address"]["country"]
     except KeyError:
         return None
+    
+def get_location_state(latitude: str, longitude: str, cache: Cache) -> str | None:
+    response_data = reverse_geocode(latitude, longitude, cache)
+    try:
+        return response_data["features"][0]["properties"]["address"]["state"]
+    except KeyError:
+        return None
 
 
 def reverse_geocode(latitude: str, longitude: str, cache: Cache) -> str | None:

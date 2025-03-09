@@ -3,7 +3,7 @@ import json
 
 import surfpy
 from cache import Cache
-from geocode import get_location_country
+from geocode import get_location_country, get_location_state
 
 
 def get_coastal_locations(cache: Cache, force_refresh: bool = False):
@@ -39,7 +39,11 @@ def get_coastal_locations(cache: Cache, force_refresh: bool = False):
             buoyStation.location.latitude, buoyStation.location.longitude, cache=cache
         )
 
-        if loc_country is None:
+        loc_state = get_location_state(
+            buoyStation.location.latitude, buoyStation.location.longitude, cache=cache
+        )
+
+        if loc_country != "United States" or loc_state is None:
             continue
 
         locations_dict[buoyStation.station_id] = {
@@ -48,6 +52,7 @@ def get_coastal_locations(cache: Cache, force_refresh: bool = False):
             "longitude": float(buoyStation.location.longitude),
             "latitude": float(buoyStation.location.latitude),
             "country": loc_country,
+            "state": loc_state or "Unknown",
         }
 
     # set cache
