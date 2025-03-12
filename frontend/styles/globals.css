@@ -2,6 +2,10 @@ html * {
   font-family: "Inter";
 }
 
+body {
+  margin: 0;
+}
+
 p {
   font-size: 2em;
   margin-top: 0;
