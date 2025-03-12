@@ -196,6 +196,7 @@ img,
 .error-message {
   font-size: 2em;
   font-weight: bold;
+  text-align: center;
 }
 
 .error-details {
@@ -218,6 +219,15 @@ img,
 
   .location-form {
     width: 90%;
+  }
+
+  .error-container {
+    margin-left: 3vh;
+    margin-right: 3vh;
+  }
+
+  .error-details {
+    text-align: center;
   }
 
   .forecast-header {
