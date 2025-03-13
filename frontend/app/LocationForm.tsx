@@ -20,23 +20,18 @@ export const LocationForm: React.FC<LocationFormProps> = ({
   const [error, setError] = useState<string | null>(null);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedLocationId(e.target.value);
+    const newSelectedLocationId = e.target.value;
+    setSelectedLocationId(newSelectedLocationId);
     setError(null);
+
+    // Trigger form submission when a valid location is selected
+    if (stations[newSelectedLocationId] && newSelectedLocationId !== placeholderOption) {
+      navigate(`/forecast/${encodeURIComponent(newSelectedLocationId)}`);
+    } else if (newSelectedLocationId !== placeholderOption) {
+      console.error("Selected location not found");
+      setError("Please select a valid location.");
+    }
   };
-
-  const handleSubmit = useCallback(
-    (e: FormEvent<HTMLFormElement>) => {
-      e.preventDefault();
-
-      if (stations[selectedLocationId]) {
-        navigate(`/forecast/${encodeURIComponent(selectedLocationId)}`);
-      } else {
-        console.error("Selected location not found");
-        setError("Please select a valid location.");
-      }
-    },
-    [stations, navigate, selectedLocationId],
-  );
 
   const groupedStations = useMemo(() => {
     const groups = [];
@@ -62,17 +57,13 @@ export const LocationForm: React.FC<LocationFormProps> = ({
   }, [stations]);
 
   return (
-    <form
-      className="location-form"
-      id="landing-page-location-form"
-      onSubmit={handleSubmit}
-    >
+    <form className="location-form" id="landing-page-location-form">
       <div className="input-wrapper">
         <select
           id="location-list"
           name="location"
           value={selectedLocationId}
-          onChange={handleInputChange}
+          onChange={handleInputChange} // Trigger submission on change
         >
           <option value={placeholderOption} disabled>
             Search or select a location
@@ -89,7 +80,6 @@ export const LocationForm: React.FC<LocationFormProps> = ({
           ))}
         </select>
       </div>
-      <input id="submit-button" type="submit" value="Submit" />
       {error && <p className="error-message">{error}</p>}
     </form>
   );
