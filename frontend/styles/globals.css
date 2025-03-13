@@ -18,6 +18,7 @@ p {
   flex-direction: column;
   margin-bottom: 3vw;
   margin-top: 3vw;
+  width: 40%;
 }
 
 .forecast-header {
@@ -56,6 +57,7 @@ img,
   display: flex;
   align-items: center;
   flex-direction: column;
+  margin: 1vw;
 }
 
 #current-wave-height {
@@ -124,20 +126,14 @@ img,
   border: none;
 }
 
-.location-form {
-  flex-direction: row;
-}
-
 .input-wrapper {
   display: flex;
   justify-content: space-between;
   padding: 10px;
-  min-width: 220px;
-  padding-right: 10px;
+  min-width: 450px;
   background-color: #fff;
-  border: 1px solid #ccc;
   border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   font-size: 1em;
 }
 
@@ -161,23 +157,6 @@ img,
   height: 400px;
 }
 
-#submit-button {
-  padding: 12px;
-  background-color: #00b5bb;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  margin: 10px;
-  text-align: center;
-  font-size: 1em;
-}
-
-#submit-button:hover {
-  background-color: #006381;
-}
-
 .progress-container {
   width: 30vw;
   background-color: white;
@@ -185,7 +164,6 @@ img,
   position: relative;
   margin-top: 35vh;
 }
-
 
 .progress-filler {
   height: 100%;
@@ -219,10 +197,20 @@ img,
   margin-top: 2vh;
 }
 
+.leaflet-popup-content {
+  width: 125px;
+  font-size: 1.6em !important;
+  margin-left: 0.3em;
+}
+
 @media (max-width: 800px) {
 
   .location-form {
     width: 90%;
+  }
+
+  .input-wrapper {
+    min-width: 100px;
   }
 
   .error-container {
