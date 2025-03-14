@@ -59,3 +59,36 @@ def get_coastal_locations(cache: Cache, force_refresh: bool = False):
     cache.set_item(key, json.dumps(locations_dict).encode(cache_encoding))
 
     return locations_dict
+
+
+def is_buoy_data_available(
+    station: surfpy.BuoyStation,
+    known_locations: object
+) -> tuple[Literal[False], None] | tuple[Literal[True], str]:
+    
+    rounded_lat = round(station.location.latitude, 1)
+    rounded_lon = round(station.location.longitude, 1)
+    lat_lon_key = f"{rounded_lat},{rounded_lon}"
+
+    # Check if the key exists and calculate the difference
+    location = known_locations.get(lat_lon_key)
+    if location:
+        current_loc_diff = abs(station.location.latitude - rounded_lat) + abs(station.location.longitude - rounded_lon)
+        closest_distance = location.get('closest_distance')
+
+        # Update and return if the current location is closer
+        if closest_distance is None or closest_distance < current_loc_diff:
+            location['closest_distance'] = current_loc_diff
+            return (True, lat_lon_key)
+
+    # If the location is not found or no update is needed
+    return (False, None)
+
+
+def get_buoy_display_name(name: str) -> str:
+    if len(name) > 4 and name[-4] == "," and name[-3] == " " and name[-2:].isupper():
+        name = name[:-4]
+
+    name = name.lstrip("0123456789- ").rstrip(", ")
+
+    return name
