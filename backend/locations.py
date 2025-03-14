@@ -1,10 +1,13 @@
 import datetime
 import json
+from typing import Literal, TypedDict
 
 import surfpy
 from cache import Cache
-from geocode import get_location_country, get_location_state
 
+class KnownLocation(TypedDict):
+    name: str
+    state: str
 
 def get_coastal_locations(cache: Cache, force_refresh: bool = False):
 
@@ -26,33 +29,29 @@ def get_coastal_locations(cache: Cache, force_refresh: bool = False):
     buoy_stations.fetch_stations()
 
     locations_dict = {}
+    with open('known_locations.json') as fp:
+        known_locations: dict[str, KnownLocation] = json.load(fp)
+
     for buoyStation in buoy_stations.stations:
-        if (
-            buoyStation.buoy_type in ("tao", "oilrig", "dart")
-            or buoyStation.owner
-            == "Prediction and Research Moored Array in the Atlantic"
-            or buoyStation.name == ""
-        ):
+        data_available, surf_location = is_buoy_data_available(buoyStation, known_locations)
+        if not data_available:
+            continue
+        known_locations[surf_location]['closest_station'] = buoyStation
+
+    for location in known_locations.values():
+        buoyStation = location.get('closest_station')
+        if not buoyStation:
             continue
 
-        loc_country = get_location_country(
-            buoyStation.location.latitude, buoyStation.location.longitude, cache=cache
-        )
-
-        loc_state = get_location_state(
-            buoyStation.location.latitude, buoyStation.location.longitude, cache=cache
-        )
-
-        if loc_country != "United States" or loc_state is None:
-            continue
-
+        buoy_name = get_buoy_display_name(buoyStation.location.name)
+        # set country to United States until global buoys supported
         locations_dict[buoyStation.station_id] = {
             "id": buoyStation.station_id,
-            "name": buoyStation.location.name,
+            "name": location.get('name', buoy_name or "Unknown"),
             "longitude": float(buoyStation.location.longitude),
             "latitude": float(buoyStation.location.latitude),
-            "country": loc_country,
-            "state": loc_state or "Unknown",
+            "country": "United States",
+            "state": location.get('state', "Unknown"),
         }
 
     # set cache
