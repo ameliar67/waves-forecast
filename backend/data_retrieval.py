@@ -74,9 +74,9 @@ def get_chart(forecast, conversion_rate):
 
     fig = plt.figure(figsize=(25, 10))
     ax = fig.subplots()
-    ax.plot(times, maxs, c="green", label="max")
-    ax.plot(times, mins, c="blue", label="min")
-    ax.plot(times, summary, c="red", label="average")
+    ax.plot(times, maxs, c="green", label="Max Wave Height")
+    ax.plot(times, mins, c="blue", label="Min Wave Height")
+    ax.plot(times, summary, c="red", label="Summary")
     date_format = mdates.DateFormatter("%A %d %B\n%Y\n%H:%M")
     ax.xaxis.set_major_formatter(date_format)
     ax.set_xlabel("Date and Time")
