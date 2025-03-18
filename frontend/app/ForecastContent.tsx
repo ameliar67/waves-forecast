@@ -1,7 +1,7 @@
 import React from "react";
 import { BuoyStation, ForecastData as ForecastDataModel } from "./api";
 import { LocationForm } from "./LocationForm";
-import { HourlyForecastGrid } from "./HourlyForecastGrid"
+import { HourlyForecastGrid } from "./HourlyForecastGrid";
 
 export interface ForecastContentProps extends ForecastDataModel {
   stations: Record<string, BuoyStation>;
@@ -31,9 +31,7 @@ export const ForecastContent: React.FC<ForecastContentProps> = ({
               <p className="wave-height">
                 {forecastData.current_wave_height} ft
               </p>
-              <p className="label">
-                Wave Height
-              </p>
+              <p className="label">Wave Height</p>
             </div>
           </div>
 
@@ -64,7 +62,9 @@ export const ForecastContent: React.FC<ForecastContentProps> = ({
           {forecastData.weather_alerts !== "None" ? (
             <>
               <p className="label">Current Weather Warnings:</p>
-              <p id="weather-alerts" className="data">{forecastData.weather_alerts}</p>
+              <p id="weather-alerts" className="data">
+                {forecastData.weather_alerts}
+              </p>
             </>
           ) : (
             <p className="no-alerts">No current weather warnings</p>
