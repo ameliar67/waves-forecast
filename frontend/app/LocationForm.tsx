@@ -1,4 +1,4 @@
-import React, { FormEvent, useCallback, useMemo, useState } from "react";
+import React, { useState, useMemo, useRef, useEffect } from "react";
 import { useNavigate } from "react-router";
 import { BuoyStation } from "./api";
 
@@ -9,77 +9,114 @@ interface LocationFormProps {
 
 const placeholderOption = "placeholder";
 
-export const LocationForm: React.FC<LocationFormProps> = ({
-  activeStationId,
-  stations,
-}) => {
+export const LocationForm: React.FC<LocationFormProps> = ({ activeStationId, stations }) => {
   const navigate = useNavigate();
-  const [selectedLocationId, setSelectedLocationId] = useState(
-    activeStationId || placeholderOption,
-  );
+  const [selectedLocationId, setSelectedLocationId] = useState(activeStationId || placeholderOption);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const newSelectedLocationId = e.target.value;
-    setSelectedLocationId(newSelectedLocationId);
-    setError(null);
+  // Ref for the dropdown to detect clicks outside
+  const dropdownRef = useRef<HTMLUListElement | null>(null);
 
-    // Trigger form submission when a valid location is selected
-    if (stations[newSelectedLocationId] && newSelectedLocationId !== placeholderOption) {
-      navigate(`/forecast/${encodeURIComponent(newSelectedLocationId)}`);
-    } else if (newSelectedLocationId !== placeholderOption) {
-      console.error("Selected location not found");
-      setError("Please select a valid location.");
-    }
-  };
+  // Filter the stations based on the search query
+  const filteredStations = useMemo(() => {
+    const lowercasedQuery = searchQuery.toLowerCase();
+    return Object.values(stations).filter((station) =>
+      station.name.toLowerCase().includes(lowercasedQuery) ||
+      station.state.toLowerCase().includes(lowercasedQuery)
+    );
+  }, [stations, searchQuery]);
 
+  // Group stations by state
   const groupedStations = useMemo(() => {
-    const groups = [];
-    const sortedStations = Object.values(stations).sort((a, b) => {
-      if (a.state !== b.state) {
-        return a.state.localeCompare(b.state);
+    const groups: { [state: string]: BuoyStation[] } = {};
+    filteredStations.forEach((station) => {
+      if (!groups[station.state]) {
+        groups[station.state] = [];
       }
-
-      return a.name.localeCompare(b.name);
+      groups[station.state].push(station);
     });
 
-    let current: BuoyStation[] = [];
-    for (const s of sortedStations) {
-      if (current[0]?.state !== s.state) {
-        current = [];
-        groups.push(current);
+    return Object.entries(groups).sort(([stateA], [stateB]) =>
+      stateA.localeCompare(stateB)
+    );
+  }, [filteredStations]);
+
+  // Handle search input change
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(e.target.value);
+  };
+
+  // Toggle dropdown visibility
+  const toggleDropdown = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
+
+  // Handle item selection from the dropdown
+  const handleItemSelect = (stationId: string) => {
+    setSelectedLocationId(stationId);
+    setIsDropdownOpen(false); // Close the dropdown after selection
+    setError(null);
+    navigate(`/forecast/${encodeURIComponent(stationId)}`);
+  };
+
+  // Close dropdown if click happens outside of dropdown
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsDropdownOpen(false);
       }
+    };
 
-      current.push(s);
-    }
+    document.addEventListener("click", handleClickOutside);
 
-    return groups;
-  }, [stations]);
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, []);
+
+  // Prevent click from propagating when clicking on the search input
+  const handleSearchClick = (e: React.MouseEvent<HTMLInputElement>) => {
+    e.stopPropagation();
+    toggleDropdown(); // Open the dropdown when clicked
+  };
 
   return (
     <form className="location-form" id="landing-page-location-form">
-      <div className="input-wrapper">
-        <select
-          id="location-list"
-          name="location"
-          value={selectedLocationId}
-          onChange={handleInputChange} // Trigger submission on change
-        >
-          <option value={placeholderOption} disabled>
-            Search or select a location
-          </option>
-
-          {groupedStations.map((g) => (
-            <optgroup key={g[0].state} label={g[0].state}>
-              {g.map((b) => (
-                <option key={b.id} value={b.id}>
-                  {b.name}
-                </option>
-              ))}
-            </optgroup>
-          ))}
-        </select>
-      </div>
+      <input
+        type="text"
+        placeholder="Search or select a location"
+        value={searchQuery}
+        onChange={handleSearchChange}
+        onClick={handleSearchClick} // Prevent propagation and open dropdown
+        aria-label="Search locations"
+        autoComplete="off"
+      />
+      {isDropdownOpen && (
+        <ul ref={dropdownRef} id="location-list" className="dropdown-list">
+          {groupedStations.length === 0 ? (
+            <li className="dropdown-item">No results found</li>
+          ) : (
+            groupedStations.map(([state, stationsInState]) => (
+              <li key={state} className="dropdown-group">
+                <strong>{state}</strong>
+                <ul className="dropdown-group-list">
+                  {stationsInState.map((station) => (
+                    <li
+                      key={station.id}
+                      className="dropdown-item"
+                      onClick={() => handleItemSelect(station.id)}
+                    >
+                      {station.name}
+                    </li>
+                  ))}
+                </ul>
+              </li>
+            ))
+          )}
+        </ul>
+      )}
       {error && <p className="error-message">{error}</p>}
     </form>
   );
