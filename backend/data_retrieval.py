@@ -85,10 +85,10 @@ def get_chart(forecast, conversion_rate):
     return fig
 
 
-def fetch_active_weather_alerts(location: Location, api_root_url: str) -> dict:
+def fetch_active_weather_alerts(location: Location) -> dict:
     # https://api.weather.gov/alerts/active?point=46.221924,-123.816882
 
-    url = f"{api_root_url}alerts/active?point={location.latitude},{location.longitude}"
+    url = f"https://api.weather.gov/alerts/active?point={location.latitude},{location.longitude}"
     resp = app_session.get(url)
     if not resp.ok:
         logging.error(
@@ -130,7 +130,7 @@ def retrieve_new_data(wave_model, hours_to_forecast, location, conversion_rate) 
         weather_data[0], "wind_compass_direction", "No wind direction available"
     )
 
-    alerts = fetch_active_weather_alerts(location, "https://api.weather.gov/")
+    alerts = fetch_active_weather_alerts(location)
     wave_data = merge_wave_weather_data(buoy_data, weather_data)
 
     for d in wave_data:

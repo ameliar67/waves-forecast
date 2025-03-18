@@ -15,14 +15,9 @@ app_config = Config.from_environment()
 
 
 # Initialize BlobServiceClient and container clients
-def get_blob_service_client():
-    blob_account = BlobServiceClient(
-        app_config.cache_blob_account_url, DefaultAzureCredential()
-    )
-    return blob_account
-
-
-blob_service_client = get_blob_service_client()
+blob_service_client = BlobServiceClient(
+    app_config.cache_blob_account_url, DefaultAzureCredential()
+)
 cache_container_client = blob_service_client.get_container_client("forecast-cache")
 data_container_client = blob_service_client.get_container_client("data")
 

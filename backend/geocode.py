@@ -38,4 +38,4 @@ def reverse_geocode(latitude: str, longitude: str, cache: Cache) -> str | None:
         )
 
     cache.set_item(cache_key, reverse_geo_response.text.encode(cache_encoding))
-    return json.loads(reverse_geo_response.text)
+    return reverse_geo_response.json()
