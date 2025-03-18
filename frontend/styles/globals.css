@@ -41,6 +41,7 @@ p {
   padding: 5px;
   position: fixed;
   overflow: visible;
+  align-items: center;
 }
 
 img {
@@ -81,6 +82,7 @@ img {
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   z-index: 10;
+  height: 22px;
 }
 
 #current-wave-height {
@@ -108,7 +110,7 @@ img {
   display: flex;
   justify-content: space-around;
   width: 80%;
-  margin: 5%;
+  margin: 120px;
 }
 
 .wind-layout,
@@ -359,6 +361,7 @@ input {
   .individual-data-fields {
     flex-direction: column;
     gap: 10vh;
+    margin: 0;
   }
 
   .wave-wind-air {
