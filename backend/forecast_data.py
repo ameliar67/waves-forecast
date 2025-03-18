@@ -42,7 +42,6 @@ def get_wave_forecast(
 
     # call retrieve_new_data for new forecast
     forecast_data = retrieve_new_data(wave_model, hours_to_forecast, location)
-    print("forecast_data", forecast_data)
 
     # generate graph
     img = BytesIO()
