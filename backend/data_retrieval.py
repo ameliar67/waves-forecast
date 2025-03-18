@@ -1,5 +1,5 @@
 from math import isnan
-
+import logging
 import matplotlib.dates as mdates
 import matplotlib.pyplot as plt
 import surfpy
@@ -11,7 +11,6 @@ from surfpy.location import Location
 def change_units(content, new_units, old_unit):
 
     for d in content:
-
         if d.wave_summary is not None:
             d.wave_summary.change_units(new_units)
         for swell in d.swell_components:
@@ -66,7 +65,6 @@ def merge_wave_weather_data(wave_data, weather_data):
 
 
 def get_chart(forecast, conversion_rate):
-
     maxs = [x.maximum_breaking_height * conversion_rate for x in forecast]
     mins = [x.minimum_breaking_height * conversion_rate for x in forecast]
     summary = [x.wave_summary.wave_height * conversion_rate for x in forecast]
@@ -122,6 +120,7 @@ def retrieve_new_data(wave_model, hours_to_forecast, location, conversion_rate) 
         }
         return forecast_data
 
+    # Use default values for missing data
     air_temperature = getattr(
         weather_data[0], "air_temperature", "No temperature forecast available"
     )

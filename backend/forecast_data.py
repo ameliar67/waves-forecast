@@ -27,7 +27,9 @@ def get_wave_forecast(
     key = f"ttl-short/forecast/v1/{location_id}"
 
     # Cache check: return if found
-    if (cache_item := cache.get_item(key, max_age=datetime.timedelta(days=1))) is not None:
+    if (
+        cache_item := cache.get_item(key, max_age=datetime.timedelta(days=1))
+    ) is not None:
         return json.loads(cache_item.decode(cache_encoding))
 
     # Cache miss: Retrieve new data
