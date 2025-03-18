@@ -93,8 +93,10 @@ def fetch_active_weather_alerts(location: Location, api_root_url: str) -> dict:
     url = f"{api_root_url}alerts/active?point={location.latitude},{location.longitude}"
     resp = app_session.get(url)
     if not resp.ok:
-        # TODO - error handling
-        pass
+        logging.error(
+            f"Failed to fetch weather alerts for {location}: {resp.status_code} {resp.text}"
+        )
+        return {}
 
     resp_json = resp.json()
     return resp_json
