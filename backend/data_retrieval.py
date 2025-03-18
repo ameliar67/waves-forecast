@@ -139,9 +139,24 @@ def retrieve_new_data(
     current_wave_height = round(wave_data[0].wave_summary.wave_height * conversion_rate)
 
     chart = get_chart(wave_data, conversion_rate)
-    hourly_forecast = [x.wave_summary.wave_height * conversion_rate for x in wave_data]
-    forecast_hours = [x.date.strftime("%H:%M") for x in wave_data]
-    forecast_dates = [x.date.strftime("%m-%d-%Y") for x in wave_data]
+    hourly_forecast, forecast_hours, forecast_dates = [], [], []
+
+
+    for x in wave_data:
+        hourly_forecast.append(x.wave_summary.wave_height * conversion_rate)
+    
+        # Get the hour from the date
+        hour = x.date.hour  # Extracts the hour from the datetime object
+
+        # Check if the hour is later than 21:00 (9 PM) or earlier than 6:00 AM
+        if hour > 21 or hour < 6:
+            continue
+    
+        # Append forecast hours and dates
+        forecast_hours.append(x.date.strftime("%H:%M"))
+        forecast_dates.append(x.date.strftime("%m-%d-%Y"))
+
+
 
     alerts_list = alerts.get("features", [])
     headline = (
