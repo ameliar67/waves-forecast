@@ -21,7 +21,7 @@ export interface ForecastData {
   forecast_dates: [string];
 }
 
-//Locations data is stored in blobs as it doesn't change often
+//Locations data is kept in blob storage as it doesn't change often
 //Forecast data changes often and is regenerated via azure functions unless
 //already stored in cache
 

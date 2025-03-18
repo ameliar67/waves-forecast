@@ -244,7 +244,6 @@ img {
 
 input[type="search"] {
   border: none !important;
-  /* Remove the border from the search input */
 }
 
 input {
@@ -286,7 +285,6 @@ input {
   flex-wrap: wrap;
   justify-content: center;
   gap: 20px;
-  /* Space between forecast items */
 }
 
 .forecast-item {
@@ -298,7 +296,6 @@ input {
   border-radius: 8px;
   border: 1px solid #edf2f7;
   width: 150px;
-  /* Set a fixed width for each item */
 }
 
 .forecast-time,
@@ -408,21 +405,15 @@ input {
 
   .forecast-items {
     flex-direction: column;
-    /* Stack items vertically on small screens */
     align-items: stretch;
-    /* Allow the items to stretch and fill available width */
     width: 100%;
-    /* Ensure the container takes full width */
   }
 
   .forecast-item {
     display: flex;
     flex-direction: row;
-    /* Arrange time, height, and date side-by-side */
     justify-content: space-between;
-    /* Space out the elements equally */
     width: 100%;
-    /* Make each item take full width */
     padding: 10px;
   }
 
@@ -430,13 +421,10 @@ input {
   .forecast-height,
   .forecast-date {
     flex: 1;
-    /* Allow each item to take up equal space */
     text-align: center;
     padding: 5px;
-    /* Add some padding for spacing */
   }
 
-  /* Optional: Adjust font size on mobile for better readability */
   .forecast-time,
   .forecast-height,
   .forecast-date {
