@@ -36,11 +36,10 @@ def change_units(content, new_units, old_unit):
     return content
 
 
-def merge_wave_weather_data(wave_data, weather_data, units):
+def merge_wave_weather_data(wave_data, weather_data):
     last_weather_index = 0
 
     for wave in wave_data:
-        wave.change_units(units.Units.metric)
         if wave.date > weather_data[-1].date:
             return wave_data
 
@@ -49,7 +48,6 @@ def merge_wave_weather_data(wave_data, weather_data, units):
             if weather.date != wave.date:
                 continue
 
-            weather.change_units(units.Units.metric)
             if weather.air_temperature is not None and not isnan(
                 weather.air_temperature
             ):
@@ -67,13 +65,11 @@ def merge_wave_weather_data(wave_data, weather_data, units):
     return wave_data
 
 
-def get_chart(forecast, units: str = surfpy.units.Units.metric):
+def get_chart(forecast, conversion_rate):
 
-    forecast = change_units(forecast, units, units)
-
-    maxs = [x.maximum_breaking_height for x in forecast]
-    mins = [x.minimum_breaking_height for x in forecast]
-    summary = [x.wave_summary.wave_height for x in forecast]
+    maxs = [x.maximum_breaking_height * conversion_rate for x in forecast]
+    mins = [x.minimum_breaking_height * conversion_rate for x in forecast]
+    summary = [x.wave_summary.wave_height * conversion_rate for x in forecast]
     times = [x.date for x in forecast]
 
     fig = plt.figure(figsize=(25, 10))
@@ -85,7 +81,6 @@ def get_chart(forecast, units: str = surfpy.units.Units.metric):
     ax.xaxis.set_major_formatter(date_format)
     ax.set_xlabel("Date and Time")
     ax.set_ylabel(f"Breaking Wave Height ({forecast[0].unit})")
-    fig.suptitle('Wave Height', fontsize=16)
     ax.grid(True)
 
     return fig
@@ -104,7 +99,9 @@ def fetch_active_weather_alerts(location: Location, api_root_url: str) -> dict:
     return resp_json
 
 
-def retrieve_new_data(wave_model, hours_to_forecast, location) -> plt.Figure:
+def retrieve_new_data(
+    wave_model, hours_to_forecast, location, conversion_rate
+) -> plt.Figure:
 
     wave_grib_data = wave_model.fetch_grib_datas(0, hours_to_forecast)
     raw_wave_data = wave_model.parse_grib_datas(location, wave_grib_data)
@@ -124,36 +121,27 @@ def retrieve_new_data(wave_model, hours_to_forecast, location) -> plt.Figure:
         }
         return forecast_data
 
-    if weather_data[0].air_temperature:
-        air_temperature = weather_data[0].air_temperature
-    else:
-        air_temperature = "No temperature forecast available"
-
-    if weather_data[0].short_forecast:
-        short_forecast = weather_data[0].short_forecast
-    else:
-        short_forecast = "No forecast available"
-
-    if weather_data[0].wind_speed:
-        wind_speed = weather_data[0].wind_speed
-    else:
-        wind_speed = "No wind speed available"
-
-    if weather_data[0].wind_compass_direction:
-        wind_direction = weather_data[0].wind_compass_direction
-    else:
-        wind_direction = "No wind directon available"
+    air_temperature = getattr(
+        weather_data[0], "air_temperature", "No temperature forecast available"
+    )
+    short_forecast = getattr(weather_data[0], "short_forecast", "No forecast available")
+    wind_speed = getattr(weather_data[0], "wind_speed", "No wind speed available")
+    wind_direction = getattr(
+        weather_data[0], "wind_compass_direction", "No wind direction available"
+    )
 
     alerts = fetch_active_weather_alerts(location, "https://api.weather.gov/")
-    wave_data = merge_wave_weather_data(buoy_data, weather_data, units)
+    wave_data = merge_wave_weather_data(buoy_data, weather_data)
 
     for d in wave_data:
         d.solve_breaking_wave_heights(location)
 
-    res = change_units(wave_data, surfpy.units.Units.metric, surfpy.units.Units.metric)
-    current_wave_height = round(res[0].wave_summary.wave_height)
+    current_wave_height = round(wave_data[0].wave_summary.wave_height * conversion_rate)
 
-    chart = get_chart(res)
+    chart = get_chart(wave_data, conversion_rate)
+    hourly_forecast = [x.wave_summary.wave_height * conversion_rate for x in wave_data]
+    forecast_hours = [x.date.strftime("%H:%M") for x in wave_data]
+    forecast_dates = [x.date.strftime("%m-%d-%Y") for x in wave_data]
 
     alerts_list = alerts.get("features", [])
     headline = (
@@ -172,7 +160,7 @@ def retrieve_new_data(wave_model, hours_to_forecast, location) -> plt.Figure:
         "wind_direction": wind_direction,
         "hourly_forecast": hourly_forecast,
         "forecast_hours": forecast_hours,
-        "forecast_dates": forecast_dates
+        "forecast_dates": forecast_dates,
     }
 
     return forecast_data

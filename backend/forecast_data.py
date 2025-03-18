@@ -35,13 +35,20 @@ def get_wave_forecast(
 
     # cache miss
     # create location object
+
+    # Conversion rate for metric to imperial (multiply result by 3.281)
+    # Currently the surfpy module returns metric data from its functions
+    conversion_rate = 3.281
+
     location = surfpy.Location(lat, lon, altitude=0, name=selected_location)
     location.depth = 10.0
     location.angle = 200.0
     location.slope = 0.28
 
     # call retrieve_new_data for new forecast
-    forecast_data = retrieve_new_data(wave_model, hours_to_forecast, location)
+    forecast_data = retrieve_new_data(
+        wave_model, hours_to_forecast, location, conversion_rate
+    )
 
     # generate graph
     img = BytesIO()
@@ -60,7 +67,7 @@ def get_wave_forecast(
         "wind_direction": forecast_data["wind_direction"],
         "hourly_forecast": forecast_data["hourly_forecast"],
         "forecast_hours": forecast_data["forecast_hours"],
-        "forecast_dates": forecast_data["forecast_dates"]
+        "forecast_dates": forecast_data["forecast_dates"],
     }
 
     # set_item in cache
