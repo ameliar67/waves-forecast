@@ -9,9 +9,14 @@ interface LocationFormProps {
 
 const placeholderOption = "placeholder";
 
-export const LocationForm: React.FC<LocationFormProps> = ({ activeStationId, stations }) => {
+export const LocationForm: React.FC<LocationFormProps> = ({
+  activeStationId,
+  stations,
+}) => {
   const navigate = useNavigate();
-  const [selectedLocationId, setSelectedLocationId] = useState(activeStationId || placeholderOption);
+  const [selectedLocationId, setSelectedLocationId] = useState(
+    activeStationId || placeholderOption
+  );
   const [searchQuery, setSearchQuery] = useState("");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -22,9 +27,10 @@ export const LocationForm: React.FC<LocationFormProps> = ({ activeStationId, sta
   // Filter the stations based on the search query
   const filteredStations = useMemo(() => {
     const lowercasedQuery = searchQuery.toLowerCase();
-    return Object.values(stations).filter((station) =>
-      station.name.toLowerCase().includes(lowercasedQuery) ||
-      station.state.toLowerCase().includes(lowercasedQuery)
+    return Object.values(stations).filter(
+      (station) =>
+        station.name.toLowerCase().includes(lowercasedQuery) ||
+        station.state.toLowerCase().includes(lowercasedQuery)
     );
   }, [stations, searchQuery]);
 
@@ -64,7 +70,10 @@ export const LocationForm: React.FC<LocationFormProps> = ({ activeStationId, sta
   // Close dropdown if click happens outside of dropdown
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
         setIsDropdownOpen(false);
       }
     };

@@ -11,7 +11,7 @@ const ProgressBar: React.FC<ProgressBarProps> = ({ containerHeight }) => {
     // Update the position of the filler to create the indeterminate animation
     const interval = setInterval(() => {
       setPosition((prevPosition) =>
-        prevPosition >= 100 ? -100 : prevPosition + 0.2,
+        prevPosition >= 100 ? -100 : prevPosition + 0.2
       );
     }, 1);
 

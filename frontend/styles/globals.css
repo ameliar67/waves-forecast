@@ -145,7 +145,7 @@ img {
   width: 300px;
 }
 
-#location-list  {
+#location-list {
   border: 0;
   width: 100%;
 }
@@ -224,8 +224,8 @@ img {
 #location-list {
   width: 100%;
   padding: 0;
-  max-height: 300px; 
-  overflow-y: auto; 
+  max-height: 300px;
+  overflow-y: auto;
   z-index: 10;
   background-color: white;
 }
@@ -243,7 +243,8 @@ img {
 
 
 input[type="search"] {
-  border: none !important; /* Remove the border from the search input */
+  border: none !important;
+  /* Remove the border from the search input */
 }
 
 input {
@@ -284,7 +285,8 @@ input {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 20px; /* Space between forecast items */
+  gap: 20px;
+  /* Space between forecast items */
 }
 
 .forecast-item {
@@ -295,7 +297,8 @@ input {
   background-color: #f7fafc;
   border-radius: 8px;
   border: 1px solid #edf2f7;
-  width: 150px; /* Set a fixed width for each item */
+  width: 150px;
+  /* Set a fixed width for each item */
 }
 
 .forecast-time,
@@ -354,7 +357,7 @@ input {
   }
 
   .wave-and-weather-title {
-    padding: 0; 
+    padding: 0;
     margin-top: 0.2em;
   }
 
@@ -369,11 +372,14 @@ input {
     justify-content: space-between;
   }
 
-  .wave-data-fields, .wind-data-fields, .general-weather-data-fields {
+  .wave-data-fields,
+  .wind-data-fields,
+  .general-weather-data-fields {
     flex-direction: column;
   }
 
-  .label, p {
+  .label,
+  p {
     font-size: 1em;
   }
 
@@ -401,25 +407,33 @@ input {
   }
 
   .forecast-items {
-    flex-direction: column; /* Stack items vertically on small screens */
-    align-items: stretch; /* Allow the items to stretch and fill available width */
-    width: 100%; /* Ensure the container takes full width */
+    flex-direction: column;
+    /* Stack items vertically on small screens */
+    align-items: stretch;
+    /* Allow the items to stretch and fill available width */
+    width: 100%;
+    /* Ensure the container takes full width */
   }
 
   .forecast-item {
     display: flex;
-    flex-direction: row; /* Arrange time, height, and date side-by-side */
-    justify-content: space-between; /* Space out the elements equally */
-    width: 100%; /* Make each item take full width */
+    flex-direction: row;
+    /* Arrange time, height, and date side-by-side */
+    justify-content: space-between;
+    /* Space out the elements equally */
+    width: 100%;
+    /* Make each item take full width */
     padding: 10px;
   }
 
   .forecast-time,
   .forecast-height,
   .forecast-date {
-    flex: 1; /* Allow each item to take up equal space */
+    flex: 1;
+    /* Allow each item to take up equal space */
     text-align: center;
-    padding: 5px; /* Add some padding for spacing */
+    padding: 5px;
+    /* Add some padding for spacing */
   }
 
   /* Optional: Adjust font size on mobile for better readability */

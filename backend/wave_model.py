@@ -18,9 +18,7 @@ def get_wave_model(lat: int, lon: int):
     loc = surfpy.Location(lat, lon)
     for m in all_wave_models:
         if m.contains_location(loc):
-            logging.info(
-                "Using model %s for location %f,%f", m.description, lat, lon
-            )
+            logging.info("Using model %s for location %f,%f", m.description, lat, lon)
             return m
 
     logging.info(
