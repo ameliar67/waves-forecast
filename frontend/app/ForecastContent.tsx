@@ -21,7 +21,6 @@ export const ForecastContent: React.FC<ForecastContentProps> = ({
         <a href="/" className="wave-and-weather-title">
           Surf Forecast
         </a>
-
         <LocationForm activeStationId={locationId} stations={stations} />
       </div>
 
@@ -64,8 +63,8 @@ export const ForecastContent: React.FC<ForecastContentProps> = ({
         <div className="alerts-layout">
           {forecastData.weather_alerts !== "None" ? (
             <>
-              <p className="data">{forecastData.weather_alerts}</p>
-              <p className="label">Current Weather Warnings</p>
+              <p className="label">Current Weather Warnings:</p>
+              <p id="weather-alerts" className="data">{forecastData.weather_alerts}</p>
             </>
           ) : (
             <p className="no-alerts">No current weather warnings</p>
