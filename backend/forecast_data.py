@@ -26,36 +26,28 @@ def get_wave_forecast(
     cache_encoding = "utf-8"
     key = f"ttl-short/forecast/v1/{location_id}"
 
-    # check cache for forecast data
-    cache_item = cache.get_item(key, max_age=datetime.timedelta(days=1))
-
-    # cache hit
-    if cache_item is not None:
+    # Cache check: return if found
+    if (cache_item := cache.get_item(key, max_age=datetime.timedelta(days=1))) is not None:
         return json.loads(cache_item.decode(cache_encoding))
 
-    # cache miss
-    # create location object
+    # Cache miss: Retrieve new data
 
     # Conversion rate for metric to imperial (multiply result by 3.281)
-    # Currently the surfpy module returns metric data from its functions
+    # Currently surfpy module returns metric data
     conversion_rate = 3.281
-
     location = surfpy.Location(lat, lon, altitude=0, name=selected_location)
-    location.depth = 10.0
-    location.angle = 200.0
-    location.slope = 0.28
+    location.depth, location.angle, location.slope = 10.0, 200.0, 0.28
 
-    # call retrieve_new_data for new forecast
     forecast_data = retrieve_new_data(
         wave_model, hours_to_forecast, location, conversion_rate
     )
 
-    # generate graph
+    # Generate graph
     img = BytesIO()
     forecast_data["chart"].savefig(img, format="png")
     plot_base64_image = base64.b64encode(img.getvalue()).decode("utf8")
 
-    # organise forecast data
+    # Prepare the forecast data to return
     wave_height = forecast_data["average_wave_height"]
     data = {
         "chart": plot_base64_image,
@@ -70,6 +62,6 @@ def get_wave_forecast(
         "forecast_dates": forecast_data["forecast_dates"],
     }
 
-    # set_item in cache
+    # Cache the newly fetched data
     cache.set_item(key, json.dumps(data).encode(cache_encoding))
     return data
