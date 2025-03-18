@@ -102,9 +102,7 @@ def fetch_active_weather_alerts(location: Location, api_root_url: str) -> dict:
     return resp_json
 
 
-def retrieve_new_data(
-    wave_model, hours_to_forecast, location, conversion_rate
-) -> plt.Figure:
+def retrieve_new_data(wave_model, hours_to_forecast, location, conversion_rate) -> dict:
 
     wave_grib_data = wave_model.fetch_grib_datas(0, hours_to_forecast)
     raw_wave_data = wave_model.parse_grib_datas(location, wave_grib_data)
