@@ -16,6 +16,9 @@ export interface ForecastData {
   short_forecast: string;
   weather_alerts: string;
   air_temperature: string;
+  hourly_forecast: [number];
+  forecast_hours: [string];
+  forecast_dates: [string];
 }
 
 //Locations data is stored in blobs as it doesn't change often
