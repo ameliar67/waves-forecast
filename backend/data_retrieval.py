@@ -74,13 +74,14 @@ def get_chart(forecast, conversion_rate):
 
     fig = plt.figure(figsize=(25, 10))
     ax = fig.subplots()
-    ax.plot(times, maxs, c="green")
-    ax.plot(times, mins, c="blue")
-    ax.plot(times, summary, c="red")
+    ax.plot(times, maxs, c="green", label="max")
+    ax.plot(times, mins, c="blue", label="min")
+    ax.plot(times, summary, c="red", label="average")
     date_format = mdates.DateFormatter("%A %d %B\n%Y\n%H:%M")
     ax.xaxis.set_major_formatter(date_format)
     ax.set_xlabel("Date and Time")
     ax.set_ylabel(f"Breaking Wave Height ({forecast[0].unit})")
+    ax.legend(loc="upper left")
     ax.grid(True)
 
     return fig
