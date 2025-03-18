@@ -71,6 +71,9 @@ def forecast(req: func.HttpRequest) -> func.HttpResponse:
         "short_forecast": wave_forecast["short_forecast"],
         "wind_speed": wave_forecast["wind_speed"],
         "wind_direction": wave_forecast["wind_direction"],
+        "hourly_forecast": wave_forecast["hourly_forecast"],
+        "forecast_hours": wave_forecast["forecast_hours"],
+        "forecast_dates": wave_forecast["forecast_dates"]
     }
 
     return func.HttpResponse(

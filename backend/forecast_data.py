@@ -59,6 +59,9 @@ def get_wave_forecast(
         "short_forecast": forecast_data["short_forecast"],
         "wind_speed": forecast_data["wind_speed"],
         "wind_direction": forecast_data["wind_direction"],
+        "hourly_forecast": forecast_data["hourly_forecast"],
+        "forecast_hours": forecast_data["forecast_hours"],
+        "forecast_dates": forecast_data["forecast_dates"]
     }
 
     # set_item in cache

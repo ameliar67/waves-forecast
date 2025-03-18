@@ -170,6 +170,9 @@ def retrieve_new_data(wave_model, hours_to_forecast, location) -> plt.Figure:
         "short_forecast": short_forecast,
         "wind_speed": wind_speed,
         "wind_direction": wind_direction,
+        "hourly_forecast": hourly_forecast,
+        "forecast_hours": forecast_hours,
+        "forecast_dates": forecast_dates
     }
 
     return forecast_data
