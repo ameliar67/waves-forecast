@@ -8,7 +8,6 @@ export interface BuoyStation {
 }
 
 export interface ForecastData {
-  wave_height_graph: string;
   current_wave_height: string;
   wind_speed: string;
   wind_direction: string;

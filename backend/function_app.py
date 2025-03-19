@@ -68,7 +68,6 @@ def forecast(req: func.HttpRequest) -> func.HttpResponse:
 
     # Prepare response data
     response_data = {
-        "wave_height_graph": wave_forecast["chart"],
         "selected_location": selected_location["name"],
         "current_wave_height": wave_forecast["average_wave_height"],
         "weather_alerts": wave_forecast["weather_alerts"],

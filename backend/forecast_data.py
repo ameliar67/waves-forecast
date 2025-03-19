@@ -1,17 +1,9 @@
 import datetime
+import json
+
 import surfpy
 from cache import Cache
-from data_retrieval import retrieve_new_data
-import json
-import base64
-from io import BytesIO
-from typing import TypedDict
-
-
-class WaveForecastData(TypedDict):
-    chart: str
-    average_wave_height: float
-    weather_alerts: str | None
+from data_retrieval import WaveForecastData, retrieve_new_data
 
 
 def get_wave_forecast(
@@ -40,29 +32,7 @@ def get_wave_forecast(
     location = surfpy.Location(lat, lon, altitude=0, name=selected_location)
     location.depth, location.angle, location.slope = 10.0, 200.0, 0.28
 
-    forecast_data = retrieve_new_data(
-        wave_model, hours_to_forecast, location, conversion_rate
-    )
-
-    # Generate graph
-    img = BytesIO()
-    forecast_data["chart"].savefig(img, format="png")
-    plot_base64_image = base64.b64encode(img.getvalue()).decode("utf8")
-
-    # Prepare the forecast data to return
-    wave_height = forecast_data["average_wave_height"]
-    data = {
-        "chart": plot_base64_image,
-        "average_wave_height": wave_height,
-        "weather_alerts": forecast_data["weather_alerts"],
-        "air_temperature": forecast_data["air_temperature"],
-        "short_forecast": forecast_data["short_forecast"],
-        "wind_speed": forecast_data["wind_speed"],
-        "wind_direction": forecast_data["wind_direction"],
-        "hourly_forecast": forecast_data["hourly_forecast"],
-        "forecast_hours": forecast_data["forecast_hours"],
-        "forecast_dates": forecast_data["forecast_dates"],
-    }
+    data = retrieve_new_data(wave_model, hours_to_forecast, location, conversion_rate)
 
     # Cache the newly fetched data
     cache.set_item(key, json.dumps(data).encode(cache_encoding))

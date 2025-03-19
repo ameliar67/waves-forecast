@@ -73,10 +73,7 @@ export const ForecastContent: React.FC<ForecastContentProps> = ({
       </div>
       <HourlyForecastGrid {...forecastData}></HourlyForecastGrid>
       <div className="wave-height-graph">
-        <img
-          src={`data:image/png;base64,${forecastData.wave_height_graph}`}
-          alt="Wave Height Graph"
-        />
+        {/* TODO: front-end rendered wave height graph */}
       </div>
     </>
   );
