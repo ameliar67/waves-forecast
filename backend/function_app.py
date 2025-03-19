@@ -71,9 +71,6 @@ def forecast(req: func.HttpRequest) -> func.HttpResponse:
         "wave_height_graph": wave_forecast["chart"],
         "selected_location": selected_location["name"],
         "current_wave_height": wave_forecast["average_wave_height"],
-        "units": surfpy.units.unit_name(
-            surfpy.units.Units.metric, surfpy.units.Measurement.length
-        ),
         "weather_alerts": wave_forecast["weather_alerts"],
         "air_temperature": wave_forecast["air_temperature"],
         "short_forecast": wave_forecast["short_forecast"],

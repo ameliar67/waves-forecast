@@ -10,15 +10,14 @@ export interface BuoyStation {
 export interface ForecastData {
   wave_height_graph: string;
   current_wave_height: string;
-  units: string;
   wind_speed: string;
   wind_direction: string;
   short_forecast: string;
   weather_alerts: string;
   air_temperature: string;
-  hourly_forecast: [number];
-  forecast_hours: [string];
-  forecast_dates: [string];
+  hourly_forecast: number[];
+  forecast_hours: string[];
+  forecast_dates: string[];
 }
 
 //Locations data is kept in blob storage as it doesn't change often
