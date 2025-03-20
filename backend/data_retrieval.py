@@ -7,18 +7,22 @@ from config import app_session
 from surfpy import units
 from surfpy.location import Location
 
+class HourlyForecastSummary(TypedDict):
+    date: str
+    maxs: float
+    mins: float
+    hourly_summary: float
+
 
 class WaveForecastData(TypedDict):
-    average_wave_height: float
+    selected_location: str
+    average_wave_height: int
     weather_alerts: str | None
-    air_temperature: any  # TODO
-    short_forecast: any  # TODO
-    wind_speed: any  # TODO
-    wind_direction: any  # TODO
-    hourly_forecast: any  # TODO
-    forecast_hours: any  # TODO
-    forecast_dates: any  # TODO
-
+    air_temperature: int | str
+    short_forecast: str
+    wind_speed: int | str
+    wind_direction: str
+    hourly_forecast: list[HourlyForecastSummary]
 
 def change_units(content, new_units, old_unit):
 
