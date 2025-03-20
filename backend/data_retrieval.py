@@ -4,7 +4,6 @@ from typing import TypedDict
 
 import surfpy
 from config import app_session
-from surfpy import units
 from surfpy.location import Location
 
 class HourlyForecastSummary(TypedDict):
@@ -23,33 +22,6 @@ class WaveForecastData(TypedDict):
     wind_speed: int | str
     wind_direction: str
     hourly_forecast: list[HourlyForecastSummary]
-
-def change_units(content, new_units, old_unit):
-
-    for d in content:
-        if d.wave_summary is not None:
-            d.wave_summary.change_units(new_units)
-        for swell in d.swell_components:
-            swell.change_units(new_units)
-
-        d.minimum_breaking_height = units.convert(
-            d.minimum_breaking_height, units.Measurement.length, old_unit, d.unit
-        )
-        d.maximum_breaking_height = units.convert(
-            d.maximum_breaking_height, units.Measurement.length, old_unit, d.unit
-        )
-        d.wind_speed = units.convert(
-            d.wind_speed, units.Measurement.speed, old_unit, d.unit
-        )
-        d.air_temperature = units.convert(
-            d.air_temperature, units.Measurement.temperature, old_unit, d.unit
-        )
-        d.pressure = units.convert(
-            d.pressure, units.Measurement.pressure, old_unit, d.unit
-        )
-
-    return content
-
 
 def merge_wave_weather_data(wave_data, weather_data):
     last_weather_index = 0
