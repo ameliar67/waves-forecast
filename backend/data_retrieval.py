@@ -131,19 +131,16 @@ def retrieve_new_data(
 
     current_wave_height = round(wave_data[0].wave_summary.wave_height * conversion_rate)
 
-    hourly_forecast, forecast_hours, forecast_dates = [], [], []
-
+    hourly_forecast = []
     for x in wave_data:
-        hourly_forecast.append(x.wave_summary.wave_height * conversion_rate)
-
-        # Remove hourly forecast later than 21:00 (9 PM) or earlier than 6:00 AM
-        hour = x.date.hour
-
-        if hour > 21 or hour < 6:
-            continue
-
-        forecast_hours.append(x.date.strftime("%H:%M"))
-        forecast_dates.append(x.date.strftime("%m-%d-%Y"))
+        hourly_forecast.append(
+            {
+                "date": x.date.isoformat(),
+                "maxs": x.maximum_breaking_height * conversion_rate,
+                "mins": x.minimum_breaking_height * conversion_rate,
+                "hourly_summary": x.wave_summary.wave_height * conversion_rate,
+            }
+        )
 
     alerts_list = alerts.get("features", [])
     headline = (
@@ -160,6 +157,4 @@ def retrieve_new_data(
         "wind_speed": wind_speed,
         "wind_direction": wind_direction,
         "hourly_forecast": hourly_forecast,
-        "forecast_hours": forecast_hours,
-        "forecast_dates": forecast_dates,
     }
