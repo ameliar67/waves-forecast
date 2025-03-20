@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Plot from "react-plotly.js";
 
 interface GraphData {
@@ -19,12 +19,24 @@ interface WaveChartProps {
 const WaveChart: React.FC<WaveChartProps> = ({ forecastData }) => {
   const { hourly_forecast = [] } = forecastData;
 
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Check the screen size on component mount and on window resize
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    handleResize();
+    window.addEventListener("resize", handleResize);
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   // Ensure graph_data is not empty before proceeding
   if (!hourly_forecast || hourly_forecast.length === 0) {
     return <p>No graph data available</p>;
   }
 
-  // Extract data for plotting by iterating over the array of objects
   const times: string[] = [];
   const maxs: number[] = [];
   const mins: number[] = [];
@@ -37,7 +49,6 @@ const WaveChart: React.FC<WaveChartProps> = ({ forecastData }) => {
     summary.push(data.hourly_summary);
   });
 
-  // Define the Plot data structure with lines only (no markers)
   const plotData: Plotly.Data[] = [
     {
       x: times,
@@ -45,7 +56,7 @@ const WaveChart: React.FC<WaveChartProps> = ({ forecastData }) => {
       type: "scatter",
       mode: "lines", // Removed the 'markers' to only show lines
       name: "Max Wave Height",
-      line: { color: "green" },
+      line: { color: "#00b894" },
     },
     {
       x: times,
@@ -53,7 +64,7 @@ const WaveChart: React.FC<WaveChartProps> = ({ forecastData }) => {
       type: "scatter",
       mode: "lines",
       name: "Min Wave Height",
-      line: { color: "blue" },
+      line: { color: "#0984e3" },
     },
     {
       x: times,
@@ -61,44 +72,53 @@ const WaveChart: React.FC<WaveChartProps> = ({ forecastData }) => {
       type: "scatter",
       mode: "lines",
       name: "Wave Summary",
-      line: { color: "red" },
+      line: { color: "#e17055" },
     },
   ];
 
   const plotLayout: Partial<Plotly.Layout> = {
-    title: {
-      text: "Hourly Wave Height",
-      font: { size: 24, family: "Inter", color: "black" },
-    },
     xaxis: {
       title: "Time",
-      titlefont: { size: 18, family: "Arial, sans-serif", color: "black" },
-      tickfont: { size: 14, family: "Arial, sans-serif", color: "black" },
+      titlefont: { size: 18, family: "Arial, sans-serif", color: "#636e72" },
+      tickfont: { size: 14, family: "Arial, sans-serif", color: "#636e72" },
+      showgrid: false, // Hide the grid lines
+      zeroline: false,
     },
     yaxis: {
       title: "Wave Height (feet)",
-      titlefont: { size: 18, family: "Arial, sans-serif", color: "black" },
-      tickfont: { size: 14, family: "Arial, sans-serif", color: "black" },
+      titlefont: { size: 18, family: "Arial, sans-serif", color: "#636e72" },
+      tickfont: { size: 14, family: "Arial, sans-serif", color: "#636e72" },
+      showgrid: true,
+      gridcolor: "#ddd",
     },
-    hovermode: "closest", // Correct value for hovermode
-    plot_bgcolor: "#f7f7f7", // Light background color
-    paper_bgcolor: "#f7f7f7", // Light paper background color
+    hovermode: "closest",
     showlegend: true,
-    margin: {
-      l: 50, // Left margin
-      r: 50, // Right margin
-      t: 50, // Top margin
-      b: 50, // Bottom margin
+    legend: {
+      x: isMobile ? 0.5 : 0.5, // Center the legend horizontally on mobile and desktop
+      y: isMobile ? 1.1 : 1.05,
+      xanchor: "center", // Center the legend horizontally
+      yanchor: "bottom", // Align to the bottom of the legend box
+      orientation: "v",
+      font: { family: "Inter", size: 14, color: "#636e72" },
     },
+    margin: {
+      l: 50,
+      r: 30,
+      t: 50,
+      b: 100,
+    },
+    autosize: true,
+    plot_bgcolor: "#f4f6f7",
+    paper_bgcolor: "#ffffff",
   };
 
   return (
-    <div style={{ width: "1300px", height: "500px", marginBottom: "70px" }}>
+    <div className="graph">
       <Plot
         data={plotData}
         layout={plotLayout}
         config={{
-          staticPlot: true, // Disable interactivity
+          responsive: true, // Make the plot responsive to window resizing
         }}
         style={{ width: "100%", height: "100%" }}
       />
