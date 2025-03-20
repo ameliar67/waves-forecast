@@ -1,25 +1,56 @@
 import React from "react";
-import { ForecastData as ForecastDataModel } from "./api";
 
-export const HourlyForecastGrid: React.FC<ForecastDataModel> = ({
-  ...forecastData
-}) => {
+interface GraphData {
+  maxs: number;
+  mins: number;
+  hourly_summary: number;
+  date: string; // ISO 8601 date format
+}
+
+interface ForecastData {
+  hourly_forecast: GraphData[];
+}
+
+interface WaveChartProps {
+  forecastData: ForecastData;
+}
+
+const HourlyForecastGrid: React.FC<WaveChartProps> = ({ forecastData }) => {
+  const { hourly_forecast = [] } = forecastData;
+
   return (
     <div className="forecast-container">
       <div className="forecast-title">Hourly Forecast</div>
       <div className="forecast-items">
-        {forecastData.forecast_hours.map((hours, index) => (
-          <div className="forecast-item" key={index}>
-            <div className="forecast-height">
-              {forecastData.hourly_forecast[index].toFixed(1)} ft
-            </div>
-            <div className="forecast-time">{hours}</div>
-            <div className="forecast-date">
-              {forecastData.forecast_dates[index]}
-            </div>
-          </div>
-        ))}
+        {hourly_forecast.length > 0 ? (
+          hourly_forecast.map((data, index) => {
+            // Use the built-in Date constructor to parse the ISO 8601 date string
+            const date = new Date(data.date);
+
+            // Format the date (MM/DD/YYYY)
+            const formattedDate = date.toLocaleDateString();
+            // Format the time (HH:MM) without seconds
+            const formattedTime = date.toLocaleTimeString([], {
+              hour: "2-digit",
+              minute: "2-digit",
+            });
+
+            const forecastHeight = data.hourly_summary.toFixed(1);
+
+            return (
+              <div key={index} className="forecast-item">
+                <div className="forecast-height">{forecastHeight} ft</div>
+                <div className="forecast-time">{formattedTime}</div>
+                <div className="forecast-date">{formattedDate}</div>
+              </div>
+            );
+          })
+        ) : (
+          <div>No forecast data available</div>
+        )}
       </div>
     </div>
   );
 };
+
+export default HourlyForecastGrid;

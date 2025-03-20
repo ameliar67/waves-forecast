@@ -1,7 +1,8 @@
 import React from "react";
 import { BuoyStation, ForecastData as ForecastDataModel } from "./api";
 import { LocationForm } from "./LocationForm";
-import { HourlyForecastGrid } from "./HourlyForecastGrid";
+import HourlyForecastGrid from "./HourlyForecastGrid";
+import WaveChart from "./Graph";
 
 export interface ForecastContentProps extends ForecastDataModel {
   stations: Record<string, BuoyStation>;
@@ -71,10 +72,8 @@ export const ForecastContent: React.FC<ForecastContentProps> = ({
           )}
         </div>
       </div>
-      <HourlyForecastGrid {...forecastData}></HourlyForecastGrid>
-      <div className="wave-height-graph">
-        {/* TODO: front-end rendered wave height graph */}
-      </div>
+      <HourlyForecastGrid forecastData={forecastData}></HourlyForecastGrid>
+      <WaveChart forecastData={forecastData}></WaveChart>
     </>
   );
 };
