@@ -40,13 +40,13 @@ const WaveChart: React.FC<WaveChartProps> = ({ forecastData }) => {
   const times: string[] = [];
   const maxs: number[] = [];
   const mins: number[] = [];
-  const summary: number[] = [];
+  const wave_height: number[] = [];
 
   hourly_forecast.forEach((data) => {
     times.push(data.date);
     maxs.push(data.max_breaking_height);
     mins.push(data.min_breaking_height);
-    summary.push(data.wave_height);
+    wave_height.push(data.wave_height);
   });
 
   const plotData: Plotly.Data[] = [
@@ -68,7 +68,7 @@ const WaveChart: React.FC<WaveChartProps> = ({ forecastData }) => {
     },
     {
       x: times,
-      y: summary,
+      y: wave_height,
       type: "scatter",
       mode: "lines",
       name: "Wave Height",
