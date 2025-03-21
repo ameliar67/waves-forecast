@@ -51,9 +51,8 @@ export const ForecastPage: React.FC<{
   return stations && forecastData ? (
     <ForecastContent
       locationId={locationId!}
-      locationName={locationName!}
       stations={stations}
-      {...forecastData}
+      forecastData={forecastData}
     />
   ) : (
     <ForecastLoading locationId={locationId!} stations={stations} />

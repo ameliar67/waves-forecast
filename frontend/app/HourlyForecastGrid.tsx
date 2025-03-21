@@ -1,29 +1,19 @@
 import React from "react";
-
-interface HourlyForecast {
-  max_breaking_height: number;
-  min_breaking_height: number;
-  wave_height: number;
-  date: string; // ISO 8601 date format
-}
-
-interface ForecastData {
-  hourly_forecast: HourlyForecast[];
-}
+import { HourlyForecast } from "./api";
 
 interface WaveChartProps {
-  forecastData: ForecastData;
+  hourlyForecast: HourlyForecast[];
 }
 
-const HourlyForecastGrid: React.FC<WaveChartProps> = ({ forecastData }) => {
-  const { hourly_forecast = [] } = forecastData;
-
+const HourlyForecastGrid: React.FC<WaveChartProps> = ({
+  hourlyForecast = [],
+}) => {
   return (
     <div className="forecast-container">
       <div className="forecast-title">Hourly Forecast</div>
       <div className="forecast-items">
-        {hourly_forecast.length > 0 ? (
-          hourly_forecast.map((data, index) => {
+        {hourlyForecast.length > 0 ? (
+          hourlyForecast.map((data, index) => {
             // Use the built-in Date constructor to parse the ISO 8601 date string
             const date = new Date(data.date);
 

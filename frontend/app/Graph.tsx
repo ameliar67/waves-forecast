@@ -1,24 +1,12 @@
 import Plotly from "plotly.js-basic-dist";
 import React, { useLayoutEffect, useMemo, useRef, useState } from "react";
-
-interface HourlyForecast {
-  max_breaking_height: number;
-  min_breaking_height: number;
-  wave_height: number;
-  date: string; // ISO 8601 date format
-}
-
-interface ForecastData {
-  hourly_forecast: HourlyForecast[];
-}
+import { HourlyForecast } from "./api";
 
 interface WaveChartProps {
-  forecastData: ForecastData;
+  hourlyForecast: HourlyForecast[];
 }
 
-const WaveChart: React.FC<WaveChartProps> = ({ forecastData }) => {
-  const { hourly_forecast = [] } = forecastData;
-
+const WaveChart: React.FC<WaveChartProps> = ({ hourlyForecast = [] }) => {
   const [isMobile, setIsMobile] = useState(false);
   useLayoutEffect(() => {
     const match = window.matchMedia("(min-width:768px)");
@@ -30,15 +18,15 @@ const WaveChart: React.FC<WaveChartProps> = ({ forecastData }) => {
   }, []);
 
   const plotData = useMemo<Plotly.Data[]>(() => {
-    if (!hourly_forecast || hourly_forecast.length === 0) {
+    if (!hourlyForecast || hourlyForecast.length === 0) {
       return [];
     }
 
-    const times = hourly_forecast.map((h) => h.date);
+    const times = hourlyForecast.map((h) => h.date);
     return [
       {
         x: times,
-        y: hourly_forecast.map((h) => h.max_breaking_height),
+        y: hourlyForecast.map((h) => h.max_breaking_height),
         type: "scatter",
         mode: "lines", // Removed the 'markers' to only show lines
         name: "Max Breaking Wave Height",
@@ -46,7 +34,7 @@ const WaveChart: React.FC<WaveChartProps> = ({ forecastData }) => {
       },
       {
         x: times,
-        y: hourly_forecast.map((h) => h.min_breaking_height),
+        y: hourlyForecast.map((h) => h.min_breaking_height),
         type: "scatter",
         mode: "lines",
         name: "Min Breaking Wave Height",
@@ -54,14 +42,14 @@ const WaveChart: React.FC<WaveChartProps> = ({ forecastData }) => {
       },
       {
         x: times,
-        y: hourly_forecast.map((h) => h.wave_height),
+        y: hourlyForecast.map((h) => h.wave_height),
         type: "scatter",
         mode: "lines",
         name: "Wave Height",
         line: { color: "#e17055", shape: "spline" },
       },
     ];
-  }, [hourly_forecast]);
+  }, [hourlyForecast]);
 
   const plotLayout = useMemo<Partial<Plotly.Layout>>(
     () => ({

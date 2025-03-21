@@ -1,20 +1,19 @@
 import React from "react";
-import { BuoyStation, ForecastData as ForecastDataModel } from "./api";
-import { LocationForm } from "./LocationForm";
-import HourlyForecastGrid from "./HourlyForecastGrid";
+import { BuoyStation, ForecastData } from "./api";
 import WaveChart from "./Graph";
+import HourlyForecastGrid from "./HourlyForecastGrid";
+import { LocationForm } from "./LocationForm";
 
-export interface ForecastContentProps extends ForecastDataModel {
+export interface ForecastContentProps {
+  forecastData: ForecastData;
   stations: Record<string, BuoyStation>;
   locationId: string;
-  locationName: string;
 }
 
 export const ForecastContent: React.FC<ForecastContentProps> = ({
   locationId,
-  locationName,
   stations,
-  ...forecastData
+  forecastData,
 }) => {
   return (
     <>
@@ -72,8 +71,8 @@ export const ForecastContent: React.FC<ForecastContentProps> = ({
           )}
         </div>
       </div>
-      <HourlyForecastGrid forecastData={forecastData}></HourlyForecastGrid>
-      <WaveChart forecastData={forecastData}></WaveChart>
+      <HourlyForecastGrid hourlyForecast={forecastData.hourly_forecast} />
+      <WaveChart hourlyForecast={forecastData.hourly_forecast} />
     </>
   );
 };
