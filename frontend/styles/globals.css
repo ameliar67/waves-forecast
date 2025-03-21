@@ -312,20 +312,10 @@ input {
 }
 
 .graph {
-  width: 1300px; /* Fixed width */
-  height: 700px; /* Fixed height */
-  margin: 0 auto 70px; /* Center the graph horizontally and add margin-bottom */
-  background-color: #f4f6f7;
-  overflow: hidden; /* Prevent overflow if canvas exceeds the container */
-  position: relative;
+  width: 1300px;
+  height: 700px;
+  margin-bottom: 70px;
 }
-
-canvas {
-  width: 100%; /* Make the canvas scale to the container width */
-  height: 100%; /* Make the canvas fill the container height */
-  display: block; /* Remove any extra space below canvas */
-}
-
 
 #weather-alerts {
   margin-top: 20px;
