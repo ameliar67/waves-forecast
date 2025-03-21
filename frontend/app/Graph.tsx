@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from "react";
-import Plot from "react-plotly.js";
+import React, { useEffect, useRef } from "react";
 
 interface HourlyForecast {
   max_breaking_height: number;
   min_breaking_height: number;
   wave_height: number;
-  date: string; // ISO 8601 date format
+  date: string;
 }
 
 interface ForecastData {
@@ -17,111 +16,90 @@ interface WaveChartProps {
 }
 
 const WaveChart: React.FC<WaveChartProps> = ({ forecastData }) => {
-  const { hourly_forecast = [] } = forecastData;
+  const { hourly_forecast } = forecastData;
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
-  const [isMobile, setIsMobile] = useState(false);
-
-  // Check the screen size on component mount and on window resize
   useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth <= 768);
+    if (!canvasRef.current || hourly_forecast.length === 0) return;
+
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    const paddingLeft = 170, paddingTop = 50, canvasWidth = canvas.width - paddingLeft - 50, canvasHeight = canvas.height - paddingTop - 50;
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    const times = hourly_forecast.map(({ date }) => date);
+    const maxs = hourly_forecast.map(({ max_breaking_height }) => max_breaking_height);
+    const mins = hourly_forecast.map(({ min_breaking_height }) => min_breaking_height);
+    const waveHeight = hourly_forecast.map(({ wave_height }) => wave_height);
+    const allValues = [...maxs, ...mins, ...waveHeight];
+    const yMax = Math.max(...allValues);
+    const yMin = Math.min(...allValues);
+    const yRange = yMax - yMin;
+
+    const drawLine = (data: number[], color: string) => {
+      ctx.beginPath();
+      ctx.strokeStyle = color;
+      ctx.lineWidth = 2;
+      data.forEach((value, index) => {
+        const x = (index * canvasWidth) / (times.length - 1) + paddingLeft;
+        const y = canvasHeight - ((value - yMin) / yRange) * canvasHeight + paddingTop;
+        index === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+      });
+      ctx.stroke();
     };
-    handleResize();
-    window.addEventListener("resize", handleResize);
 
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+    const formatDate = (dateStr: string) =>
+      new Date(dateStr).toLocaleString("en-US", {
+        weekday: "short", year: "numeric", month: "short", day: "numeric", hour: "2-digit", minute: "2-digit", hour12: true
+      });
 
-  // Ensure graph_data is not empty before proceeding
-  if (!hourly_forecast || hourly_forecast.length === 0) {
-    return <p>No graph data available</p>;
-  }
+    const drawTicksAndLabels = () => {
+      ctx.fillStyle = "#636e72";
+      ctx.font = "14px Arial";
+      
+      times.forEach((time, index) => {
+        if (index % 3 === 0) {
+          const x = (index * canvasWidth) / (times.length - 1) + paddingLeft;
+          ctx.fillText(formatDate(time), x - 45, canvasHeight + paddingTop + 35);
+          ctx.beginPath();
+          ctx.moveTo(x, canvasHeight + paddingTop);
+          ctx.lineTo(x, canvasHeight + paddingTop + 10);
+          ctx.strokeStyle = "#636e72"; // Set the tick color explicitly
+          ctx.stroke();
+        }
+      });
 
-  const times: string[] = [];
-  const maxs: number[] = [];
-  const mins: number[] = [];
-  const wave_height: number[] = [];
+      const yStep = yRange / 5;
+      for (let i = 0; i <= 5; i++) {
+        const y = canvasHeight - ((yMin + i * yStep - yMin) / yRange) * canvasHeight + paddingTop;
+        ctx.fillText((yMin + i * yStep).toFixed(1), paddingLeft - 50, y);
+        ctx.beginPath();
+        ctx.moveTo(paddingLeft - 5, y);
+        ctx.lineTo(paddingLeft, y);
+        ctx.strokeStyle = "#636e72"; // Set the tick color explicitly
+        ctx.stroke();
+      }
 
-  hourly_forecast.forEach((data) => {
-    times.push(data.date);
-    maxs.push(data.max_breaking_height);
-    mins.push(data.min_breaking_height);
-    wave_height.push(data.wave_height);
-  });
+      ctx.save();
+      ctx.translate(paddingLeft / 2 - 20, canvasHeight / 2 + paddingTop);
+      ctx.rotate(-Math.PI / 2);
+      ctx.fillText("Wave Height (feet)", 0, 0);
+      ctx.restore();
+      ctx.fillText("Time", canvasWidth / 2 + paddingLeft, canvasHeight + paddingTop + 70);
+    };
 
-  const plotData: Plotly.Data[] = [
-    {
-      x: times,
-      y: maxs,
-      type: "scatter",
-      mode: "lines", // Removed the 'markers' to only show lines
-      name: "Max Breaking Wave Height",
-      line: { color: "#00b894" },
-    },
-    {
-      x: times,
-      y: mins,
-      type: "scatter",
-      mode: "lines",
-      name: "Min Breaking Wave Height",
-      line: { color: "#0984e3" },
-    },
-    {
-      x: times,
-      y: wave_height,
-      type: "scatter",
-      mode: "lines",
-      name: "Wave Height",
-      line: { color: "#e17055" },
-    },
-  ];
-
-  const plotLayout: Partial<Plotly.Layout> = {
-    xaxis: {
-      title: "Time",
-      titlefont: { size: 18, family: "Arial, sans-serif", color: "#636e72" },
-      tickfont: { size: 14, family: "Arial, sans-serif", color: "#636e72" },
-      showgrid: false, // Hide the grid lines
-      zeroline: false,
-    },
-    yaxis: {
-      title: "Wave Height (feet)",
-      titlefont: { size: 18, family: "Arial, sans-serif", color: "#636e72" },
-      tickfont: { size: 14, family: "Arial, sans-serif", color: "#636e72" },
-      showgrid: true,
-      gridcolor: "#ddd",
-    },
-    hovermode: "closest",
-    showlegend: true,
-    legend: {
-      x: isMobile ? 0.5 : 0.5, // Center the legend horizontally on mobile and desktop
-      y: isMobile ? 1.1 : 1.05,
-      xanchor: "center", // Center the legend horizontally
-      yanchor: "bottom", // Align to the bottom of the legend box
-      orientation: "v",
-      font: { family: "Inter", size: 14, color: "#636e72" },
-    },
-    margin: {
-      l: 50,
-      r: 30,
-      t: 50,
-      b: 100,
-    },
-    autosize: true,
-    plot_bgcolor: "#f4f6f7",
-    paper_bgcolor: "#ffffff",
-  };
+    drawLine(maxs, "#00b894");
+    drawLine(mins, "#0984e3");
+    drawLine(waveHeight, "#e17055");
+    drawTicksAndLabels();
+  }, [hourly_forecast]);
 
   return (
     <div className="graph">
-      <Plot
-        data={plotData}
-        layout={plotLayout}
-        config={{
-          responsive: true, // Make the plot responsive to window resizing
-        }}
-        style={{ width: "100%", height: "100%" }}
-      />
+      <canvas ref={canvasRef} width={1500} height={700} />
     </div>
   );
 };
