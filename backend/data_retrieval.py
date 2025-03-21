@@ -8,9 +8,9 @@ from surfpy.location import Location
 
 class HourlyForecastSummary(TypedDict):
     date: str
-    maxs: float
-    mins: float
-    hourly_summary: float
+    max_breaking_height: float
+    min_breaking_height: float
+    wave_height: float
 
 
 class WaveForecastData(TypedDict):
@@ -112,9 +112,9 @@ def retrieve_new_data(
         hourly_forecast.append(
             {
                 "date": x.date.isoformat(),
-                "maxs": x.maximum_breaking_height * conversion_rate,
-                "mins": x.minimum_breaking_height * conversion_rate,
-                "hourly_summary": x.wave_summary.wave_height * conversion_rate,
+                "max_breaking_height": x.maximum_breaking_height * conversion_rate,
+                "min_breaking_height": x.minimum_breaking_height * conversion_rate,
+                "wave_height": x.wave_summary.wave_height * conversion_rate,
             }
         )
 

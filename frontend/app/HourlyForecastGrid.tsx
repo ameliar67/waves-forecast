@@ -1,14 +1,14 @@
 import React from "react";
 
-interface GraphData {
-  maxs: number;
-  mins: number;
-  hourly_summary: number;
+interface HourlyForecast {
+  max_breaking_height: number;
+  min_breaking_height: number;
+  wave_height: number;
   date: string; // ISO 8601 date format
 }
 
 interface ForecastData {
-  hourly_forecast: GraphData[];
+  hourly_forecast: HourlyForecast[];
 }
 
 interface WaveChartProps {
@@ -35,7 +35,7 @@ const HourlyForecastGrid: React.FC<WaveChartProps> = ({ forecastData }) => {
               minute: "2-digit",
             });
 
-            const forecastHeight = data.hourly_summary.toFixed(1);
+            const forecastHeight = data.wave_height.toFixed(1);
 
             return (
               <div key={index} className="forecast-item">

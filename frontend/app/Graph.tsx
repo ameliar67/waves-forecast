@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from "react";
 import Plot from "react-plotly.js";
 
-interface GraphData {
-  maxs: number;
-  mins: number;
-  hourly_summary: number;
+interface HourlyForecast {
+  max_breaking_height: number;
+  min_breaking_height: number;
+  wave_height: number;
   date: string; // ISO 8601 date format
 }
 
 interface ForecastData {
-  hourly_forecast: GraphData[];
+  hourly_forecast: HourlyForecast[];
 }
 
 interface WaveChartProps {
@@ -44,9 +44,9 @@ const WaveChart: React.FC<WaveChartProps> = ({ forecastData }) => {
 
   hourly_forecast.forEach((data) => {
     times.push(data.date);
-    maxs.push(data.maxs);
-    mins.push(data.mins);
-    summary.push(data.hourly_summary);
+    maxs.push(data.max_breaking_height);
+    mins.push(data.min_breaking_height);
+    summary.push(data.wave_height);
   });
 
   const plotData: Plotly.Data[] = [
@@ -55,7 +55,7 @@ const WaveChart: React.FC<WaveChartProps> = ({ forecastData }) => {
       y: maxs,
       type: "scatter",
       mode: "lines", // Removed the 'markers' to only show lines
-      name: "Max Wave Height",
+      name: "Max Breaking Wave Height",
       line: { color: "#00b894" },
     },
     {
@@ -63,7 +63,7 @@ const WaveChart: React.FC<WaveChartProps> = ({ forecastData }) => {
       y: mins,
       type: "scatter",
       mode: "lines",
-      name: "Min Wave Height",
+      name: "Min Breaking Wave Height",
       line: { color: "#0984e3" },
     },
     {
@@ -71,7 +71,7 @@ const WaveChart: React.FC<WaveChartProps> = ({ forecastData }) => {
       y: summary,
       type: "scatter",
       mode: "lines",
-      name: "Wave Summary",
+      name: "Wave Height",
       line: { color: "#e17055" },
     },
   ];
