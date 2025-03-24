@@ -15,7 +15,7 @@ interface MapComponentProps {
 
 const center: LatLngExpression = [30.5, -95.5];
 
-export const MapComponent: React.FC<MapComponentProps> = ({
+export const LocationMap: React.FC<MapComponentProps> = ({
   className,
   stations,
 }) => {

@@ -2,8 +2,8 @@ import React from "react";
 import { BuoyStation } from "./api";
 import { LocationForm } from "./LocationForm";
 
-const MapComponent = React.lazy(() =>
-  import("./MapComponent").then((m) => ({ default: m.MapComponent }))
+const LocationMap = React.lazy(() =>
+  import("./LocationMap").then((m) => ({ default: m.LocationMap }))
 );
 
 export const HomePage: React.FC<{ stations: Record<string, BuoyStation> }> = ({
@@ -16,7 +16,7 @@ export const HomePage: React.FC<{ stations: Record<string, BuoyStation> }> = ({
     </div>
 
     <React.Suspense fallback={null}>
-      <MapComponent className={"home-map"} stations={stations} />
+      <LocationMap className={"home-map"} stations={stations} />
     </React.Suspense>
   </>
 );
