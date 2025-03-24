@@ -1,22 +1,14 @@
-import Plotly from "plotly.js-basic-dist";
-import React, { useLayoutEffect, useMemo, useRef, useState } from "react";
+import type Plotly from "plotly.js-basic-dist";
+import React, { useCallback, useMemo } from "react";
 import { HourlyForecast } from "./api";
 
 interface WaveChartProps {
   hourlyForecast: HourlyForecast[];
 }
 
+const PlotlyGraph = React.lazy(() => import("./PlotlyGraph"));
+
 const WaveChart: React.FC<WaveChartProps> = ({ hourlyForecast = [] }) => {
-  const [isMobile, setIsMobile] = useState(false);
-  useLayoutEffect(() => {
-    const match = window.matchMedia("(min-width:768px)");
-    setIsMobile(match.matches);
-
-    const listener = (e: MediaQueryListEvent) => setIsMobile(e.matches);
-    match.addEventListener("change", listener);
-    return () => match.removeEventListener("change", listener);
-  }, []);
-
   const plotData = useMemo<Plotly.Data[]>(() => {
     if (!hourlyForecast || hourlyForecast.length === 0) {
       return [];
@@ -51,8 +43,8 @@ const WaveChart: React.FC<WaveChartProps> = ({ hourlyForecast = [] }) => {
     ];
   }, [hourlyForecast]);
 
-  const plotLayout = useMemo<Partial<Plotly.Layout>>(
-    () => ({
+  const plotLayout = useCallback(
+    (isMobile: boolean): Partial<Plotly.Layout> => ({
       xaxis: {
         title: "Time",
         titlefont: { size: 18, family: "Arial, sans-serif", color: "#636e72" },
@@ -87,23 +79,19 @@ const WaveChart: React.FC<WaveChartProps> = ({ hourlyForecast = [] }) => {
       plot_bgcolor: "#f4f6f7",
       paper_bgcolor: "#ffffff",
     }),
-    [isMobile]
+    []
   );
-
-  const graphElement = useRef<HTMLDivElement | null>(null);
-
-  useLayoutEffect(() => {
-    if (graphElement.current) {
-      Plotly.newPlot(graphElement.current, plotData, plotLayout);
-    }
-  }, [plotData, plotLayout]);
 
   // Ensure graph_data is not empty before proceeding
   if (plotData.length === 0) {
     return <p>No graph data available</p>;
   }
 
-  return <div className="graph" ref={graphElement}></div>;
+  return (
+    <React.Suspense fallback={null}>
+      <PlotlyGraph data={plotData} layout={plotLayout} />
+    </React.Suspense>
+  );
 };
 
 export default WaveChart;

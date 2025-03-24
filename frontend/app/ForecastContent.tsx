@@ -1,8 +1,8 @@
 import React from "react";
 import { BuoyStation, ForecastData } from "./api";
-import WaveChart from "./Graph";
 import HourlyForecastGrid from "./HourlyForecastGrid";
 import { LocationForm } from "./LocationForm";
+import WaveChart from "./WaveChart";
 
 export interface ForecastContentProps {
   forecastData: ForecastData;
