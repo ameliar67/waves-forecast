@@ -3,3 +3,4 @@ __pycache__/
 deploy-backend.sh
 run-azurite-emulator.sh
 .qodo
+frontend/parcel-bundle-reports
