@@ -16,7 +16,7 @@ export const HomePage: React.FC<{ stations: Record<string, BuoyStation> }> = ({
     </div>
 
     <React.Suspense fallback={null}>
-      <LocationMap className={"home-map"} stations={stations} />
+      <LocationMap className={"home-map"} stations={Object.values(stations)} />
     </React.Suspense>
   </>
 );

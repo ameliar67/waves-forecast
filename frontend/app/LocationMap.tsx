@@ -10,7 +10,7 @@ import { BuoyStation } from "./api";
 
 interface MapComponentProps {
   className?: string;
-  stations: Record<string, BuoyStation>;
+  stations: BuoyStation[];
 }
 
 const center: LatLngExpression = [30.5, -95.5];
@@ -24,14 +24,14 @@ export const LocationMap: React.FC<MapComponentProps> = ({
       <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
 
       <MarkerCluster>
-        {Object.entries(stations).map(([locId, buoyStation]) => (
+        {stations.map((buoyStation) => (
           <Marker
-            key={locId}
+            key={buoyStation.id}
             position={[buoyStation.latitude, buoyStation.longitude]}
           >
             <Popup>
               <div>
-                <a href={`/forecast/${locId}`}>{buoyStation.name}</a>
+                <a href={`/forecast/${buoyStation.id}`}>{buoyStation.name}</a>
               </div>
             </Popup>
           </Marker>
