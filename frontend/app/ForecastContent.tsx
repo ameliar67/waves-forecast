@@ -1,18 +1,16 @@
 import React from "react";
-import { BuoyStation, ForecastData } from "./api";
+import { ForecastData } from "./api";
 import HourlyForecastGrid from "./HourlyForecastGrid";
 import { LocationForm } from "./LocationForm";
 import WaveChart from "./WaveChart";
 
 export interface ForecastContentProps {
   forecastData: ForecastData;
-  stations: Record<string, BuoyStation>;
   locationId: string;
 }
 
 export const ForecastContent: React.FC<ForecastContentProps> = ({
   locationId,
-  stations,
   forecastData,
 }) => {
   return (
@@ -21,7 +19,7 @@ export const ForecastContent: React.FC<ForecastContentProps> = ({
         <a href="/" className="wave-and-weather-title">
           Surf Forecast
         </a>
-        <LocationForm activeStationId={locationId} stations={stations} />
+        <LocationForm activeStationId={locationId} />
       </div>
 
       <div className="individual-data-fields">

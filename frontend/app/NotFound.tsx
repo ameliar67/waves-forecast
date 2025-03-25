@@ -1,16 +1,13 @@
 import React from "react";
 import { LocationForm } from "./LocationForm";
-import { BuoyStation } from "./api";
 
 interface NoForecastProps {
   errorMessage: React.ReactNode;
-  stations: Record<string, BuoyStation>;
   locationId: string;
   errorDetails: string;
 }
 
 export const ForecastUnavailable: React.FC<NoForecastProps> = ({
-  stations,
   locationId,
   errorMessage,
   errorDetails,
@@ -21,7 +18,7 @@ export const ForecastUnavailable: React.FC<NoForecastProps> = ({
         <a href="/" className="wave-and-weather-title">
           Surf Forecast
         </a>
-        <LocationForm activeStationId={locationId} stations={stations} />
+        <LocationForm activeStationId={locationId} />
       </div>
 
       <div className="error-container">

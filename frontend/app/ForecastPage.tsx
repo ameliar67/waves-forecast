@@ -1,17 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router";
-import {
-  BuoyStation,
-  ForecastData as ForecastDataModel,
-  getForecast,
-} from "./api";
+import { ForecastData as ForecastDataModel, getForecast } from "./api";
 import { ForecastContent } from "./ForecastContent";
 import { ForecastLoading } from "./ForecastLoading";
 import { ForecastUnavailable } from "./NotFound";
 
-export const ForecastPage: React.FC<{
-  stations: Record<string, BuoyStation>;
-}> = ({ stations }) => {
+export const ForecastPage: React.FC = () => {
   const { locationId } = useParams();
   const [forecastData, setForecastData] = useState<ForecastDataModel | null>(
     null
@@ -37,20 +31,15 @@ export const ForecastPage: React.FC<{
     return (
       <ForecastUnavailable
         errorMessage="No forecast data currently available for selected location"
-        stations={stations}
         errorDetails="Please select another location"
         locationId={locationId || "Unknown"}
       />
     );
   }
 
-  return stations && forecastData ? (
-    <ForecastContent
-      locationId={locationId!}
-      stations={stations}
-      forecastData={forecastData}
-    />
+  return forecastData ? (
+    <ForecastContent locationId={locationId!} forecastData={forecastData} />
   ) : (
-    <ForecastLoading locationId={locationId!} stations={stations} />
+    <ForecastLoading locationId={locationId!} />
   );
 };

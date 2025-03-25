@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router";
+import { BuoyStation, getLocations } from "./api";
 import { ForecastPage } from "./ForecastPage";
 import { HomePage } from "./Home";
-import { BuoyStation, getLocations } from "./api";
+import { StationsContext } from "./Stations";
 
 export function App() {
   const [stations, setStations] = useState<Record<string, BuoyStation>>({});
@@ -15,14 +16,13 @@ export function App() {
   }, []);
 
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route index element={<HomePage stations={stations} />} />
-        <Route
-          path="/forecast/:locationId"
-          element={<ForecastPage stations={stations} />}
-        />
-      </Routes>
-    </BrowserRouter>
+    <StationsContext.Provider value={stations}>
+      <BrowserRouter>
+        <Routes>
+          <Route index element={<HomePage />} />
+          <Route path="/forecast/:locationId" element={<ForecastPage />} />
+        </Routes>
+      </BrowserRouter>
+    </StationsContext.Provider>
   );
 }

@@ -1,22 +1,14 @@
-import React, { useState, useMemo, useRef, useEffect } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router";
 import { BuoyStation } from "./api";
+import { useStations } from "./Stations";
 
 interface LocationFormProps {
   activeStationId?: string;
-  stations: Record<string, BuoyStation>;
 }
 
-const placeholderOption = "placeholder";
-
-export const LocationForm: React.FC<LocationFormProps> = ({
-  activeStationId,
-  stations,
-}) => {
+export const LocationForm: React.FC<LocationFormProps> = () => {
   const navigate = useNavigate();
-  const [selectedLocationId, setSelectedLocationId] = useState(
-    activeStationId || placeholderOption
-  );
   const [searchQuery, setSearchQuery] = useState("");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -24,19 +16,17 @@ export const LocationForm: React.FC<LocationFormProps> = ({
   // Ref for the dropdown to detect clicks outside
   const dropdownRef = useRef<HTMLUListElement | null>(null);
 
-  // Filter the stations based on the search query
-  const filteredStations = useMemo(() => {
+  // Filter stations based on search query, group by state
+  const stations = useStations();
+  const groupedStations = useMemo(() => {
     const lowercasedQuery = searchQuery.toLowerCase();
-    return Object.values(stations).filter(
+    const filteredStations = Object.values(stations).filter(
       (station) =>
         station.name.toLowerCase().includes(lowercasedQuery) ||
         station.state.toLowerCase().includes(lowercasedQuery)
     );
-  }, [stations, searchQuery]);
 
-  // Group stations by state
-  const groupedStations = useMemo(() => {
-    const groups: { [state: string]: BuoyStation[] } = {};
+    const groups: Record<string, BuoyStation[]> = {};
     filteredStations.forEach((station) => {
       if (!groups[station.state]) {
         groups[station.state] = [];
@@ -47,7 +37,7 @@ export const LocationForm: React.FC<LocationFormProps> = ({
     return Object.entries(groups).sort(([stateA], [stateB]) =>
       stateA.localeCompare(stateB)
     );
-  }, [filteredStations]);
+  }, [stations, searchQuery]);
 
   // Handle search input change
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -61,7 +51,6 @@ export const LocationForm: React.FC<LocationFormProps> = ({
 
   // Handle item selection from the dropdown
   const handleItemSelect = (stationId: string) => {
-    setSelectedLocationId(stationId);
     setIsDropdownOpen(false); // Close the dropdown after selection
     setError(null);
     navigate(`/forecast/${encodeURIComponent(stationId)}`);
