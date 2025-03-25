@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useCallback, useMemo, useState } from "react";
+import ForecastItem from "./ForecastItem";
 import { HourlyForecast } from "./api";
 
 interface WaveChartProps {
@@ -10,37 +11,43 @@ const HourlyForecastGrid: React.FC<WaveChartProps> = ({
 }) => {
   return (
     <div className="forecast-container">
-      <div className="forecast-title">Hourly Forecast</div>
+
       <div className="forecast-items">
         {hourlyForecast.length > 0 ? (
-          hourlyForecast.map((data, index) => {
-            // Use the built-in Date constructor to parse the ISO 8601 date string
-            const date = new Date(data.date);
-
-            // Format the date (MM/DD/YYYY)
-            const formattedDate = date.toLocaleDateString();
-            // Format the time (HH:MM) without seconds
-            const formattedTime = date.toLocaleTimeString([], {
-              hour: "2-digit",
-              minute: "2-digit",
-            });
-
+          [...hourlyForecast, ...hourlyForecast].map((data, index) => {
+            const formattedDate = formatDate(data.date);
+            const formattedTime = formatTime(data.date);
             const forecastHeight = data.wave_height.toFixed(1);
 
             return (
-              <div key={index} className="forecast-item">
-                <div className="forecast-height">{forecastHeight} ft</div>
-                <div className="forecast-time">{formattedTime}</div>
-                <div className="forecast-date">{formattedDate}</div>
-              </div>
+              <ForecastItem
+                key={index}
+                forecastHeight={forecastHeight}
+                formattedTime={formattedTime}
+                formattedDate={formattedDate}
+              />
             );
           })
         ) : (
           <div>No forecast data available</div>
         )}
       </div>
+
     </div>
   );
 };
+
+function formatDate(date: string) {
+  const parsedDate = new Date(date);
+  return parsedDate.toLocaleDateString();
+}
+
+function formatTime(date: string) {
+  const parsedDate = new Date(date);
+  return parsedDate.toLocaleTimeString([], {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+}
 
 export default HourlyForecastGrid;

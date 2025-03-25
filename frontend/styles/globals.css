@@ -265,15 +265,18 @@ input {
 }
 
 .forecast-container {
-  width: 100%;
   margin-top: 20px;
   margin-bottom: 50px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+  max-width: 950px;
+  overflow-x: scroll;
 }
 
 .forecast-items {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
   gap: 20px;
 }
 
