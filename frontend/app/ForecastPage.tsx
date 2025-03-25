@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router";
+import { useParams } from "react-router";
 import {
   BuoyStation,
   ForecastData as ForecastDataModel,
@@ -16,15 +16,11 @@ export const ForecastPage: React.FC<{
   const [forecastData, setForecastData] = useState<ForecastDataModel | null>(
     null
   );
-  const [locationName, setLocationName] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
-  const navigate = useNavigate();
 
   useEffect(() => {
     if (!locationId) return;
 
-    //Loading State
-    setLocationName(stations[locationId]?.name || "Unknown Station");
     setLoading(true);
     setForecastData(null);
 
@@ -35,7 +31,7 @@ export const ForecastPage: React.FC<{
         console.error("Error fetching data:", err);
       })
       .finally(() => setLoading(false));
-  }, [locationId, stations, navigate]);
+  }, [locationId]);
 
   if (!loading && !forecastData) {
     return (
