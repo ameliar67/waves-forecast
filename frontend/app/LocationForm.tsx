@@ -1,4 +1,10 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { useNavigate } from "react-router";
 import { BuoyStation } from "./api";
 import { useStations } from "./Stations";
@@ -11,7 +17,6 @@ export const LocationForm: React.FC<LocationFormProps> = () => {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
   // Ref for the dropdown to detect clicks outside
   const dropdownRef = useRef<HTMLUListElement | null>(null);
@@ -40,21 +45,32 @@ export const LocationForm: React.FC<LocationFormProps> = () => {
   }, [stations, searchQuery]);
 
   // Handle search input change
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchQuery(e.target.value);
-  };
+  const handleSearchChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setSearchQuery(e.target.value);
+    },
+    [setSearchQuery]
+  );
 
   // Toggle dropdown visibility
-  const toggleDropdown = () => {
-    setIsDropdownOpen(!isDropdownOpen);
-  };
+  const toggleDropdown = useCallback(
+    () => setIsDropdownOpen((prev) => !prev),
+    [setIsDropdownOpen]
+  );
 
   // Handle item selection from the dropdown
-  const handleItemSelect = (stationId: string) => {
-    setIsDropdownOpen(false); // Close the dropdown after selection
-    setError(null);
-    navigate(`/forecast/${encodeURIComponent(stationId)}`);
-  };
+  const handleItemSelect = useCallback<React.MouseEventHandler<HTMLLIElement>>(
+    (evt) => {
+      const stationId = evt.currentTarget.dataset.stationId;
+      if (!stationId) {
+        return;
+      }
+
+      setIsDropdownOpen(false); // Close the dropdown after selection
+      navigate(`/forecast/${encodeURIComponent(stationId)}`);
+    },
+    []
+  );
 
   // Close dropdown if click happens outside of dropdown
   useEffect(() => {
@@ -75,10 +91,13 @@ export const LocationForm: React.FC<LocationFormProps> = () => {
   }, []);
 
   // Prevent click from propagating when clicking on the search input
-  const handleSearchClick = (e: React.MouseEvent<HTMLInputElement>) => {
-    e.stopPropagation();
-    toggleDropdown(); // Open the dropdown when clicked
-  };
+  const handleSearchClick = useCallback(
+    (e: React.MouseEvent<HTMLInputElement>) => {
+      e.stopPropagation();
+      toggleDropdown(); // Open the dropdown when clicked
+    },
+    [toggleDropdown]
+  );
 
   return (
     <form className="location-form" id="landing-page-location-form">
@@ -104,7 +123,8 @@ export const LocationForm: React.FC<LocationFormProps> = () => {
                     <li
                       key={station.id}
                       className="dropdown-item"
-                      onClick={() => handleItemSelect(station.id)}
+                      data-station-id={station.id}
+                      onClick={handleItemSelect}
                     >
                       {station.name}
                     </li>
@@ -115,7 +135,6 @@ export const LocationForm: React.FC<LocationFormProps> = () => {
           )}
         </ul>
       )}
-      {error && <p className="error-message">{error}</p>}
     </form>
   );
 };
