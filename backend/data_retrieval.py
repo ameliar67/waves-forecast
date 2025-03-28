@@ -1,10 +1,11 @@
 import logging
-from math import isnan
 from typing import TypedDict
-
 import surfpy
 from config import app_session
 from surfpy.location import Location
+import asyncio
+import aiohttp
+
 
 class HourlyForecastSummary(TypedDict):
     date: str
@@ -23,33 +24,24 @@ class WaveForecastData(TypedDict):
     wind_direction: str
     hourly_forecast: list[HourlyForecastSummary]
 
-def merge_wave_weather_data(wave_data, weather_data):
-    last_weather_index = 0
 
-    for wave in wave_data:
-        if wave.date > weather_data[-1].date:
-            return wave_data
+async def get_response(session: aiohttp.ClientSession, url: str):
+    async with session.get(url) as response:
+        return await response.read()
 
-        for i in range(last_weather_index, len(weather_data)):
-            weather = weather_data[i]
-            if weather.date != wave.date:
-                continue
 
-            if weather.air_temperature is not None and not isnan(
-                weather.air_temperature
-            ):
-                wave.air_temperature = weather.air_temperature
-            wave.short_forecast = weather.short_forecast
-            if weather.wind_speed is not None and not isnan(weather.wind_speed):
-                wave.wind_speed = weather.wind_speed
-            if weather.wind_direction is not None and not isnan(weather.wind_direction):
-                wave.wind_direction = weather.wind_direction
-            if weather.wind_compass_direction is not None:
-                wave.wind_compass_direction = weather.wind_compass_direction
-            last_weather_index = i
-            break
+async def make_requests(urls):
+    responses = []
 
-    return wave_data
+    async with aiohttp.ClientSession() as session:
+        tasks = []
+        for url in urls:
+            task = get_response(session, url)
+            tasks.append(task)
+
+        responses = await asyncio.gather(*tasks)
+
+    return responses
 
 
 def fetch_active_weather_alerts(location: Location) -> dict:
@@ -71,16 +63,25 @@ def retrieve_new_data(
     wave_model, hours_to_forecast, location, conversion_rate
 ) -> WaveForecastData | None:
 
-    wave_grib_data = wave_model.fetch_grib_datas(0, hours_to_forecast)
-    raw_wave_data = wave_model.parse_grib_datas(location, wave_grib_data)
+    wave_data = {}
 
-    if not raw_wave_data:
+    # Generate URLs for fetching grib data
+    urls = wave_model.create_grib_urls(0, hours_to_forecast)
+
+    grib_datas = asyncio.run(make_requests(urls))
+
+    for grib_data in grib_datas:
+        wave_model.parse_grib_data(location, grib_data, wave_data)
+
+    if not wave_data:
         return None
 
-    buoy_data = wave_model.to_buoy_data(raw_wave_data)
+    # Turn NOAA model data into buoy data
+    buoy_data = wave_model.to_buoy_data(wave_data)
+
     weather_data = surfpy.WeatherApi.fetch_hourly_forecast(location)
 
-    if len(weather_data) == 0:
+    if len(weather_data) == 0 or len(buoy_data) == 0:
         forecast_data = {
             "chart": None,
             "current_wave_height": 0,
@@ -100,15 +101,10 @@ def retrieve_new_data(
     )
 
     alerts = fetch_active_weather_alerts(location)
-    wave_data = merge_wave_weather_data(buoy_data, weather_data)
-
-    for d in wave_data:
-        d.solve_breaking_wave_heights(location)
-
-    current_wave_height = round(wave_data[0].wave_summary.wave_height * conversion_rate)
 
     hourly_forecast = []
-    for x in wave_data:
+    for x in buoy_data:
+        x.solve_breaking_wave_heights(location)
         hourly_forecast.append(
             {
                 "date": x.date.isoformat(),
@@ -117,6 +113,8 @@ def retrieve_new_data(
                 "wave_height": x.wave_summary.wave_height * conversion_rate,
             }
         )
+
+    current_wave_height = round(buoy_data[0].wave_summary.wave_height * conversion_rate)
 
     alerts_list = alerts.get("features", [])
     headline = (
