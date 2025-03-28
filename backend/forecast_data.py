@@ -5,7 +5,6 @@ import surfpy
 from cache import Cache
 from data_retrieval import WaveForecastData, retrieve_new_data
 
-
 def get_wave_forecast(
     wave_model: surfpy.WaveModel,
     cache: Cache,
@@ -13,7 +12,7 @@ def get_wave_forecast(
     selected_location: str,
     lat=str,
     lon=str,
-    hours_to_forecast=24,
+    hours_to_forecast=384,
 ) -> WaveForecastData:
     cache_encoding = "utf-8"
     key = f"ttl-short/forecast/v1/{location_id}"
@@ -33,6 +32,7 @@ def get_wave_forecast(
     location.depth, location.angle, location.slope = 10.0, 200.0, 0.28
 
     data = retrieve_new_data(wave_model, hours_to_forecast, location, conversion_rate)
+
 
     # Cache the newly fetched data
     cache.set_item(key, json.dumps(data).encode(cache_encoding))
