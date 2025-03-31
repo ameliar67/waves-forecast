@@ -5,7 +5,8 @@ import surfpy
 from cache import Cache
 from data_retrieval import WaveForecastData, retrieve_new_data
 
-def get_wave_forecast(
+
+async def get_wave_forecast(
     wave_model: surfpy.WaveModel,
     cache: Cache,
     location_id: str,
@@ -31,8 +32,9 @@ def get_wave_forecast(
     location = surfpy.Location(lat, lon, altitude=0, name=selected_location)
     location.depth, location.angle, location.slope = 10.0, 200.0, 0.28
 
-    data = retrieve_new_data(wave_model, hours_to_forecast, location, conversion_rate)
-
+    data = await retrieve_new_data(
+        wave_model, hours_to_forecast, location, conversion_rate
+    )
 
     # Cache the newly fetched data
     cache.set_item(key, json.dumps(data).encode(cache_encoding))

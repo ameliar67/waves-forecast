@@ -1,7 +1,6 @@
 import logging
 from typing import TypedDict
 import surfpy
-from config import app_session
 from surfpy.location import Location
 import asyncio
 import aiohttp
@@ -25,41 +24,37 @@ class WaveForecastData(TypedDict):
     hourly_forecast: list[HourlyForecastSummary]
 
 
-async def get_response(session: aiohttp.ClientSession, url: str):
-    async with session.get(url) as response:
-        return await response.read()
+async def get_response(session: aiohttp.ClientSession, url: str) -> bytes:
+    try:
+        async with session.get(url) as response:
+            response.raise_for_status()
+            return await response.read()
+    except aiohttp.ClientError as e:
+        logging.error(f"Failed to fetch data from {url}: {e}")
+        return b""
 
 
-async def make_requests(urls):
-    responses = []
-
+async def fetch_multiple_urls(urls: list[str]) -> list[bytes]:
     async with aiohttp.ClientSession() as session:
-        tasks = []
-        for url in urls:
-            task = get_response(session, url)
-            tasks.append(task)
-
-        responses = await asyncio.gather(*tasks)
-
-    return responses
+        tasks = [get_response(session, url) for url in urls]
+        return await asyncio.gather(*tasks)
 
 
-def fetch_active_weather_alerts(location: Location) -> dict:
-    # https://api.weather.gov/alerts/active?point=46.221924,-123.816882
-
+async def fetch_active_weather_alerts(location: Location) -> dict:
     url = f"https://api.weather.gov/alerts/active?point={location.latitude},{location.longitude}"
-    resp = app_session.get(url)
-    if not resp.ok:
-        logging.error(
-            f"Failed to fetch weather alerts for {location}: {resp.status_code} {resp.text}"
-        )
+
+    try:
+        async with aiohttp.ClientSession() as session:
+            async with session.get(url) as resp:
+                resp.raise_for_status()
+                resp_json = await resp.json()
+                return resp_json
+    except aiohttp.ClientError as e:
+        logging.error(f"Failed to fetch weather alerts for {location}: {e}")
         return {}
 
-    resp_json = resp.json()
-    return resp_json
 
-
-def retrieve_new_data(
+async def retrieve_new_data(
     wave_model, hours_to_forecast, location, conversion_rate
 ) -> WaveForecastData | None:
 
@@ -68,7 +63,8 @@ def retrieve_new_data(
     # Generate URLs for fetching grib data
     urls = wave_model.create_grib_urls(0, hours_to_forecast)
 
-    grib_datas = asyncio.run(make_requests(urls))
+    # Fetch GRIB data in parallel
+    grib_datas = await fetch_multiple_urls(urls)
 
     for grib_data in grib_datas:
         wave_model.parse_grib_data(location, grib_data, wave_data)
@@ -79,6 +75,7 @@ def retrieve_new_data(
     # Turn NOAA model data into buoy data
     buoy_data = wave_model.to_buoy_data(wave_data)
 
+    # Fetch weather data
     weather_data = surfpy.WeatherApi.fetch_hourly_forecast(location)
 
     if len(weather_data) == 0 or len(buoy_data) == 0:
@@ -100,7 +97,7 @@ def retrieve_new_data(
         weather_data[0], "wind_compass_direction", "No wind direction available"
     )
 
-    alerts = fetch_active_weather_alerts(location)
+    alerts = await fetch_active_weather_alerts(location)
 
     hourly_forecast = []
     for x in buoy_data:

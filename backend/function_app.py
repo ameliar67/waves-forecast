@@ -8,7 +8,7 @@ from cache import Cache
 from config import Config
 from locations import get_coastal_locations
 from wave_model import get_wave_model
-import forecast_data  # Ensure this import is included for wave forecasting
+import forecast_data
 
 app_config = Config.from_environment()
 
@@ -38,7 +38,7 @@ app = func.FunctionApp(http_auth_level=func.AuthLevel.ANONYMOUS)
 
 @app.function_name(name="LocationForecast")
 @app.route(route="forecast/{location_id}", methods=["GET"])
-def forecast(req: func.HttpRequest) -> func.HttpResponse:
+async def forecast(req: func.HttpRequest) -> func.HttpResponse:
     location_id = req.route_params.get("location_id")
 
     # Early return if location is not available
@@ -51,7 +51,7 @@ def forecast(req: func.HttpRequest) -> func.HttpResponse:
     wave_model = get_wave_model(
         selected_location["latitude"], selected_location["longitude"]
     )
-    wave_forecast = forecast_data.get_wave_forecast(
+    wave_forecast = await forecast_data.get_wave_forecast(
         wave_model=wave_model,
         cache=cache,
         location_id=location_id,
