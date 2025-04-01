@@ -4,6 +4,7 @@ import surfpy
 from surfpy.location import Location
 import asyncio
 import aiohttp
+from grib_parser import GribParser
 
 
 class HourlyForecastSummary(TypedDict):
@@ -24,8 +25,13 @@ class WaveForecastData(TypedDict):
     hourly_forecast: list[HourlyForecastSummary]
 
 
+# Setup logging to track the execution flow
+logging.basicConfig(level=logging.INFO)  # Set to INFO level for less verbosity
+
+
 async def get_response(session: aiohttp.ClientSession, url: str) -> bytes:
     try:
+        logging.info(f"Fetching data from {url}")
         async with session.get(url) as response:
             response.raise_for_status()
             return await response.read()
@@ -42,8 +48,10 @@ async def fetch_multiple_urls(urls: list[str]) -> list[bytes]:
 
 async def fetch_active_weather_alerts(location: Location) -> dict:
     url = f"https://api.weather.gov/alerts/active?point={location.latitude},{location.longitude}"
-
     try:
+        logging.info(
+            f"Fetching weather alerts for location: {location.latitude}, {location.longitude}"
+        )
         async with aiohttp.ClientSession() as session:
             async with session.get(url) as resp:
                 resp.raise_for_status()
@@ -54,31 +62,43 @@ async def fetch_active_weather_alerts(location: Location) -> dict:
         return {}
 
 
+async def fetch_hourly_forecast_async(location: Location):
+    # Run the synchronous function in a separate thread
+    return await asyncio.to_thread(surfpy.WeatherApi.fetch_hourly_forecast, location)
+
+
 async def retrieve_new_data(
     wave_model, hours_to_forecast, location, conversion_rate
 ) -> WaveForecastData | None:
 
     wave_data = {}
 
-    # Generate URLs for fetching grib data
+    logging.info("Generating URLs for GRIB data...")
+    # Generate URLs for fetching GRIB data
     urls = wave_model.create_grib_urls(0, hours_to_forecast)
 
     # Fetch GRIB data in parallel
     grib_datas = await fetch_multiple_urls(urls)
 
+    grib_parser = GribParser(location_resolution=0.167)
+
+    # Parse GRIB data for each fetched GRIB data
     for grib_data in grib_datas:
-        wave_model.parse_grib_data(location, grib_data, wave_data)
+        logging.info("Parsing GRIB data...")
+        grib_parser.parse_grib_data(location, grib_data, wave_data)
 
     if not wave_data:
+        logging.warning("No wave data available after parsing GRIB data.")
         return None
 
     # Turn NOAA model data into buoy data
     buoy_data = wave_model.to_buoy_data(wave_data)
 
     # Fetch weather data
-    weather_data = surfpy.WeatherApi.fetch_hourly_forecast(location)
+    weather_data = await fetch_hourly_forecast_async(location)
 
     if len(weather_data) == 0 or len(buoy_data) == 0:
+        logging.warning("No forecast or buoy data available.")
         forecast_data = {
             "chart": None,
             "current_wave_height": 0,
@@ -120,6 +140,7 @@ async def retrieve_new_data(
         else None
     )
 
+    logging.info("Returning forecast data.")
     return {
         "average_wave_height": current_wave_height,
         "weather_alerts": headline or "None",
