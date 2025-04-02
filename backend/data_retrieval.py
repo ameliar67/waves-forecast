@@ -4,7 +4,7 @@ import surfpy
 from surfpy.location import Location
 import asyncio
 import aiohttp
-from grib_parser import GribParser
+from grib_parser import parse_grib_data
 
 
 class HourlyForecastSummary(TypedDict):
@@ -73,19 +73,15 @@ async def retrieve_new_data(
 
     wave_data = {}
 
-    logging.info("Generating URLs for GRIB data...")
     # Generate URLs for fetching GRIB data
     urls = wave_model.create_grib_urls(0, hours_to_forecast)
 
     # Fetch GRIB data in parallel
-    grib_datas = await fetch_multiple_urls(urls)
-
-    grib_parser = GribParser(location_resolution=0.167)
+    grib_datas = await fetch_multiple_urls(urls, location, wave_data)
 
     # Parse GRIB data for each fetched GRIB data
     for grib_data in grib_datas:
-        logging.info("Parsing GRIB data...")
-        grib_parser.parse_grib_data(location, grib_data, wave_data)
+        parse_grib_data(location, grib_data, 0.167, wave_data)
 
     if not wave_data:
         logging.warning("No wave data available after parsing GRIB data.")
