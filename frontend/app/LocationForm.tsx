@@ -13,7 +13,7 @@ interface LocationFormProps {
   activeStationId?: string;
 }
 
-export const LocationForm: React.FC<LocationFormProps> = () => {
+export const LocationForm: React.FC<LocationFormProps> = ({ activeStationId }) => {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -99,11 +99,16 @@ export const LocationForm: React.FC<LocationFormProps> = () => {
     [toggleDropdown]
   );
 
+  // Determine the placeholder text, including active station name if available
+  const placeholderText = activeStationId
+    ? stations[activeStationId]?.name || "Search or select a location"
+    : "Search or select a location";
+
   return (
     <form className="location-form" id="landing-page-location-form">
       <input
         type="text"
-        placeholder="Search or select a location"
+        placeholder={placeholderText} // Use dynamic placeholder based on activeStationId
         value={searchQuery}
         onChange={handleSearchChange}
         onClick={handleSearchClick} // Prevent propagation and open dropdown
