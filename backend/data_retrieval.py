@@ -77,7 +77,7 @@ async def retrieve_new_data(
     urls = wave_model.create_grib_urls(0, hours_to_forecast)
 
     # Fetch GRIB data in parallel
-    grib_datas = await fetch_multiple_urls(urls, location, wave_data)
+    grib_datas = await fetch_multiple_urls(urls)
 
     # Parse GRIB data for each fetched GRIB data
     for grib_data in grib_datas:
