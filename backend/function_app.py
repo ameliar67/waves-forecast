@@ -4,6 +4,7 @@ import logging
 import azure.functions as func
 from azure.identity import DefaultAzureCredential
 from azure.storage.blob import BlobServiceClient, ContentSettings, PublicAccess
+from azure.core.exceptions import ResourceExistsError
 from cache import Cache
 from config import Config
 from locations import get_coastal_locations
@@ -22,13 +23,15 @@ data_container_client = blob_service_client.get_container_client("data")
 
 # Create containers if not exist (only for development)
 if app_config.is_development:
+    try:
+        cache_container_client.create_container(public_access=PublicAccess.OFF)
+    except ResourceExistsError:
+        pass
 
-    def create_container_if_not_exists(container_client, public_access=None):
-        if not container_client.exists():
-            container_client.create_container(public_access=public_access)
-
-    create_container_if_not_exists(cache_container_client, PublicAccess.OFF)
-    create_container_if_not_exists(data_container_client, PublicAccess.BLOB)
+    try:
+        data_container_client.create_container(public_access=PublicAccess.BLOB)
+    except ResourceExistsError:
+        pass
 
 cache = Cache(cache_container_client)
 locations_dict = get_coastal_locations(cache)
@@ -55,7 +58,6 @@ async def forecast(req: func.HttpRequest) -> func.HttpResponse:
         wave_model=wave_model,
         cache=cache,
         location_id=location_id,
-        selected_location=selected_location["name"],
         lat=selected_location["latitude"],
         lon=selected_location["longitude"],
     )

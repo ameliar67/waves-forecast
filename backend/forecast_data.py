@@ -10,7 +10,6 @@ async def get_wave_forecast(
     wave_model: surfpy.WaveModel,
     cache: Cache,
     location_id: str,
-    selected_location: str,
     lat=str,
     lon=str,
     hours_to_forecast=384,
@@ -29,7 +28,7 @@ async def get_wave_forecast(
     # Conversion rate for metric to imperial (multiply result by 3.281)
     # Currently surfpy module returns metric data
     conversion_rate = 3.281
-    location = surfpy.Location(lat, lon, altitude=0, name=selected_location)
+    location = surfpy.Location(lat, lon, altitude=0)
     location.depth, location.angle, location.slope = 10.0, 200.0, 0.28
 
     data = await retrieve_new_data(
