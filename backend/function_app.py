@@ -3,28 +3,13 @@ import logging
 
 import azure.functions as func
 import forecast_data
-from azure.core.exceptions import ResourceExistsError
-from azure.identity import DefaultAzureCredential
-from azure.storage.blob import BlobServiceClient, ContentSettings, PublicAccess
-from config import Config
+from azure.storage.blob import ContentSettings
 from locations import get_coastal_locations
 from wave_model import get_wave_model
 
-app_config = Config.from_environment()
-
-
-# Initialize BlobServiceClient and container clients
-blob_service_client = BlobServiceClient(
-    app_config.cache_blob_account_url, DefaultAzureCredential()
-)
-data_container_client = blob_service_client.get_container_client("data")
-
-# Create containers if not exist (only for development)
-if app_config.is_development:
-    try:
-        data_container_client.create_container(public_access=PublicAccess.BLOB)
-    except ResourceExistsError:
-        pass
+data_container_name = "data"
+locations_blob_path = f"{data_container_name}/locations"
+locations_dict = get_coastal_locations()
 
 app = func.FunctionApp(http_auth_level=func.AuthLevel.ANONYMOUS)
 
@@ -77,7 +62,7 @@ async def forecast(req: func.HttpRequest) -> func.HttpResponse:
 
 @app.function_name("RefreshLocations")
 @app.timer_trigger(schedule="15 3 * * *", run_on_startup=False, arg_name="timer")
-def refresh_locations(timer: func.TimerRequest) -> None:
+async def refresh_locations(timer: func.TimerRequest) -> None:
     logging.info("Refreshing locations response blob")
 
     # Get updated locations and upload to Blob storage
