@@ -11,7 +11,18 @@ class KnownLocation(TypedDict):
     state: str
 
 
-def get_coastal_locations(cache: Cache, force_refresh: bool = False):
+class LocationData(TypedDict):
+    id: str
+    name: str
+    longitude: float
+    latitude: float
+    country: str
+    state: str
+
+
+def get_coastal_locations(
+    cache: Cache, force_refresh: bool = False
+) -> dict[str, LocationData]:
 
     key = "ttl-short/buoy_locations/v1"
     cache_encoding = "utf-8"
