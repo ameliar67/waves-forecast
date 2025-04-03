@@ -1,9 +1,7 @@
-import datetime
 import json
 from typing import Literal, TypedDict
 
 import surfpy
-from cache import Cache
 
 
 class KnownLocation(TypedDict):
@@ -20,24 +18,7 @@ class LocationData(TypedDict):
     state: str
 
 
-def get_coastal_locations(
-    cache: Cache, force_refresh: bool = False
-) -> dict[str, LocationData]:
-
-    key = "ttl-short/buoy_locations/v1"
-    cache_encoding = "utf-8"
-
-    # check cache if not forcing refresh
-    cache_item = (
-        None if force_refresh else cache.get_item(key, datetime.timedelta(days=365))
-    )
-
-    # on hit: return
-    if cache_item is not None:
-        locations_dict = json.loads(cache_item.decode(cache_encoding))
-        return locations_dict
-
-    # on miss
+def get_coastal_locations() -> dict[str, LocationData]:
     buoy_stations = surfpy.BuoyStations()
     buoy_stations.fetch_stations()
 
@@ -68,9 +49,6 @@ def get_coastal_locations(
             "country": "United States",
             "state": location.get("state", "Unknown"),
         }
-
-    # set cache
-    cache.set_item(key, json.dumps(locations_dict).encode(cache_encoding))
 
     return locations_dict
 

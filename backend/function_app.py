@@ -2,14 +2,13 @@ import json
 import logging
 
 import azure.functions as func
+import forecast_data
+from azure.core.exceptions import ResourceExistsError
 from azure.identity import DefaultAzureCredential
 from azure.storage.blob import BlobServiceClient, ContentSettings, PublicAccess
-from azure.core.exceptions import ResourceExistsError
-from cache import Cache
 from config import Config
 from locations import get_coastal_locations
 from wave_model import get_wave_model
-import forecast_data
 
 app_config = Config.from_environment()
 
@@ -18,23 +17,14 @@ app_config = Config.from_environment()
 blob_service_client = BlobServiceClient(
     app_config.cache_blob_account_url, DefaultAzureCredential()
 )
-cache_container_client = blob_service_client.get_container_client("forecast-cache")
 data_container_client = blob_service_client.get_container_client("data")
 
 # Create containers if not exist (only for development)
 if app_config.is_development:
     try:
-        cache_container_client.create_container(public_access=PublicAccess.OFF)
-    except ResourceExistsError:
-        pass
-
-    try:
         data_container_client.create_container(public_access=PublicAccess.BLOB)
     except ResourceExistsError:
         pass
-
-cache = Cache(cache_container_client)
-locations_dict = get_coastal_locations(cache)
 
 app = func.FunctionApp(http_auth_level=func.AuthLevel.ANONYMOUS)
 
@@ -56,8 +46,6 @@ async def forecast(req: func.HttpRequest) -> func.HttpResponse:
     )
     wave_forecast = await forecast_data.get_wave_forecast(
         wave_model=wave_model,
-        cache=cache,
-        location_id=location_id,
         lat=selected_location["latitude"],
         lon=selected_location["longitude"],
     )
@@ -90,10 +78,10 @@ async def forecast(req: func.HttpRequest) -> func.HttpResponse:
 @app.function_name("RefreshLocations")
 @app.timer_trigger(schedule="15 3 * * *", run_on_startup=False, arg_name="timer")
 def refresh_locations(timer: func.TimerRequest) -> None:
-    logging.info("Refreshing locations cache entry and response blob")
+    logging.info("Refreshing locations response blob")
 
     # Get updated locations and upload to Blob storage
-    locations_data = get_coastal_locations(cache, force_refresh=True)
+    locations_data = get_coastal_locations()
     response_content = json.dumps({"locations": locations_data}).encode("utf-8")
 
     locations_blob = data_container_client.get_blob_client("locations")
