@@ -1,15 +1,16 @@
 import json
 import logging
+import os
 from typing import TypedDict
 
 import azure.functions as func
 import forecast_data
 from azure.storage.blob import BlobClient, ContainerClient, ContentSettings
 import azurefunctions.extensions.bindings.blob as blob_binding
-from config import IS_DEVELOPMENT_MODE
 from locations import LocationData, get_coastal_locations
 from wave_model import get_wave_model
 
+IS_DEVELOPMENT_MODE = os.environ.get("IS_DEVELOPMENT") in ("1", "True", "true")
 data_container_name = "data"
 locations_blob_path = f"{data_container_name}/locations"
 refresh_forecast_queue_name = "refresh-forecast"

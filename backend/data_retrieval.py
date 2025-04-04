@@ -1,10 +1,14 @@
+import asyncio
 import logging
 from typing import TypedDict
-import surfpy
-from surfpy.location import Location
-import asyncio
+
 import aiohttp
+import surfpy
 from grib_parser import parse_grib_data
+from surfpy.location import Location
+
+http_session = aiohttp.ClientSession()
+http_session.headers["User-Agent"] = "waves-forecast/1.0.0"
 
 
 class HourlyForecastSummary(TypedDict):
@@ -41,9 +45,8 @@ async def get_response(session: aiohttp.ClientSession, url: str) -> bytes:
 
 
 async def fetch_multiple_urls(urls: list[str]) -> list[bytes]:
-    async with aiohttp.ClientSession() as session:
-        tasks = [get_response(session, url) for url in urls]
-        return await asyncio.gather(*tasks)
+    tasks = [get_response(http_session, url) for url in urls]
+    return await asyncio.gather(*tasks)
 
 
 async def fetch_active_weather_alerts(location: Location) -> dict:
@@ -52,11 +55,10 @@ async def fetch_active_weather_alerts(location: Location) -> dict:
         logging.info(
             f"Fetching weather alerts for location: {location.latitude}, {location.longitude}"
         )
-        async with aiohttp.ClientSession() as session:
-            async with session.get(url) as resp:
-                resp.raise_for_status()
-                resp_json = await resp.json()
-                return resp_json
+        async with http_session.get(url) as resp:
+            resp.raise_for_status()
+            resp_json = await resp.json()
+            return resp_json
     except aiohttp.ClientError as e:
         logging.error(f"Failed to fetch weather alerts for {location}: {e}")
         return {}
