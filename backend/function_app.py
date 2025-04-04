@@ -73,7 +73,7 @@ async def forecast(message: str, datacontainer: blob_binding.ContainerClient) ->
     content_settings = ContentSettings(
         content_type="application/json", cache_control="public, max-age=1800"
     )
-    await forecast_blob_client.upload_blob(
+    forecast_blob_client.upload_blob(
         json.dumps(response_data), overwrite=True, content_settings=content_settings
     )
 
