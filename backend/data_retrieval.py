@@ -1,4 +1,5 @@
 import asyncio
+from collections import defaultdict
 import datetime
 import logging
 from typing import TypedDict
@@ -93,15 +94,13 @@ async def retrieve_new_data(
     location: surfpy.Location,
     conversion_rate: float,
 ) -> WaveForecastData | None:
-
-    wave_data = {}
-
     # Generate URLs for fetching GRIB data
     urls = wave_model.create_grib_urls(0, hours_to_forecast)
 
     # Fetch GRIB data in parallel
     grib_datas = await fetch_multiple_urls(urls)
 
+    wave_data = defaultdict(list)
     # Parse GRIB data for each fetched GRIB data
     for grib_data in grib_datas:
         parse_grib_data(location, grib_data, 0.167, wave_data)
