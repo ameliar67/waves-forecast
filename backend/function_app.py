@@ -53,19 +53,10 @@ async def forecast(message: str, datacontainer: blob_binding.ContainerClient) ->
     # Handle missing forecast data
     if not wave_forecast:
         logging.error("Failed to retrieve forecast data for %s", message)
-        raise ValueError("Failed to retrieve forecast data")
+        return
 
     # Prepare response data
-    response_data = {
-        "selected_location": selected_location["name"],
-        "current_wave_height": wave_forecast["average_wave_height"],
-        "weather_alerts": wave_forecast["weather_alerts"],
-        "air_temperature": wave_forecast["air_temperature"],
-        "short_forecast": wave_forecast["short_forecast"],
-        "wind_speed": wave_forecast["wind_speed"],
-        "wind_direction": wave_forecast["wind_direction"],
-        "hourly_forecast": wave_forecast["hourly_forecast"],
-    }
+    wave_forecast["selected_location"] = selected_location["name"]
 
     forecast_blob_client = data_container_client.get_blob_client(
         selected_location["output_path"]
@@ -74,7 +65,7 @@ async def forecast(message: str, datacontainer: blob_binding.ContainerClient) ->
         content_type="application/json", cache_control="public, max-age=1800"
     )
     forecast_blob_client.upload_blob(
-        json.dumps(response_data), overwrite=True, content_settings=content_settings
+        json.dumps(wave_forecast), overwrite=True, content_settings=content_settings
     )
 
 

@@ -1,4 +1,5 @@
 import asyncio
+import datetime
 import logging
 from typing import TypedDict
 
@@ -19,6 +20,7 @@ class HourlyForecastSummary(TypedDict):
 
 class WaveForecastData(TypedDict):
     selected_location: str
+    generated_at: str
     average_wave_height: int
     weather_alerts: str | None
     air_temperature: int | str
@@ -43,9 +45,9 @@ async def get_response(session: aiohttp.ClientSession, url: str) -> bytes:
         return b""
 
 
-async def fetch_multiple_urls(urls: list[str]) -> list[bytes]:
+def fetch_multiple_urls(urls: list[str]) -> asyncio.Future[list[bytes]]:
     tasks = [get_response(http_session, url) for url in urls]
-    return await asyncio.gather(*tasks)
+    return asyncio.gather(*tasks)
 
 
 async def fetch_active_weather_alerts(location: surfpy.Location) -> dict:
@@ -61,7 +63,9 @@ async def fetch_active_weather_alerts(location: surfpy.Location) -> dict:
         return {}
 
 
-async def fetch_hourly_forecast_async(location: surfpy.Location):
+async def fetch_hourly_forecast_async(
+    location: surfpy.Location,
+) -> list[surfpy.BuoyData]:
     try:
         return await asyncio.to_thread(
             surfpy.WeatherApi.fetch_hourly_forecast, location
@@ -73,6 +77,14 @@ async def fetch_hourly_forecast_async(location: surfpy.Location):
             location.longitude,
         )
         return []
+
+
+EMPTY_FORECAST_DATA = {
+    "chart": None,
+    "current_wave_height": 0,
+    "alerts": "No forecast available",
+    "air_temperature": "No forecast available",
+}
 
 
 async def retrieve_new_data(
@@ -103,20 +115,27 @@ async def retrieve_new_data(
         return None
 
     # Turn NOAA model data into buoy data
-    buoy_data = wave_model.to_buoy_data(wave_data)
+    buoy_data: list[surfpy.BuoyData] = wave_model.to_buoy_data(wave_data)
+
+    if len(buoy_data) == 0:
+        logging.warning(
+            "No buoy data available for location %f,%f",
+            location.latitude,
+            location.longitude,
+        )
+        return EMPTY_FORECAST_DATA.copy()
 
     # Fetch weather data
-    weather_data = await fetch_hourly_forecast_async(location)
-
-    if len(weather_data) == 0 or len(buoy_data) == 0:
-        logging.warning("No forecast or buoy data available.")
-        forecast_data = {
-            "chart": None,
-            "current_wave_height": 0,
-            "alerts": "No forecast available",
-            "air_temperature": "No forecast available",
-        }
-        return forecast_data
+    weather_data, alerts = await asyncio.gather(
+        fetch_hourly_forecast_async(location), fetch_active_weather_alerts(location)
+    )
+    if len(weather_data) == 0:
+        logging.warning(
+            "No forecast available for location %f,%f",
+            location.latitude,
+            location.longitude,
+        )
+        return EMPTY_FORECAST_DATA.copy()
 
     # Use default values for missing data
     air_temperature = getattr(
@@ -127,8 +146,6 @@ async def retrieve_new_data(
     wind_direction = getattr(
         weather_data[0], "wind_compass_direction", "No wind direction available"
     )
-
-    alerts = await fetch_active_weather_alerts(location)
 
     hourly_forecast = []
     for x in buoy_data:
@@ -152,6 +169,7 @@ async def retrieve_new_data(
     )
 
     return {
+        "generated_at": datetime.datetime.now(datetime.timezone.utc).isoformat(),
         "average_wave_height": current_wave_height,
         "weather_alerts": headline or "None",
         "air_temperature": air_temperature,
