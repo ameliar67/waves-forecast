@@ -61,13 +61,25 @@ async def fetch_active_weather_alerts(location: surfpy.Location) -> dict:
         return {}
 
 
-async def fetch_hourly_forecast_async(location: Location):
-    # Run the synchronous function in a separate thread
-    return await asyncio.to_thread(surfpy.WeatherApi.fetch_hourly_forecast, location)
+async def fetch_hourly_forecast_async(location: surfpy.Location):
+    try:
+        return await asyncio.to_thread(
+            surfpy.WeatherApi.fetch_hourly_forecast, location
+        )
+    except:
+        logging.exception(
+            "Failure fetching hourly forecast for location %f,%f - returning empty result",
+            location.latitude,
+            location.longitude,
+        )
+        return []
 
 
 async def retrieve_new_data(
-    wave_model, hours_to_forecast, location, conversion_rate
+    wave_model: surfpy.WaveModel,
+    hours_to_forecast: int,
+    location: surfpy.Location,
+    conversion_rate: float,
 ) -> WaveForecastData | None:
 
     wave_data = {}
