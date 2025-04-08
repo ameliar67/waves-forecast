@@ -35,7 +35,7 @@ class ForecastQueueMessage(TypedDict):
     connection="",
 )
 async def forecast(message: str, datacontainer: blob_binding.ContainerClient) -> None:
-    logging.info(f"Refreshing forecast for {message}")
+    logging.info("Refreshing forecast for %s", message)
     # Convert type hint from blob binding (required by Azure Functions) to normal ContainerClient (code completion)
     data_container_client: ContainerClient = datacontainer
     selected_location: ForecastQueueMessage = json.loads(message)
@@ -52,9 +52,8 @@ async def forecast(message: str, datacontainer: blob_binding.ContainerClient) ->
 
     # Handle missing forecast data
     if not wave_forecast:
-        err_message = f"Failed to retrieve forecast data for {message}"
-        logging.error(err_message)
-        raise ValueError(err_message)
+        logging.error("Failed to retrieve forecast data for %s", message)
+        raise ValueError("Failed to retrieve forecast data")
 
     # Prepare response data
     response_data = {

@@ -5,7 +5,6 @@ from typing import TypedDict
 import aiohttp
 import surfpy
 from grib_parser import parse_grib_data
-from surfpy.location import Location
 
 http_session = aiohttp.ClientSession()
 http_session.headers["User-Agent"] = "waves-forecast/1.0.0"
@@ -35,12 +34,12 @@ logging.basicConfig(level=logging.INFO)  # Set to INFO level for less verbosity
 
 async def get_response(session: aiohttp.ClientSession, url: str) -> bytes:
     try:
-        logging.info(f"Fetching data from {url}")
+        logging.info("Fetching data from %s", url)
         async with session.get(url) as response:
             response.raise_for_status()
             return await response.read()
-    except aiohttp.ClientError as e:
-        logging.error(f"Failed to fetch data from {url}: {e}")
+    except aiohttp.ClientError:
+        logging.exception("Failed to fetch data from %s", url)
         return b""
 
 
@@ -49,18 +48,16 @@ async def fetch_multiple_urls(urls: list[str]) -> list[bytes]:
     return await asyncio.gather(*tasks)
 
 
-async def fetch_active_weather_alerts(location: Location) -> dict:
+async def fetch_active_weather_alerts(location: surfpy.Location) -> dict:
     url = f"https://api.weather.gov/alerts/active?point={location.latitude},{location.longitude}"
     try:
-        logging.info(
-            f"Fetching weather alerts for location: {location.latitude}, {location.longitude}"
-        )
+        logging.info("Fetching weather alerts from url %s", url)
         async with http_session.get(url) as resp:
             resp.raise_for_status()
             resp_json = await resp.json()
             return resp_json
-    except aiohttp.ClientError as e:
-        logging.error(f"Failed to fetch weather alerts for {location}: {e}")
+    except aiohttp.ClientError:
+        logging.exception("Failed to fetch weather alerts from %s", url)
         return {}
 
 
@@ -86,7 +83,11 @@ async def retrieve_new_data(
         parse_grib_data(location, grib_data, 0.167, wave_data)
 
     if not wave_data:
-        logging.warning("No wave data available after parsing GRIB data.")
+        logging.warning(
+            "No wave data available after parsing GRIB data for %f,%f",
+            location.latitude,
+            location.longitude,
+        )
         return None
 
     # Turn NOAA model data into buoy data
@@ -138,7 +139,6 @@ async def retrieve_new_data(
         else None
     )
 
-    logging.info("Returning forecast data.")
     return {
         "average_wave_height": current_wave_height,
         "weather_alerts": headline or "None",
