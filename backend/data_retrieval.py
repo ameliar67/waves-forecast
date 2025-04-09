@@ -7,6 +7,7 @@ from typing import TypedDict
 import aiohttp
 import surfpy
 from grib_parser import parse_grib_data
+import math
 
 http_session = aiohttp.ClientSession()
 http_session.headers["User-Agent"] = "waves-forecast/1.0.0"
@@ -68,6 +69,11 @@ async def fetch_hourly_forecast_async(
     location: surfpy.Location,
 ) -> list[surfpy.BuoyData]:
     try:
+        logging.info(
+            "Fetching hourly forecast for location %f,%f",
+            location.latitude,
+            location.longitude,
+        )
         return await asyncio.to_thread(
             surfpy.WeatherApi.fetch_hourly_forecast, location
         )
@@ -152,13 +158,19 @@ async def retrieve_new_data(
         hourly_forecast.append(
             {
                 "date": x.date.isoformat(),
-                "max_breaking_height": x.maximum_breaking_height * conversion_rate,
-                "min_breaking_height": x.minimum_breaking_height * conversion_rate,
+                "max_breaking_height": (
+                    x.maximum_breaking_height * conversion_rate
+                    if not math.isnan(x.maximum_breaking_height * conversion_rate)
+                    else None
+                ),
+                "min_breaking_height": (
+                    x.maximum_breaking_height * conversion_rate
+                    if not math.isnan(x.maximum_breaking_height * conversion_rate)
+                    else None
+                ),
                 "wave_height": x.wave_summary.wave_height * conversion_rate,
             }
         )
-
-    current_wave_height = round(buoy_data[0].wave_summary.wave_height * conversion_rate)
 
     alerts_list = alerts.get("features", [])
     headline = (
@@ -169,7 +181,6 @@ async def retrieve_new_data(
 
     return {
         "generated_at": datetime.datetime.now(datetime.timezone.utc).isoformat(),
-        "average_wave_height": current_wave_height,
         "weather_alerts": headline or "None",
         "air_temperature": air_temperature,
         "short_forecast": short_forecast,
