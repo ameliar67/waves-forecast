@@ -13,6 +13,7 @@ export const ForecastContent: React.FC<ForecastContentProps> = ({
   locationId,
   forecastData,
 }) => {
+  const forecastHeight = Math.round(forecastData.hourly_forecast[0].wave_height);
   return (
     <>
       <div className="forecast-header">
@@ -27,7 +28,7 @@ export const ForecastContent: React.FC<ForecastContentProps> = ({
           <div className="wave-data-fields">
             <div className="wave-height-layout">
               <p className="wave-height">
-                {forecastData.current_wave_height} ft
+                {forecastHeight} ft
               </p>
               <p className="label">Wave Height</p>
             </div>
