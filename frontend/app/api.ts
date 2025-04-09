@@ -8,9 +8,9 @@ export interface BuoyStation {
 }
 
 export interface HourlyForecast {
-  max_breaking_height: number; 
-  min_breaking_height: number; 
-  wave_height: number; 
+  max_breaking_height: number;
+  min_breaking_height: number;
+  wave_height: number;
   date: string;
 }
 
@@ -39,12 +39,23 @@ export async function getLocations() {
 }
 
 // Retrieve forecast data from blob storage
-export async function getForecast(id: string): Promise<ForecastData> {
+export async function getForecast(
+  id: string
+): Promise<ForecastData | { error: string }> {
   const response = await fetch(`${storageBaseUrl}/forecast/${id}`);
   if (!response.ok) {
-    throw new Error("Failed to fetch forecast data");
+    return { error: "Failed to fetch forecast data" };
   }
 
-  const data = await response.json();
+  const data: ForecastData = await response.json();
+  if (!data.hourly_forecast[0].min_breaking_height) {
+    return { error: "No forecast data available for this location" };
+  }
+
+  const now = new Date();
+  data.hourly_forecast = data.hourly_forecast.filter((forecast) => {
+    const forecastDate = new Date(forecast.date);
+    return forecastDate >= now;
+  });
   return data;
 }
