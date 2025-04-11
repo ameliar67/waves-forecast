@@ -2,12 +2,12 @@ import asyncio
 from collections import defaultdict
 import datetime
 import logging
+import math
 from typing import TypedDict
 
 import aiohttp
 import surfpy
-from grib_parser import parse_grib_data
-import math
+from grib_parser import GribTimeWindow, parse_grib_data
 
 http_session = aiohttp.ClientSession()
 http_session.headers["User-Agent"] = "waves-forecast/1.0.0"
@@ -47,11 +47,6 @@ async def get_response(session: aiohttp.ClientSession, url: str) -> bytes:
         return b""
 
 
-def fetch_multiple_urls(urls: list[str]) -> asyncio.Future[list[bytes]]:
-    tasks = [get_response(http_session, url) for url in urls]
-    return asyncio.gather(*tasks)
-
-
 async def fetch_active_weather_alerts(location: surfpy.Location) -> dict:
     url = f"https://api.weather.gov/alerts/active?point={location.latitude},{location.longitude}"
     try:
@@ -86,6 +81,23 @@ async def fetch_hourly_forecast_async(
         return []
 
 
+async def get_wave_model_grib(url) -> GribTimeWindow | None:
+    try:
+        response = await get_response(http_session, url)
+        return parse_grib_data(response) if len(response) else None
+    except:
+        logging.exception("Failed to get GRIB data from %s", url)
+        return None
+
+
+async def get_wave_forecast_models(
+    wave_model: surfpy.WaveModel, hours: int
+) -> list[GribTimeWindow]:
+    futures = [get_wave_model_grib(u) for u in wave_model.create_grib_urls(0, hours)]
+    grib_datas = await asyncio.gather(*futures)
+    return [g for g in grib_datas if g is not None]
+
+
 EMPTY_FORECAST_DATA = {
     "chart": None,
     "current_wave_height": 0,
@@ -100,16 +112,14 @@ async def retrieve_new_data(
     location: surfpy.Location,
     conversion_rate: float,
 ) -> WaveForecastData | None:
-    # Generate URLs for fetching GRIB data
-    urls = wave_model.create_grib_urls(0, hours_to_forecast)
-
-    # Fetch GRIB data in parallel
-    grib_datas = await fetch_multiple_urls(urls)
-
+    location_resolution = 0.167
     wave_data = defaultdict(list)
-    # Parse GRIB data for each fetched GRIB data
-    for grib_data in grib_datas:
-        parse_grib_data(location, grib_data, 0.167, wave_data)
+
+    forecast_models = await get_wave_forecast_models(wave_model, hours_to_forecast)
+    for m in forecast_models:
+        wave_data["time"].append(m.time)
+        for key, func in m.data_funcs.items():
+            wave_data[key].append(func(location, location_resolution))
 
     if not wave_data:
         logging.warning(
