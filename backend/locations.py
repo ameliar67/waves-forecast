@@ -18,6 +18,11 @@ class LocationData(TypedDict):
     state: str
 
 
+def is_in_great_lakes_region(lat, lon):
+    lon = lon if lon >= 0 else lon + 360
+    return 41.0 <= lat <= 49.0 and 267.5 <= lon <= 285.0
+
+
 def get_coastal_locations() -> dict[str, LocationData]:
     buoy_stations = surfpy.BuoyStations()
     buoy_stations.fetch_stations()
@@ -30,7 +35,9 @@ def get_coastal_locations() -> dict[str, LocationData]:
         data_available, surf_location = is_buoy_data_available(
             buoyStation, known_locations
         )
-        if not data_available:
+        if not data_available or is_in_great_lakes_region(
+            buoyStation.location.latitude, buoyStation.location.longitude
+        ):
             continue
         known_locations[surf_location]["closest_station"] = buoyStation
 
