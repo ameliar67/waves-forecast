@@ -126,6 +126,7 @@ async def retrieve_new_data(
             "No wave data available after parsing GRIB data for %f,%f",
             location.latitude,
             location.longitude,
+            wave_model.description
         )
         return None
 
@@ -138,7 +139,7 @@ async def retrieve_new_data(
             location.latitude,
             location.longitude,
         )
-        return EMPTY_FORECAST_DATA.copy()
+        return {**EMPTY_FORECAST_DATA.copy(), "wave_model": wave_model.description}
 
     # Fetch weather data
     weather_data, alerts = await asyncio.gather(
@@ -150,7 +151,8 @@ async def retrieve_new_data(
             location.latitude,
             location.longitude,
         )
-        return EMPTY_FORECAST_DATA.copy()
+        # if this is triggered still need to return existing wave data
+        return {**EMPTY_FORECAST_DATA.copy(), "wave_model": wave_model.description}
 
     # Use default values for missing data
     air_temperature = getattr(
