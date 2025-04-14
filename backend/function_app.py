@@ -21,8 +21,8 @@ app = func.FunctionApp(http_auth_level=func.AuthLevel.ANONYMOUS)
 class ForecastQueueMessage(TypedDict):
     output_path: str
     name: str
-    lat: float
-    long: float
+    latitude: float
+    longitude: float
 
 
 @app.function_name("LocationForecast")
