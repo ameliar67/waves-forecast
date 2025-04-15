@@ -1,5 +1,6 @@
 import Plotly from "plotly.js-basic-dist";
-import React, { useLayoutEffect, useMemo, useRef, useState } from "react";
+import React, { useLayoutEffect, useMemo, useRef } from "react";
+import { useIsMobile } from "./mobile";
 
 interface PlotlyGraphProps {
   data: Plotly.Data[];
@@ -7,16 +8,7 @@ interface PlotlyGraphProps {
 }
 
 const PlotlyGraph: React.FC<PlotlyGraphProps> = ({ data, layout }) => {
-  const [isMobile, setIsMobile] = useState(false);
-  useLayoutEffect(() => {
-    const match = window.matchMedia("(min-width:768px)");
-    setIsMobile(match.matches);
-
-    const listener = (e: MediaQueryListEvent) => setIsMobile(e.matches);
-    match.addEventListener("change", listener);
-    return () => match.removeEventListener("change", listener);
-  }, []);
-
+  const isMobile = useIsMobile();
   const graphElement = useRef<HTMLDivElement | null>(null);
   const plotLayout = useMemo(() => layout(isMobile), [layout, isMobile]);
 

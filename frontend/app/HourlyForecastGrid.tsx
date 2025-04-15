@@ -1,6 +1,7 @@
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useState } from "react";
 import ForecastItem from "./ForecastItem";
 import { HourlyForecast } from "./api";
+import { useIsMobile } from "./mobile";
 
 interface WaveChartProps {
   hourlyForecast: HourlyForecast[];
@@ -9,37 +10,83 @@ interface WaveChartProps {
 const HourlyForecastGrid: React.FC<WaveChartProps> = ({
   hourlyForecast = [],
 }) => {
+  const groupedByDate = groupForecastByDate(hourlyForecast);
+  const dateKeys = Object.keys(groupedByDate);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const isMobile = useIsMobile();
+
+  const handlePrev = () => {
+    setCurrentIndex((prev) => Math.max(prev - 1, 0));
+  };
+
+  const handleNext = () => {
+    setCurrentIndex((prev) => Math.min(prev + 1, dateKeys.length - 1));
+  };
+
   return (
     <div className="forecast-container">
+      {isMobile && (
+        <div className="mobile-forecast-nav">
+          <button
+            type="button"
+            onClick={handlePrev}
+            className="mobile-forecast-arrow"
+            disabled={currentIndex === 0}
+          >
+            ⬅️
+          </button>
+          <div className="mobile-forecast-date-label">
+            {dateKeys[currentIndex]}
+          </div>
+          <button
+            type="button"
+            onClick={handleNext}
+            className="mobile-forecast-arrow"
+            disabled={currentIndex === dateKeys.length - 1}
+          >
+            ➡️
+          </button>
+        </div>
+      )}
 
-      <div className="forecast-items">
-        {hourlyForecast.length > 0 ? (
-          [...hourlyForecast, ...hourlyForecast].map((data, index) => {
-            const formattedDate = formatDate(data.date);
-            const formattedTime = formatTime(data.date);
-            const forecastHeight = data.wave_height.toFixed(1);
+      {dateKeys.map((date, index) => {
+        if (isMobile && index !== currentIndex) return null;
 
-            return (
-              <ForecastItem
-                key={index}
-                forecastHeight={forecastHeight}
-                formattedTime={formattedTime}
-                formattedDate={formattedDate}
-              />
-            );
-          })
-        ) : (
-          <div>No forecast data available</div>
-        )}
-      </div>
-
+        return (
+          <div key={date} className="forecast-day-group">
+            {!isMobile && <div className="forecast-date-banner">{date}</div>}
+            <div className="forecast-items">
+              {groupedByDate[date].map((data, i) => (
+                <ForecastItem
+                  key={i}
+                  forecastHeight={data.wave_height.toFixed(1)}
+                  formattedTime={formatTime(data.date)}
+                />
+              ))}
+            </div>
+          </div>
+        );
+      })}
     </div>
   );
 };
 
+function groupForecastByDate(forecast: HourlyForecast[]) {
+  return forecast.reduce<Record<string, HourlyForecast[]>>((acc, item) => {
+    const dateKey = formatDate(item.date);
+    if (!acc[dateKey]) acc[dateKey] = [];
+    acc[dateKey].push(item);
+    return acc;
+  }, {});
+}
+
 function formatDate(date: string) {
   const parsedDate = new Date(date);
-  return parsedDate.toLocaleDateString();
+  return parsedDate.toLocaleDateString(undefined, {
+    weekday: "long",
+    month: "short",
+    day: "numeric",
+  });
 }
 
 function formatTime(date: string) {
