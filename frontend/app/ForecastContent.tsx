@@ -13,7 +13,11 @@ export const ForecastContent: React.FC<ForecastContentProps> = ({
   locationId,
   forecastData,
 }) => {
-  const forecastHeight = Math.round(forecastData.hourly_forecast[0].wave_height);
+  const { max_breaking_height, min_breaking_height } = forecastData.hourly_forecast[0];
+  const averageBreakingHeight = (max_breaking_height + min_breaking_height) / 2;
+  const roundedLower = Math.floor(averageBreakingHeight);
+  const roundedUpper = Math.ceil(averageBreakingHeight);
+  
   return (
     <>
       <div className="forecast-header">
@@ -28,7 +32,7 @@ export const ForecastContent: React.FC<ForecastContentProps> = ({
           <div className="wave-data-fields">
             <div className="wave-height-layout">
               <p className="wave-height">
-                {forecastHeight} ft
+                {roundedLower} - {roundedUpper} ft
               </p>
               <p className="label">Wave Height</p>
             </div>

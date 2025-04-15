@@ -59,7 +59,7 @@ const HourlyForecastGrid: React.FC<WaveChartProps> = ({
               {groupedByDate[date].map((data, i) => (
                 <ForecastItem
                   key={i}
-                  forecastHeight={data.wave_height.toFixed(1)}
+                  forecastHeight={((data.max_breaking_height + data.min_breaking_height) / 2).toFixed(1)}
                   formattedTime={formatTime(data.date)}
                 />
               ))}
