@@ -37,7 +37,7 @@ const WaveChart: React.FC<WaveChartProps> = ({ hourlyForecast = [] }) => {
         y: hourlyForecast.map((h) => h.wave_height),
         type: "scatter",
         mode: "lines",
-        name: "Wave Height",
+        name: "Swell Height",
         line: { color: "#e17055", shape: "spline" },
       },
     ];
