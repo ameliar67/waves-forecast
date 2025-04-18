@@ -13,11 +13,13 @@ export const ForecastContent: React.FC<ForecastContentProps> = ({
   locationId,
   forecastData,
 }) => {
-  const { max_breaking_height, min_breaking_height } = forecastData.hourly_forecast[0];
+  const { max_breaking_height = 0, min_breaking_height = 0 } =
+    forecastData?.hourly_forecast?.[0] ?? {};
+
   const averageBreakingHeight = (max_breaking_height + min_breaking_height) / 2;
   const roundedLower = Math.floor(averageBreakingHeight);
   const roundedUpper = Math.ceil(averageBreakingHeight);
-  
+
   return (
     <>
       <div className="forecast-header">
@@ -32,7 +34,9 @@ export const ForecastContent: React.FC<ForecastContentProps> = ({
           <div className="wave-data-fields">
             <div className="wave-height-layout">
               <p className="wave-height">
-                {roundedLower} - {roundedUpper} ft
+                {roundedLower === 0 && roundedUpper === 0
+                  ? "Flat"
+                  : `${roundedLower} - ${roundedUpper} ft`}
               </p>
               <p className="label">Wave Height</p>
             </div>
@@ -40,7 +44,7 @@ export const ForecastContent: React.FC<ForecastContentProps> = ({
 
           <div className="wind-data-fields">
             <div className="wind-layout">
-              <p className="data">{forecastData.wind_speed} knots</p>
+              <p className="data">{forecastData.wind_speed == "No forecast available" ? forecastData.wind_speed : forecastData.wind_speed + " knots"}</p>
               <p className="label">Wind Speed</p>
             </div>
             <div className="wind-layout">
@@ -55,7 +59,7 @@ export const ForecastContent: React.FC<ForecastContentProps> = ({
               <p className="label">Forecast</p>
             </div>
             <div className="forecast-layout">
-              <p className="data">{forecastData.air_temperature} °F</p>
+              <p className="data">{forecastData.air_temperature == "No forecast available" ? forecastData.air_temperature : forecastData.air_temperature + " °F"}</p>
               <p className="label">Air Temperature</p>
             </div>
           </div>
