@@ -15,6 +15,10 @@ const HourlyForecastGrid: React.FC<WaveChartProps> = ({
   const [currentIndex, setCurrentIndex] = useState(0);
   const isMobile = useIsMobile();
 
+  if (!hourlyForecast || hourlyForecast.length === 0) {
+    return null;
+  }
+
   const handlePrev = () => {
     setCurrentIndex((prev) => Math.max(prev - 1, 0));
   };
