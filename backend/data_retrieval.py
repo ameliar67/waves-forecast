@@ -141,29 +141,6 @@ async def retrieve_new_data(
         )
         return {**EMPTY_FORECAST_DATA.copy(), "wave_model": wave_model.description}
 
-    # Fetch weather data
-    weather_data, alerts = await asyncio.gather(
-        fetch_hourly_forecast_async(location), fetch_active_weather_alerts(location)
-    )
-    if len(weather_data) == 0:
-        logging.warning(
-            "No forecast available for location %f,%f",
-            location.latitude,
-            location.longitude,
-        )
-        # if this is triggered still need to return existing wave data
-        return {**EMPTY_FORECAST_DATA.copy(), "wave_model": wave_model.description}
-
-    # Use default values for missing data
-    air_temperature = getattr(
-        weather_data[0], "air_temperature", "No temperature forecast available"
-    )
-    short_forecast = getattr(weather_data[0], "short_forecast", "No forecast available")
-    wind_speed = getattr(weather_data[0], "wind_speed", "No wind speed available")
-    wind_direction = getattr(
-        weather_data[0], "wind_compass_direction", "No wind direction available"
-    )
-
     hourly_forecast = []
     for x in buoy_data:
         x.solve_breaking_wave_heights(location)
@@ -184,6 +161,11 @@ async def retrieve_new_data(
             }
         )
 
+    # Fetch weather data
+    weather_data, alerts = await asyncio.gather(
+        fetch_hourly_forecast_async(location), fetch_active_weather_alerts(location)
+        )
+
     alerts_list = alerts.get("features", [])
     headline = (
         alerts_list[0].get("properties", {}).get("headline", None)
@@ -191,12 +173,26 @@ async def retrieve_new_data(
         else None
     )
 
+    # if this is triggered still return existing wave data
+    if len(weather_data) == 0:
+        logging.warning(
+            "No forecast available for location %f,%f",
+            location.latitude,
+            location.longitude,
+        )
+        return {
+            **EMPTY_FORECAST_DATA.copy(),
+            "generated_at": datetime.datetime.now(datetime.timezone.utc).isoformat(),
+            "weather_alerts": headline or "None",
+            "hourly_forecast": hourly_forecast,
+        }
+
     return {
         "generated_at": datetime.datetime.now(datetime.timezone.utc).isoformat(),
         "weather_alerts": headline or "None",
-        "air_temperature": air_temperature,
-        "short_forecast": short_forecast,
-        "wind_speed": wind_speed,
-        "wind_direction": wind_direction,
+        "air_temperature": weather_data[0].air_temperature,
+        "short_forecast": weather_data[0].short_forecast,
+        "wind_speed": weather_data[0].wind_speed,
+        "wind_direction": weather_data[0].wind_direction,
         "hourly_forecast": hourly_forecast,
     }
