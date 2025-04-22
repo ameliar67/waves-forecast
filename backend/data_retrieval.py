@@ -103,6 +103,9 @@ EMPTY_FORECAST_DATA = {
     "current_wave_height": 0,
     "alerts": "No forecast available",
     "air_temperature": "No forecast available",
+    "wind_speed": "No forecast available",
+    "wind_direction": "No forecast available",
+    "short_forecast": "No forecast available",
 }
 
 
@@ -164,7 +167,7 @@ async def retrieve_new_data(
     # Fetch weather data
     weather_data, alerts = await asyncio.gather(
         fetch_hourly_forecast_async(location), fetch_active_weather_alerts(location)
-        )
+    )
 
     alerts_list = alerts.get("features", [])
     headline = (
