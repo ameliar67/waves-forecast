@@ -48,7 +48,7 @@ export async function getForecast(
   }
 
   const data: ForecastData = await response.json();
-  if (data?.hourly_forecast?.[0]?.min_breaking_height == null || data?.air_temperature === "No forecast available") {
+  if (data?.hourly_forecast?.[0]?.min_breaking_height == null) {
     return { error: "No forecast data available for this location" };
   }
 
