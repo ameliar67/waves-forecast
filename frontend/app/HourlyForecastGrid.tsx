@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
+import { HourlyForecast } from "./api";
 import ForecastItem from "./ForecastItem";
 import { useIsMobile } from "./mobile";
 import { formatUnit, useUnits } from "./Units";
@@ -10,7 +11,10 @@ interface WaveChartProps {
 const HourlyForecastGrid: React.FC<WaveChartProps> = ({
   hourlyForecast = [],
 }) => {
-  const groupedByDate = groupForecastByDate(hourlyForecast);
+  const groupedByDate = useMemo(
+    () => groupForecastByDate(hourlyForecast),
+    [hourlyForecast]
+  );
   const dateKeys = Object.keys(groupedByDate);
   const [currentIndex, setCurrentIndex] = useState(0);
   const isMobile = useIsMobile();
@@ -20,12 +24,13 @@ const HourlyForecastGrid: React.FC<WaveChartProps> = ({
   }
 
   const units = useUnits();
+  const handlePrev = useCallback(() => {
     setCurrentIndex((prev) => Math.max(prev - 1, 0));
-  };
+  }, []);
 
-  const handleNext = () => {
+  const handleNext = useCallback(() => {
     setCurrentIndex((prev) => Math.min(prev + 1, dateKeys.length - 1));
-  };
+  }, [dateKeys.length]);
 
   return (
     <div className="forecast-container">
