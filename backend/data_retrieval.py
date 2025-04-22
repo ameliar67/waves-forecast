@@ -119,7 +119,8 @@ async def retrieve_new_data(
     for m in forecast_models:
         wave_data["time"].append(m.time)
         for key, func in m.data_funcs.items():
-            wave_data[key].append(func(location, location_resolution))
+            func_val = func(location, location_resolution)
+            wave_data[key].append(func_val)
 
     if not wave_data:
         logging.warning(
