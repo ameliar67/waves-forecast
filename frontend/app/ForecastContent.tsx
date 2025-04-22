@@ -27,6 +27,14 @@ export const ForecastContent: React.FC<ForecastContentProps> = ({
   const roundedUpper = Math.ceil(averageBreakingHeight);
 
   const stations = useStations();
+
+  const direction =
+    typeof forecastData.wind_direction !== "number"
+      ? ""
+      : ["N", "E", "S", "W"][
+          Math.floor((forecastData.wind_direction + 45) / 90) % 4
+        ];
+
   return (
     <>
       <div className="forecast-header">
@@ -56,11 +64,27 @@ export const ForecastContent: React.FC<ForecastContentProps> = ({
 
           <div className="wind-data-fields">
             <div className="wind-layout">
-              <p className="data">{forecastData.wind_speed == "No forecast available" ? forecastData.wind_speed : forecastData.wind_speed + " knots"}</p>
+              <p className="data">
+                {forecastData.wind_speed == "No forecast available"
+                  ? forecastData.wind_speed
+                  : forecastData.wind_speed + " knots"}
+              </p>
               <p className="label">Wind Speed</p>
             </div>
             <div className="wind-layout">
-              <p className="data">{forecastData.wind_direction}</p>
+              <div className="wind-direction-layout">
+                <p className="data">
+                  {direction} {forecastData.wind_direction}
+                </p>
+                {forecastData.wind_direction !== "No forecast available" && (
+                  <div
+                    className="wind-arrow"
+                    style={{
+                      transform: `rotate(${forecastData.wind_direction}deg)`,
+                    }}
+                  ></div>
+                )}
+              </div>
               <p className="label">Wind Direction</p>
             </div>
           </div>
