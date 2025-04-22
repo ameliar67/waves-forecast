@@ -108,7 +108,7 @@ img {
   display: flex;
   justify-content: space-around;
   width: 80%;
-  margin: 120px;
+  margin: 80px;
 }
 
 .wind-layout,
@@ -367,6 +367,40 @@ input {
   flex-grow: 1;
 }
 
+.wind-arrow {
+  width: 0;
+  height: 0;
+  border-left: 7px solid transparent;
+  border-right: 7px solid transparent;
+  border-bottom: 20px solid black;
+  margin-left: 10px;
+  transition: transform 0.3s ease-in-out;
+}
+
+.wind-direction-layout {
+  display: flex;
+  flex-direction: row;
+}
+
+.location-name {
+  margin-top: 130px;
+  font-weight: bold;
+  font-size: 2.5em;
+}
+
+.forecast-content-location {
+  margin-right: 900px;
+}
+
+#number-of-days-label {
+  font-weight: bold;
+  margin-top: 40px;
+}
+
+#generation-time {
+  font-size: 1.5em;
+}
+
 @media (max-width: 800px) {
   .location-form {
     min-width: 50%;
@@ -496,5 +530,20 @@ input {
     top: 0;
     z-index: 5;
     border-bottom: 1px solid #ccc;
+  }
+
+  .location-name {
+    margin-top: 30px;
+    font-weight: bold;
+    font-size: 2.5em;
+  }
+
+  .location-details {
+    margin-bottom: 30px;
+  }
+
+  #number-of-days-label {
+    font-weight: bold;
+    margin-top: 40px;
   }
 }
