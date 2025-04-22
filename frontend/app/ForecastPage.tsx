@@ -4,12 +4,14 @@ import { getForecast } from "./api";
 import { ForecastContent } from "./ForecastContent";
 import { ForecastLoading } from "./ForecastLoading";
 import { ForecastUnavailable } from "./NotFound";
+import { useStations } from "./Stations";
 
 export const ForecastPage: React.FC = () => {
   const { locationId } = useParams();
   const [forecastData, setForecastData] = useState<Awaited<
     ReturnType<typeof getForecast>
   > | null>(null);
+  const stations = useStations();
   const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
@@ -22,9 +24,9 @@ export const ForecastPage: React.FC = () => {
     getForecast(locationId)
       .then((f) => setForecastData(f))
       .finally(() => setLoading(false));
-  }, [locationId]);
+  }, [stations, locationId]);
 
-  if (loading || forecastData === null) {
+  if (loading || forecastData === null || Object.keys(stations).length === 0) {
     return <ForecastLoading locationId={locationId!} />;
   }
 
