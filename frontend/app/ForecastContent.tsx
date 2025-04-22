@@ -2,6 +2,7 @@ import React from "react";
 import { ForecastData } from "./api";
 import HourlyForecastGrid from "./HourlyForecastGrid";
 import { LocationForm } from "./LocationForm";
+import { useStations } from "./Stations";
 import { formatUnit, useUnits } from "./Units";
 import WaveChart from "./WaveChart";
 
@@ -25,6 +26,7 @@ export const ForecastContent: React.FC<ForecastContentProps> = ({
   const roundedLower = Math.floor(averageBreakingHeight);
   const roundedUpper = Math.ceil(averageBreakingHeight);
 
+  const stations = useStations();
   return (
     <>
       <div className="forecast-header">
@@ -33,6 +35,11 @@ export const ForecastContent: React.FC<ForecastContentProps> = ({
         </a>
         <LocationForm activeStationId={locationId} />
       </div>
+
+      <p className="location-name">{stations[locationId]["name"]}</p>
+      <p className="location-details">
+        {stations[locationId]["state"]}, {stations[locationId]["country"]}
+      </p>
 
       <div className="individual-data-fields">
         <div className="wave-wind-air">
@@ -87,6 +94,19 @@ export const ForecastContent: React.FC<ForecastContentProps> = ({
           )}
         </div>
       </div>
+      <p id="number-of-days-label">16 Day Forecast</p>
+      <p id="generation-time">
+        Last generated at{" "}
+        {new Date(forecastData.generated_at).toLocaleString("en-US", {
+          weekday: "long",
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+          hour: "numeric",
+          minute: "2-digit",
+          hour12: true,
+        })}
+      </p>
       <HourlyForecastGrid hourlyForecast={forecastData.hourly_forecast} />
       <WaveChart hourlyForecast={forecastData.hourly_forecast} />
     </>
