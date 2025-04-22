@@ -1,6 +1,7 @@
 import type Plotly from "plotly.js-basic-dist";
 import React, { useCallback, useMemo } from "react";
 import { HourlyForecast } from "./api";
+import { useUnits } from "./Units";
 
 interface WaveChartProps {
   hourlyForecast: HourlyForecast[];
@@ -9,6 +10,7 @@ interface WaveChartProps {
 const PlotlyGraph = React.lazy(() => import("./PlotlyGraph"));
 
 const WaveChart: React.FC<WaveChartProps> = ({ hourlyForecast = [] }) => {
+  const units = useUnits();
   const plotData = useMemo<Plotly.Data[]>(() => {
     if (!hourlyForecast || hourlyForecast.length === 0) {
       return [];
@@ -18,7 +20,9 @@ const WaveChart: React.FC<WaveChartProps> = ({ hourlyForecast = [] }) => {
     return [
       {
         x: times,
-        y: hourlyForecast.map((h) => h.max_breaking_height),
+        y: hourlyForecast.map((h) =>
+          units.distance.convert(h.max_breaking_height)
+        ),
         type: "scatter",
         mode: "lines", // Removed the 'markers' to only show lines
         name: "Max Breaking Wave Height",
@@ -26,7 +30,9 @@ const WaveChart: React.FC<WaveChartProps> = ({ hourlyForecast = [] }) => {
       },
       {
         x: times,
-        y: hourlyForecast.map((h) => h.min_breaking_height),
+        y: hourlyForecast.map((h) =>
+          units.distance.convert(h.min_breaking_height)
+        ),
         type: "scatter",
         mode: "lines",
         name: "Min Breaking Wave Height",
@@ -34,14 +40,14 @@ const WaveChart: React.FC<WaveChartProps> = ({ hourlyForecast = [] }) => {
       },
       {
         x: times,
-        y: hourlyForecast.map((h) => h.wave_height),
+        y: hourlyForecast.map((h) => units.distance.convert(h.wave_height)),
         type: "scatter",
         mode: "lines",
         name: "Swell Height",
         line: { color: "#e17055", shape: "spline" },
       },
     ];
-  }, [hourlyForecast]);
+  }, [hourlyForecast, units]);
 
   const plotLayout = useCallback(
     (isMobile: boolean): Partial<Plotly.Layout> => ({
@@ -53,7 +59,7 @@ const WaveChart: React.FC<WaveChartProps> = ({ hourlyForecast = [] }) => {
         zeroline: false,
       },
       yaxis: {
-        title: "Wave Height (feet)",
+        title: `Wave Height (${units.distance.name})`,
         titlefont: { size: 18, family: "Arial, sans-serif", color: "#636e72" },
         tickfont: { size: 14, family: "Arial, sans-serif", color: "#636e72" },
         showgrid: true,
@@ -79,7 +85,7 @@ const WaveChart: React.FC<WaveChartProps> = ({ hourlyForecast = [] }) => {
       plot_bgcolor: "#f4f6f7",
       paper_bgcolor: "#ffffff",
     }),
-    []
+    [units]
   );
 
   // Ensure graph_data is not empty before proceeding

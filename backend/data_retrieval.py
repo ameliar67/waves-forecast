@@ -110,7 +110,6 @@ async def retrieve_new_data(
     wave_model: surfpy.WaveModel,
     hours_to_forecast: int,
     location: surfpy.Location,
-    conversion_rate: float,
 ) -> WaveForecastData | None:
     location_resolution = 0.167
     wave_data = defaultdict(list)
@@ -127,7 +126,7 @@ async def retrieve_new_data(
             "No wave data available after parsing GRIB data for %f,%f",
             location.latitude,
             location.longitude,
-            wave_model.description
+            wave_model.description,
         )
         return None
 
@@ -149,16 +148,16 @@ async def retrieve_new_data(
             {
                 "date": x.date.isoformat(),
                 "max_breaking_height": (
-                    x.maximum_breaking_height * conversion_rate
-                    if not math.isnan(x.maximum_breaking_height * conversion_rate)
+                    x.maximum_breaking_height
+                    if not math.isnan(x.maximum_breaking_height)
                     else None
                 ),
                 "min_breaking_height": (
-                    x.maximum_breaking_height * conversion_rate
-                    if not math.isnan(x.maximum_breaking_height * conversion_rate)
+                    x.maximum_breaking_height
+                    if not math.isnan(x.maximum_breaking_height)
                     else None
                 ),
-                "wave_height": x.wave_summary.wave_height * conversion_rate,
+                "wave_height": x.wave_summary.wave_height,
             }
         )
 

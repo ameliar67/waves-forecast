@@ -2,6 +2,7 @@ import React from "react";
 import { ForecastData } from "./api";
 import HourlyForecastGrid from "./HourlyForecastGrid";
 import { LocationForm } from "./LocationForm";
+import { formatUnit, useUnits } from "./Units";
 import WaveChart from "./WaveChart";
 
 export interface ForecastContentProps {
@@ -16,7 +17,11 @@ export const ForecastContent: React.FC<ForecastContentProps> = ({
   const { max_breaking_height = 0, min_breaking_height = 0 } =
     forecastData?.hourly_forecast?.[0] ?? {};
 
-  const averageBreakingHeight = (max_breaking_height + min_breaking_height) / 2;
+  const units = useUnits();
+
+  const averageBreakingHeight = units.distance.convert(
+    (max_breaking_height + min_breaking_height) / 2
+  );
   const roundedLower = Math.floor(averageBreakingHeight);
   const roundedUpper = Math.ceil(averageBreakingHeight);
 
@@ -36,7 +41,7 @@ export const ForecastContent: React.FC<ForecastContentProps> = ({
               <p className="wave-height">
                 {roundedLower === 0 && roundedUpper === 0
                   ? "Flat"
-                  : `${roundedLower} - ${roundedUpper} ft`}
+                  : formatUnit(roundedLower - roundedUpper, units.distance)}
               </p>
               <p className="label">Wave Height</p>
             </div>
@@ -59,7 +64,11 @@ export const ForecastContent: React.FC<ForecastContentProps> = ({
               <p className="label">Forecast</p>
             </div>
             <div className="forecast-layout">
-              <p className="data">{forecastData.air_temperature == "No forecast available" ? forecastData.air_temperature : forecastData.air_temperature + " °F"}</p>
+              <p className="data">
+                {typeof forecastData.air_temperature === "string"
+                  ? forecastData.air_temperature
+                  : formatUnit(forecastData.air_temperature, units.temperature)}
+              </p>
               <p className="label">Air Temperature</p>
             </div>
           </div>

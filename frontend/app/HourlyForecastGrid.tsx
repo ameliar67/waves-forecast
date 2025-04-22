@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import ForecastItem from "./ForecastItem";
-import { HourlyForecast } from "./api";
 import { useIsMobile } from "./mobile";
+import { formatUnit, useUnits } from "./Units";
 
 interface WaveChartProps {
   hourlyForecast: HourlyForecast[];
@@ -19,7 +19,7 @@ const HourlyForecastGrid: React.FC<WaveChartProps> = ({
     return null;
   }
 
-  const handlePrev = () => {
+  const units = useUnits();
     setCurrentIndex((prev) => Math.max(prev - 1, 0));
   };
 
@@ -63,7 +63,11 @@ const HourlyForecastGrid: React.FC<WaveChartProps> = ({
               {groupedByDate[date].map((data, i) => (
                 <ForecastItem
                   key={i}
-                  forecastHeight={((data.max_breaking_height + data.min_breaking_height) / 2).toFixed(1)}
+                  forecastHeight={formatUnit(
+                    (data.max_breaking_height + data.min_breaking_height) / 2,
+                    units.distance,
+                    1
+                  )}
                   formattedTime={formatTime(data.date)}
                 />
               ))}

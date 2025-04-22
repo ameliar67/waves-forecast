@@ -12,7 +12,7 @@ const ForecastItem: React.FC<ForecastItemProps> = ({
   return (
     <div className="forecast-item">
       <div className="forecast-time">{formattedTime}</div>
-      <div className="forecast-height">{forecastHeight} ft</div>
+      <div className="forecast-height">{forecastHeight}</div>
     </div>
   );
 };

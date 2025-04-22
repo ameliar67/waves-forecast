@@ -4,9 +4,13 @@ import { BuoyStation, getLocations } from "./api";
 import { ForecastPage } from "./ForecastPage";
 import { HomePage } from "./Home";
 import { StationsContext } from "./Stations";
+import { ImperialConversions, MetricConversions, UnitsContext } from "./Units";
 
 export function App() {
   const [stations, setStations] = useState<Record<string, BuoyStation>>({});
+  const [unitSystem, setUnitSystem] = useState<"metric" | "imperial">(
+    "imperial"
+  );
 
   // Fetch locations from the backend API when the component loads
   useEffect(() => {
@@ -16,13 +20,17 @@ export function App() {
   }, []);
 
   return (
-    <StationsContext.Provider value={stations}>
-      <BrowserRouter>
-        <Routes>
-          <Route index element={<HomePage />} />
-          <Route path="/forecast/:locationId" element={<ForecastPage />} />
-        </Routes>
-      </BrowserRouter>
-    </StationsContext.Provider>
+    <UnitsContext.Provider
+      value={unitSystem === "metric" ? MetricConversions : ImperialConversions}
+    >
+      <StationsContext.Provider value={stations}>
+        <BrowserRouter>
+          <Routes>
+            <Route index element={<HomePage />} />
+            <Route path="/forecast/:locationId" element={<ForecastPage />} />
+          </Routes>
+        </BrowserRouter>
+      </StationsContext.Provider>
+    </UnitsContext.Provider>
   );
 }
