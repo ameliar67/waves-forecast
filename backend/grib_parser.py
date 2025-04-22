@@ -9,6 +9,22 @@ import surfpy
 logging.basicConfig(level=logging.INFO)
 
 GRIB_START = "GRIB".encode("ascii")
+REQUIRED_SIGNALS = {
+    "dirpw",
+    "mpts_2",
+    "mpts",
+    "mpww",
+    "perpw",
+    "shts_2",
+    "shts",
+    "shww",
+    "swdir_2",
+    "swdir",
+    "swh",
+    "wdir",
+    "ws",
+    "wvdir",
+}
 
 
 class GribTimeWindow:
@@ -68,6 +84,9 @@ def parse_grib_data(raw_data: bytes) -> GribTimeWindow | None:
         if message.has_key("level"):
             if message.level > 1:
                 name += "_" + str(message.level)
+
+        if name not in REQUIRED_SIGNALS:
+            continue
 
         result.data_funcs[name] = wrap_data_func(message.data)
 
