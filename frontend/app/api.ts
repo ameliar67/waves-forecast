@@ -17,11 +17,12 @@ export interface HourlyForecast {
 export interface ForecastData {
   current_wave_height: string;
   wind_speed: string;
-  wind_direction: string;
+  wind_direction: number | string;
   short_forecast: string;
   weather_alerts: string;
-  air_temperature: string;
+  air_temperature: number | string;
   hourly_forecast: HourlyForecast[];
+  generated_at: string;
 }
 
 // Base url for blob storage direct access endpoints
