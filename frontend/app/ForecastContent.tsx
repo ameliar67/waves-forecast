@@ -23,8 +23,10 @@ export const ForecastContent: React.FC<ForecastContentProps> = ({
   const averageBreakingHeight = units.distance.convert(
     (max_breaking_height + min_breaking_height) / 2
   );
-  const roundedLower = Math.floor(averageBreakingHeight);
-  const roundedUpper = Math.ceil(averageBreakingHeight);
+  // Upper and lower bound of wave height range
+  // Display a typical wave height range to give better idea of expected surf conditions
+  const lowerRange = Math.floor(averageBreakingHeight);
+  const upperRange = Math.ceil(averageBreakingHeight);
 
   const stations = useStations();
 
@@ -54,9 +56,9 @@ export const ForecastContent: React.FC<ForecastContentProps> = ({
           <div className="wave-data-fields">
             <div className="wave-height-layout">
               <p className="wave-height">
-                {roundedLower === 0 && roundedUpper === 0
+                {lowerRange === 0 && upperRange === 0
                   ? "Flat"
-                  : formatUnit(roundedLower - roundedUpper, units.distance)}
+                  : `${lowerRange} - ${upperRange} ft`}
               </p>
               <p className="label">Wave Height</p>
             </div>
