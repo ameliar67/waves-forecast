@@ -546,4 +546,10 @@ input {
     font-weight: bold;
     margin-top: 40px;
   }
+
+  #generation-time {
+    font-size: 1em;
+    padding: 35px;
+    text-align: center;
+  }
 }
