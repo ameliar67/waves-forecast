@@ -12,15 +12,19 @@ export interface HourlyForecast {
   min_breaking_height: number;
   wave_height: number;
   date: string;
+  air_temperature: number;
+  short_forecast: string;
+  wind_speed: number;
+  wind_direction: number;
 }
 
 export interface ForecastData {
   current_wave_height: string;
-  wind_speed: string;
+  wind_speed: number | string;
   wind_direction: number | string;
   short_forecast: string;
   weather_alerts: string;
-  air_temperature: number | string;
+  air_temperature: number;
   hourly_forecast: HourlyForecast[];
   generated_at: string;
 }
@@ -52,6 +56,11 @@ export async function getForecast(
   if (data?.hourly_forecast?.[0]?.min_breaking_height == null) {
     return { error: "No forecast data available for this location" };
   }
+
+  data["air_temperature"] = data.hourly_forecast[0].air_temperature;
+  data["short_forecast"] = data.hourly_forecast[0].short_forecast;
+  data["wind_speed"] = data.hourly_forecast[0].wind_speed;
+  data["wind_direction"] = data.hourly_forecast[0].wind_direction;
 
   const now = new Date();
   data.hourly_forecast = data.hourly_forecast.filter((forecast) => {

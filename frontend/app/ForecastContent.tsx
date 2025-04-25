@@ -67,8 +67,8 @@ export const ForecastContent: React.FC<ForecastContentProps> = ({
           <div className="wind-data-fields">
             <div className="wind-layout">
               <p className="data">
-                {forecastData.wind_speed == "No forecast available"
-                  ? forecastData.wind_speed
+                {!forecastData.wind_speed
+                  ? "No wind speed available"
                   : forecastData.wind_speed + " knots"}
               </p>
               <p className="label">Wind Speed</p>
@@ -76,9 +76,11 @@ export const ForecastContent: React.FC<ForecastContentProps> = ({
             <div className="wind-layout">
               <div className="wind-direction-layout">
                 <p className="data">
-                  {direction} {forecastData.wind_direction}
+                  {!forecastData.wind_direction
+                    ? "No wind direction available"
+                    : direction + " " + forecastData.wind_direction}
                 </p>
-                {forecastData.wind_direction !== "No forecast available" && (
+                {forecastData.wind_direction && (
                   <div
                     className="wind-arrow"
                     style={{
@@ -93,13 +95,18 @@ export const ForecastContent: React.FC<ForecastContentProps> = ({
 
           <div className="general-weather-data-fields">
             <div className="forecast-layout">
-              <p className="data">{forecastData.short_forecast}</p>
+              <p className="data">
+                {" "}
+                {!forecastData.short_forecast
+                  ? "No forecast available"
+                  : forecastData.short_forecast}
+              </p>
               <p className="label">Forecast</p>
             </div>
             <div className="forecast-layout">
               <p className="data">
-                {typeof forecastData.air_temperature === "string"
-                  ? forecastData.air_temperature
+                {!forecastData.air_temperature
+                  ? "No air temperature available"
                   : formatUnit(forecastData.air_temperature, units.temperature)}
               </p>
               <p className="label">Air Temperature</p>

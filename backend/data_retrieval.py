@@ -144,9 +144,26 @@ async def retrieve_new_data(
         )
         return {**EMPTY_FORECAST_DATA.copy(), "wave_model": wave_model.description}
 
+    # Fetch weather data
+    weather_data, alerts = await asyncio.gather(
+        fetch_hourly_forecast_async(location), fetch_active_weather_alerts(location)
+    )
+
+    alerts_list = alerts.get("features", [])
+    headline = (
+        alerts_list[0].get("properties", {}).get("headline", None)
+        if alerts_list
+        else None
+    )
+
+    weather_data_index = 0
+
     hourly_forecast = []
     for x in buoy_data:
         x.solve_breaking_wave_heights(location)
+        while weather_data_index < (len(weather_data) - 1) and weather_data[weather_data_index].date < x.date:
+            weather_data_index += 1
+
         hourly_forecast.append(
             {
                 "date": x.date.isoformat(),
@@ -160,21 +177,29 @@ async def retrieve_new_data(
                     if not math.isnan(x.maximum_breaking_height)
                     else None
                 ),
+                "air_temperature": (
+                    weather_data[weather_data_index].air_temperature
+                    if not math.isnan(weather_data[weather_data_index].air_temperature)
+                    else None
+                ),
+                "wind_direction": (
+                    weather_data[weather_data_index].wind_direction
+                    if not math.isnan(weather_data[weather_data_index].wind_direction)
+                    else None
+                ),
+                "wind_speed": (
+                    weather_data[weather_data_index].wind_speed
+                    if not math.isnan(weather_data[weather_data_index].wind_speed)
+                    else None
+                ),
+                "short_forecast": (
+                    weather_data[weather_data_index].short_forecast
+                    if weather_data[weather_data_index].short_forecast
+                    else None
+                ),
                 "wave_height": x.wave_summary.wave_height,
             }
         )
-
-    # Fetch weather data
-    weather_data, alerts = await asyncio.gather(
-        fetch_hourly_forecast_async(location), fetch_active_weather_alerts(location)
-    )
-
-    alerts_list = alerts.get("features", [])
-    headline = (
-        alerts_list[0].get("properties", {}).get("headline", None)
-        if alerts_list
-        else None
-    )
 
     # if this is triggered still return existing wave data
     if len(weather_data) == 0:
@@ -193,9 +218,5 @@ async def retrieve_new_data(
     return {
         "generated_at": datetime.datetime.now(datetime.timezone.utc).isoformat(),
         "weather_alerts": headline or "None",
-        "air_temperature": weather_data[0].air_temperature,
-        "short_forecast": weather_data[0].short_forecast,
-        "wind_speed": weather_data[0].wind_speed,
-        "wind_direction": weather_data[0].wind_direction,
         "hourly_forecast": hourly_forecast,
     }
