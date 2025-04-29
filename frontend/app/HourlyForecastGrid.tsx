@@ -73,7 +73,10 @@ const HourlyForecastGrid: React.FC<WaveChartProps> = ({
                     units.distance,
                     1
                   )}
-                  formattedTime={formatTime(data.date)}
+                  formattedTime={data.time}
+                  airTemperature={data.air_temperature}
+                  windSpeed={data.wind_speed}
+                  windDirection={data.wind_direction}
                 />
               ))}
             </div>
@@ -86,28 +89,11 @@ const HourlyForecastGrid: React.FC<WaveChartProps> = ({
 
 function groupForecastByDate(forecast: HourlyForecast[]) {
   return forecast.reduce<Record<string, HourlyForecast[]>>((acc, item) => {
-    const dateKey = formatDate(item.date);
+    const dateKey = item.date;
     if (!acc[dateKey]) acc[dateKey] = [];
     acc[dateKey].push(item);
     return acc;
   }, {});
-}
-
-function formatDate(date: string) {
-  const parsedDate = new Date(date);
-  return parsedDate.toLocaleDateString(undefined, {
-    weekday: "long",
-    month: "short",
-    day: "numeric",
-  });
-}
-
-function formatTime(date: string) {
-  const parsedDate = new Date(date);
-  return parsedDate.toLocaleTimeString([], {
-    hour: "2-digit",
-    minute: "2-digit",
-  });
 }
 
 export default HourlyForecastGrid;
