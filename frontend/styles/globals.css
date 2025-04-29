@@ -141,6 +141,7 @@ img {
 .label {
   font-size: 1.3em;
   width: 300px;
+  margin-bottom: 20px;
 }
 
 #location-list:focus {
@@ -289,7 +290,7 @@ input {
   background-color: #f7fafc;
   border-radius: 8px;
   border: 1px solid #edf2f7;
-  width: 100px;
+  width: 200px;
 }
 
 .forecast-time,
@@ -401,6 +402,10 @@ input {
   font-size: 1.5em;
 }
 
+.forecast-air-temperature {
+  margin-top: 14px;
+}
+
 @media (max-width: 800px) {
   .location-form {
     min-width: 50%;
@@ -441,6 +446,7 @@ input {
   .wave-wind-air {
     width: 100%;
     justify-content: space-between;
+    height: unset;
   }
 
   .wave-data-fields,
@@ -485,7 +491,7 @@ input {
 
   .forecast-item {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     justify-content: space-between;
     width: 100%;
     padding: 10px;
