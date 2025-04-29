@@ -55,6 +55,13 @@ export const ForecastContent: React.FC<ForecastContentProps> = ({
         <div className="wave-wind-air">
           <div className="wave-data-fields">
             <div className="wave-height-layout">
+              <p className="label">
+                {forecastData.hourly_forecast[0]
+                  ? forecastData.hourly_forecast[0].date +
+                    " " +
+                    forecastData.hourly_forecast[0].time
+                  : ""}
+              </p>
               <p className="wave-height">
                 {lowerRange === 0 && upperRange === 0
                   ? "Flat"
@@ -128,18 +135,7 @@ export const ForecastContent: React.FC<ForecastContentProps> = ({
         </div>
       </div>
       <p id="number-of-days-label">16 Day Forecast</p>
-      <p id="generation-time">
-        Last generated at{" "}
-        {new Date(forecastData.generated_at).toLocaleString("en-US", {
-          weekday: "long",
-          year: "numeric",
-          month: "long",
-          day: "numeric",
-          hour: "numeric",
-          minute: "2-digit",
-          hour12: true,
-        })}
-      </p>
+      <p id="generation-time">Last generated at {forecastData.generated_at}</p>
       <HourlyForecastGrid hourlyForecast={forecastData.hourly_forecast} />
       <WaveChart hourlyForecast={forecastData.hourly_forecast} />
     </>

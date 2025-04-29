@@ -12,6 +12,7 @@ export interface HourlyForecast {
   min_breaking_height: number;
   wave_height: number;
   date: string;
+  time: string;
   air_temperature: number;
   short_forecast: string;
   wind_speed: number;
@@ -31,6 +32,23 @@ export interface ForecastData {
 
 // Base url for blob storage direct access endpoints
 const storageBaseUrl = process.env.STORAGE_BASE_URL;
+
+function formatDate(date: string) {
+  const parsedDate = new Date(date);
+  return parsedDate.toLocaleDateString(undefined, {
+    weekday: "long",
+    month: "short",
+    day: "numeric",
+  });
+}
+
+function formatTime(date: string) {
+  const parsedDate = new Date(date);
+  return parsedDate.toLocaleTimeString([], {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+}
 
 // Retrieve location data from blob storage
 export async function getLocations() {
@@ -67,5 +85,15 @@ export async function getForecast(
     const forecastDate = new Date(forecast.date);
     return forecastDate >= now;
   });
+
+  for (let entry of data.hourly_forecast) {
+    entry.time = formatTime(entry.date);
+    entry.date = formatDate(entry.date);
+  }
+
+  const generatedAtString =
+    formatDate(data.generated_at) + " " + formatTime(data.generated_at);
+  data.generated_at = generatedAtString;
+
   return data;
 }
