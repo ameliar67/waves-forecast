@@ -16,7 +16,7 @@ const WaveChart: React.FC<WaveChartProps> = ({ hourlyForecast = [] }) => {
       return [];
     }
 
-    const times = hourlyForecast.map((h) => h.date);
+    const times = hourlyForecast.map((h) => h.date_time_stamp);
     return [
       {
         x: times,

@@ -17,6 +17,7 @@ export interface HourlyForecast {
   short_forecast: string;
   wind_speed: number;
   wind_direction: number;
+  date_time_stamp: string;
 }
 
 export interface ForecastData {
@@ -87,8 +88,9 @@ export async function getForecast(
   });
 
   for (let entry of data.hourly_forecast) {
-    entry.time = formatTime(entry.date);
-    entry.date = formatDate(entry.date);
+    entry.date_time_stamp = entry.date
+    entry.time = formatTime(entry.date_time_stamp);
+    entry.date = formatDate(entry.date_time_stamp);
   }
 
   const generatedAtString =
