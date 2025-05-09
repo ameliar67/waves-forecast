@@ -24,7 +24,7 @@ class ForecastQueueMessage(TypedDict):
     latitude: float
     longitude: float
 
-
+# Azure Function to retrieve forecast data from NOAA for each location in the queue
 @app.function_name("LocationForecast")
 @app.queue_trigger(
     arg_name="message", queue_name=refresh_forecast_queue_name, connection=""
@@ -69,6 +69,7 @@ async def forecast(message: str, datacontainer: blob_binding.ContainerClient) ->
     )
 
 
+# Azure timed trigger Function to refresh locations every day
 @app.function_name("RefreshLocations")
 @app.timer_trigger(schedule="15 3 * * *", run_on_startup=False, arg_name="timer")
 @app.blob_input(arg_name="locationsblob", path=locations_blob_path, connection="")
@@ -88,7 +89,7 @@ def refresh_locations(timer: func.TimerRequest, locationsblob: blob_binding.Blob
         response_content, overwrite=True, content_settings=content_settings
     )
 
-
+# Azure timed trigger Function to queue location forecasts every day
 @app.function_name("QueueLocationForecasts")
 @app.timer_trigger(schedule="15 4 * * *", run_on_startup=False, arg_name="timer")
 @app.blob_input(

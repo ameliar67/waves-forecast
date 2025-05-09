@@ -117,6 +117,7 @@ async def retrieve_new_data(
     location_resolution = 0.167
     wave_data = defaultdict(list)
 
+    # Retrieve grib data from NOAA for given location
     forecast_models = await get_wave_forecast_models(wave_model, hours_to_forecast)
     for m in forecast_models:
         wave_data["time"].append(m.time)
@@ -124,6 +125,7 @@ async def retrieve_new_data(
             func_val = func(location, location_resolution)
             wave_data[key].append(func_val)
 
+    # If grib data is empty return early
     if not wave_data:
         logging.warning(
             "No wave data available after parsing GRIB data for %f,%f",
@@ -133,7 +135,7 @@ async def retrieve_new_data(
         )
         return None
 
-    # Turn NOAA model data into buoy data
+    # Turn NOAA model grib data into buoy data
     buoy_data: list[surfpy.BuoyData] = wave_model.to_buoy_data(wave_data)
 
     if len(buoy_data) == 0:
