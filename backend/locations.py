@@ -92,3 +92,25 @@ def get_buoy_display_name(name: str) -> str:
     name = name.lstrip("0123456789- ").rstrip(", ")
 
     return name
+
+
+def round_dict_keys_by_precision(data: dict, precision: int) -> dict:
+    """
+    Takes a dictionary where keys are strings of the form 'lat,lon',
+    rounds the float values of lat and lon to the given precision,
+    and returns a new dictionary with the rounded keys.
+    
+
+    """
+    new_dict = {}
+    for key, value in data.items():
+        try:
+            lat_str, lon_str = key.split(',')
+            lat = round(float(lat_str), precision)
+            lon = round(float(lon_str), precision)
+            new_key = f"{lat},{lon}"
+            new_dict[new_key] = value
+        except ValueError:
+            raise ValueError(f"Invalid key format: {key}. Expected format 'lat,lon'.")
+    return new_dict
+
