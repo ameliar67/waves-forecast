@@ -7,6 +7,7 @@ from typing import TypedDict
 
 import aiohttp
 import surfpy
+import surfpy.basestation
 from grib_parser import GribTimeWindow, parse_grib_data
 
 http_session = aiohttp.ClientSession()
@@ -30,6 +31,7 @@ class WaveForecastData(TypedDict):
     wind_speed: int | str
     wind_direction: str
     hourly_forecast: list[HourlyForecastSummary]
+    tide_forecast: list
 
 
 # Setup logging to track the execution flow
@@ -58,6 +60,30 @@ async def fetch_active_weather_alerts(location: surfpy.Location) -> dict:
     except aiohttp.ClientError:
         logging.exception("Failed to fetch weather alerts from %s", url)
         return {}
+
+
+async def fetch_tidal_forecast_async(
+    station: surfpy.basestation,
+    start_date: datetime.datetime,
+    end_date: datetime.datetime,
+) -> list[surfpy.TideEvent]:
+    try:
+        logging.info(
+            "Fetching hourly forecast for station %s",
+            station.station_id,
+        )
+        return await station.fetch_tide_data(
+            start_date,
+            end_date,
+            interval=surfpy.TideStation.DataInterval.high_low,
+            unit=surfpy.units.Units.metric,
+        )
+    except:
+        logging.exception(
+            "Failure fetching tide forecast for location %s - returning empty result",
+            station.station_id,
+        )
+        return []
 
 
 async def fetch_hourly_forecast_async(
@@ -113,9 +139,13 @@ async def retrieve_new_data(
     wave_model: surfpy.WaveModel,
     hours_to_forecast: int,
     location: surfpy.Location,
+    tide_station: str,
 ) -> WaveForecastData | None:
     location_resolution = 0.167
     wave_data = defaultdict(list)
+
+    tide_stations = surfpy.TideStations()
+    tide_stations.fetch_stations()
 
     # Retrieve grib data from NOAA for given location
     forecast_models = await get_wave_forecast_models(wave_model, hours_to_forecast)
@@ -158,12 +188,22 @@ async def retrieve_new_data(
         else None
     )
 
+    start_date = datetime.datetime.today()
+    end_date = start_date + datetime.timedelta(days=16)
+
+    for station in tide_stations.stations:
+        if station.station_id == tide_station:
+            tide_data = await fetch_tidal_forecast_async(station, start_date, end_date)
+
     weather_data_index = 0
 
     hourly_forecast = []
     for x in buoy_data:
         x.solve_breaking_wave_heights(location)
-        while weather_data_index < (len(weather_data) - 1) and weather_data[weather_data_index].date < x.date:
+        while (
+            weather_data_index < (len(weather_data) - 1)
+            and weather_data[weather_data_index].date < x.date
+        ):
             weather_data_index += 1
 
         hourly_forecast.append(
@@ -217,8 +257,21 @@ async def retrieve_new_data(
             "hourly_forecast": hourly_forecast,
         }
 
+    tide_forecast = []
+
+    if tide_data:
+        if tide_data[0]:
+            for forecast in tide_data[0]:
+                tide_forecast.append(
+                    {
+                        "date": forecast.date.isoformat(),
+                        "tidal_event": forecast.tidal_event,
+                    }
+                )
+
     return {
         "generated_at": datetime.datetime.now(datetime.timezone.utc).isoformat(),
         "weather_alerts": headline or "None",
         "hourly_forecast": hourly_forecast,
+        "tide_forecast": tide_forecast,
     }
