@@ -5,6 +5,8 @@ import { LocationForm } from "./LocationForm";
 import { useStations } from "./Stations";
 import { formatUnit, useUnits } from "./Units";
 import WaveChart from "./WaveChart";
+import TideGraph from "./TideGraph";
+
 const logo = new URL("./surf-logo.svg", import.meta.url) as unknown as string;
 
 export interface ForecastContentProps {
@@ -139,6 +141,10 @@ export const ForecastContent: React.FC<ForecastContentProps> = ({
       <p id="number-of-days-label">16 Day Forecast</p>
       <p id="generation-time">Last generated at {forecastData.generated_at}</p>
       <HourlyForecastGrid hourlyForecast={forecastData.hourly_forecast} />
+      <TideGraph tidalForecast={forecastData.tide_forecast} />
+      <p id="wave-height-graph-title">
+        {!forecastData.hourly_forecast[0] ? "" : "Wave Height"}
+      </p>
       <WaveChart hourlyForecast={forecastData.hourly_forecast} />
     </>
   );

@@ -266,6 +266,11 @@ img {
   background-color: #aeadad;
 }
 
+#tide-container {
+  width: 1200px;
+  overflow-x: scroll;
+}
+
 input[type="search"],
 input {
   border: none;
@@ -524,6 +529,9 @@ input {
     text-align: start;
     margin-left: 180px;
   }
+
+  #tide-container {
+    width: 400px;
   }
 
   .wave-height {
