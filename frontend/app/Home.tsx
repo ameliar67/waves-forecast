@@ -1,6 +1,8 @@
 import React from "react";
 import { LocationForm } from "./LocationForm";
 
+const logo = new URL("./surf-logo.svg", import.meta.url) as unknown as string;
+
 const LocationMap = React.lazy(() =>
   import("./LocationMap").then((m) => ({ default: m.LocationMap }))
 );
@@ -8,7 +10,10 @@ const LocationMap = React.lazy(() =>
 export const HomePage: React.FC = () => (
   <>
     <div id="header">
-      <p className="landing-page-title">Surf Forecast</p>
+      <div id="title-block">
+        <img id="surf-logo" src={logo} alt="Surf Logo" />
+        <p className="landing-page-title">Surf Sage</p>
+      </div>
       <LocationForm />
     </div>
 

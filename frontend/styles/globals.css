@@ -63,6 +63,7 @@ img {
   font-size: 2.5em;
   font-weight: bold;
   z-index: 10;
+  color: #36a8ac;
 }
 
 #root {
@@ -102,6 +103,7 @@ img {
   text-decoration: none;
   display: flex;
   align-items: center;
+  color: #36a8ac;
 }
 
 .individual-data-fields {
@@ -136,6 +138,33 @@ img {
 
 .data {
   font-size: 1.5em;
+}
+
+#surf-logo {
+  height: 50px;
+  width: 60px;
+}
+
+#title-block {
+  display: flex;
+  flex-direction: row;
+}
+
+#tides-text {
+  text-align: center;
+  font-family: inter;
+}
+
+#wave-height-graph-title {
+  font-size: 30px;
+  margin-top: 30px;
+  ;
+}
+
+#surf-logo-forecast-page {
+  height: 30px;
+  width: 50px;
+  margin-top: 5px;
 }
 
 .label {
@@ -435,6 +464,7 @@ input {
   .wave-and-weather-title {
     padding: 0;
     margin-top: 0.2em;
+    color: #36a8ac;
   }
 
   .individual-data-fields {
@@ -462,6 +492,7 @@ input {
 
   .landing-page-title {
     font-size: 1.5em;
+    color: #36a8ac;
   }
 
   .error-message {
@@ -476,7 +507,23 @@ input {
     display: flex;
     z-index: 10;
     background-color: white;
-    height: 120px;
+    height: 130px;
+  }
+
+  #title-block {
+    align-items: center;
+  }
+
+  #wave-height-graph-title {
+    font-size: 20px;
+    margin-bottom: 40px;
+    margin-top: 40px;
+  }
+
+  #tides-text {
+    text-align: start;
+    margin-left: 180px;
+  }
   }
 
   .wave-height {

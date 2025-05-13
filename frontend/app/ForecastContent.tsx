@@ -5,6 +5,7 @@ import { LocationForm } from "./LocationForm";
 import { useStations } from "./Stations";
 import { formatUnit, useUnits } from "./Units";
 import WaveChart from "./WaveChart";
+const logo = new URL("./surf-logo.svg", import.meta.url) as unknown as string;
 
 export interface ForecastContentProps {
   forecastData: ForecastData;
@@ -41,7 +42,8 @@ export const ForecastContent: React.FC<ForecastContentProps> = ({
     <>
       <div className="forecast-header">
         <a href="/" className="wave-and-weather-title">
-          Surf Forecast
+          <img id="surf-logo-forecast-page" src={logo} alt="Surf Logo" />
+          Surf Sage
         </a>
         <LocationForm activeStationId={locationId} />
       </div>
