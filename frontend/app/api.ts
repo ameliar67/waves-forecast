@@ -7,6 +7,11 @@ export interface BuoyStation {
   state: string;
 }
 
+export interface TidalForecast {
+  date: string;
+  tidal_event: string;
+}
+
 export interface HourlyForecast {
   max_breaking_height: number;
   min_breaking_height: number;
@@ -29,6 +34,7 @@ export interface ForecastData {
   air_temperature: number;
   hourly_forecast: HourlyForecast[];
   generated_at: string;
+  tide_forecast: TidalForecast[];
 }
 
 // Base url for blob storage direct access endpoints
@@ -88,7 +94,7 @@ export async function getForecast(
   });
 
   for (let entry of data.hourly_forecast) {
-    entry.date_time_stamp = entry.date
+    entry.date_time_stamp = entry.date;
     entry.time = formatTime(entry.date_time_stamp);
     entry.date = formatDate(entry.date_time_stamp);
   }
