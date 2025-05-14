@@ -143,7 +143,7 @@ export const ForecastContent: React.FC<ForecastContentProps> = ({
       <HourlyForecastGrid hourlyForecast={forecastData.hourly_forecast} />
       <TideGraph tidalForecast={forecastData.tide_forecast} />
       <p id="wave-height-graph-title">
-        {!forecastData.hourly_forecast[0] ? "" : "Wave Height"}
+        {!forecastData.hourly_forecast[0] ? "" : "Wave and Swell Height"}
       </p>
       <WaveChart hourlyForecast={forecastData.hourly_forecast} />
     </>
