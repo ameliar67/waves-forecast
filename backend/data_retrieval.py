@@ -63,7 +63,7 @@ async def fetch_active_weather_alerts(location: surfpy.Location) -> dict:
 
 
 async def fetch_tidal_forecast_async(
-    station: surfpy.basestation,
+    station: surfpy.TideStation,
     start_date: datetime.datetime,
     end_date: datetime.datetime,
 ) -> list[surfpy.TideEvent]:
@@ -72,7 +72,7 @@ async def fetch_tidal_forecast_async(
             "Fetching hourly forecast for station %s",
             station.station_id,
         )
-        return await station.fetch_tide_data(
+        return station.fetch_tide_data(
             start_date,
             end_date,
             interval=surfpy.TideStation.DataInterval.high_low,
