@@ -268,7 +268,7 @@ img {
 }
 
 #tide-container {
-  width: 1200px;
+  width: 80%;
   overflow-x: scroll;
 }
 
@@ -354,7 +354,6 @@ input {
 .graph {
   width: 1300px;
   height: 700px;
-  margin-bottom: 70px;
 }
 
 #weather-alerts {
