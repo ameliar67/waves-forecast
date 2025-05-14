@@ -10,7 +10,8 @@ const TideGraph: React.FC<TidesProps> = ({ tidalForecast }) => {
     return null;
   }
 
-  const width = 13500;
+  const pointSpacing = 180;
+  const width = tidalForecast.length * pointSpacing * 2;
   const height = 500;
   const padding = 80;
 
