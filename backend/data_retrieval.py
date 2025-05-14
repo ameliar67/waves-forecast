@@ -259,15 +259,14 @@ async def retrieve_new_data(
 
     tide_forecast = []
 
-    if tide_data:
-        if tide_data[0]:
-            for forecast in tide_data[0]:
-                tide_forecast.append(
-                    {
-                        "date": forecast.date.isoformat(),
-                        "tidal_event": forecast.tidal_event,
-                    }
-                )
+    if tide_data and tide_data[0]:
+        for forecast in tide_data[0]:
+            tide_forecast.append(
+                {
+                    "date": forecast.date.isoformat(),
+                    "tidal_event": forecast.tidal_event,
+                }
+            )
 
     return {
         "generated_at": datetime.datetime.now(datetime.timezone.utc).isoformat(),
