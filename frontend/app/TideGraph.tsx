@@ -12,7 +12,7 @@ const TideGraph: React.FC<TidesProps> = ({ tidalForecast }) => {
 
   const pointSpacing = 180;
   const width = tidalForecast.length * pointSpacing * 2;
-  const height = 500;
+  const height = 400;
   const padding = 80;
 
   const graphMinY = 10;
@@ -69,49 +69,55 @@ const TideGraph: React.FC<TidesProps> = ({ tidalForecast }) => {
       <p id="tides-text">Tides</p>
       <svg width={width} height={height} overflow="scroll">
         {/* Tide curve */}
-        <path d={pathD} fill="none" stroke="#137479" strokeWidth="3" />
+        <path d={pathD} fill="none" stroke="#137479" strokeWidth="8" z-index="10" />
 
         {/* Dots and Labels */}
         {processed.map((p, i) => (
           <g key={i}>
             {/* Vertical line and event label */}
             <>
-              <line
-                x1={p.x}
-                y1={p.y}
-                x2={p.x}
-                y2={height - 60}
-                stroke="#6fb8af"
-                strokeWidth="7"
-              />
+              {/* Only render line if it's a high tide */}
+              {p.event.toLowerCase() === "h" && i !== 0 && (
+                <line
+                  x1={p.x}
+                  y1={p.y + 10}
+                  x2={p.x}
+                  y2={height - 40}
+                  stroke="#6fb8af"
+                  strokeWidth="28"
+                  strokeOpacity="0.4"
+                />
+              )}
               {/* Event label (High or Low) */}
               <text
                 x={p.x}
                 // Check if it's high or low tide and place the label above accordingly
-                y={p.event.toLowerCase() === "h" ? p.y - 35 : p.y - 25} // High tide is above the peak, low tide is above the trough
+                y={p.event.toLowerCase() === "h" ? p.y - 55 : p.y - 65} // High tide is above the peak, low tide is above the trough
                 textAnchor="middle"
                 fontSize="18"
                 fill="#000"
               >
-                {p.event}
+                {p.event === 'H' ? 'High' : "Low"}
               </text>
 
               {/* Date and time labels */}
               <text
                 x={p.x}
-                y={height - 20}
+                // Check if it's high or low tide and place the label above accordingly
+                y={p.event.toLowerCase() === "h" ? p.y - 15 : p.y - 25} // High tide is above the peak, low tide is above the trough
                 textAnchor="middle"
                 fontSize="18"
-                fill="#555"
+                fill="#000"
               >
                 {p.date_label}
               </text>
               <text
                 x={p.x}
-                y={height - 40}
+                // Check if it's high or low tide and place the label above accordingly
+                y={p.event.toLowerCase() === "h" ? p.y - 35 : p.y - 45} // High tide is above the peak, low tide is above the trough
                 textAnchor="middle"
-                fontSize="14"
-                fill="#555"
+                fontSize="18"
+                fill="#000"
               >
                 {p.time_label}
               </text>
