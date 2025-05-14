@@ -92,7 +92,7 @@ const TideGraph: React.FC<TidesProps> = ({ tidalForecast }) => {
               <text
                 x={p.x}
                 // Check if it's high or low tide and place the label above accordingly
-                y={p.event.toLowerCase() === "h" ? p.y - 55 : p.y - 65} // High tide is above the peak, low tide is above the trough
+                y={p.event.toLowerCase() === "h" ? p.y - 55 : p.y - 95} // High tide is above the peak, low tide is above the trough
                 textAnchor="middle"
                 fontSize="18"
                 fill="#000"
@@ -104,7 +104,7 @@ const TideGraph: React.FC<TidesProps> = ({ tidalForecast }) => {
               <text
                 x={p.x}
                 // Check if it's high or low tide and place the label above accordingly
-                y={p.event.toLowerCase() === "h" ? p.y - 15 : p.y - 25} // High tide is above the peak, low tide is above the trough
+                y={p.event.toLowerCase() === "h" ? p.y - 15 : p.y - 55} // High tide is above the peak, low tide is above the trough
                 textAnchor="middle"
                 fontSize="18"
                 fill="#000"
@@ -114,7 +114,7 @@ const TideGraph: React.FC<TidesProps> = ({ tidalForecast }) => {
               <text
                 x={p.x}
                 // Check if it's high or low tide and place the label above accordingly
-                y={p.event.toLowerCase() === "h" ? p.y - 35 : p.y - 45} // High tide is above the peak, low tide is above the trough
+                y={p.event.toLowerCase() === "h" ? p.y - 35 : p.y - 75} // High tide is above the peak, low tide is above the trough
                 textAnchor="middle"
                 fontSize="18"
                 fill="#000"
