@@ -25,18 +25,8 @@ const WaveChart: React.FC<WaveChartProps> = ({ hourlyForecast = [] }) => {
         ),
         type: "scatter",
         mode: "lines", // Removed the 'markers' to only show lines
-        name: "Max Breaking Wave Height",
+        name: "Breaking Wave Height",
         line: { color: "#00b894", shape: "spline" },
-      },
-      {
-        x: times,
-        y: hourlyForecast.map((h) =>
-          units.distance.convert(h.min_breaking_height)
-        ),
-        type: "scatter",
-        mode: "lines",
-        name: "Min Breaking Wave Height",
-        line: { color: "#0984e3", shape: "spline" },
       },
       {
         x: times,
@@ -51,6 +41,7 @@ const WaveChart: React.FC<WaveChartProps> = ({ hourlyForecast = [] }) => {
 
   const plotLayout = useCallback(
     (isMobile: boolean): Partial<Plotly.Layout> => ({
+      width: hourlyForecast.length * 50,
       xaxis: {
         title: "Time",
         titlefont: { size: 18, family: "Arial, sans-serif", color: "#636e72" },
@@ -68,18 +59,18 @@ const WaveChart: React.FC<WaveChartProps> = ({ hourlyForecast = [] }) => {
       hovermode: "closest",
       showlegend: true,
       legend: {
-        x: isMobile ? 0.5 : 0.5, // Center the legend horizontally on mobile and desktop
-        y: isMobile ? 1.1 : 1.05,
-        xanchor: "center", // Center the legend horizontally
-        yanchor: "bottom", // Align to the bottom of the legend box
-        orientation: "v",
+        orientation: "h", // Horizontal layout
+        x: 0, // Center horizontally
+        y: -0.1, // Move below the x-axis (adjust as needed)
+        xanchor: "left",
+        yanchor: "bottom",
         font: { family: "Inter", size: 14, color: "#636e72" },
       },
       margin: {
         l: 50,
         r: 30,
         t: 50,
-        b: 100,
+        b: 30,
       },
       autosize: true,
       plot_bgcolor: "#f4f6f7",
@@ -95,7 +86,9 @@ const WaveChart: React.FC<WaveChartProps> = ({ hourlyForecast = [] }) => {
 
   return (
     <React.Suspense fallback={null}>
-      <PlotlyGraph data={plotData} layout={plotLayout} />
+      <div style={{ overflowX: "auto", width: "80%", marginBottom: "150px" }}>
+        <PlotlyGraph data={plotData} layout={plotLayout} />
+      </div>
     </React.Suspense>
   );
 };
