@@ -247,9 +247,9 @@ img {
 }
 
 .leaflet-popup-content {
-  width: 125px;
+  width: 100%;
   font-size: 1.6em !important;
-  margin-left: 0.3em;
+  margin-right: 6px !important;
 }
 
 #location-list {
