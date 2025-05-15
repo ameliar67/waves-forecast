@@ -7,6 +7,7 @@ import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 import MarkerCluster from "react-leaflet-markercluster";
 import "react-leaflet-markercluster/dist/styles.min.css";
 import { useStations } from "./Stations";
+import L from "leaflet";
 
 interface MapComponentProps {
   className?: string;
@@ -33,7 +34,17 @@ export const LocationMap: React.FC<MapComponentProps> = ({ className }) => {
     >
       <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
 
-      <MarkerCluster>
+      <MarkerCluster
+        iconCreateFunction={(cluster: any) => {
+          const count = cluster.getChildCount();
+
+          return L.divIcon({
+            html: `<div>${count}</div>`,
+            className: "custom-cluster-icon",
+            iconSize: [40, 40],
+          });
+        }}
+      >
         {stations.map((buoyStation) => (
           <Marker
             key={buoyStation.id}

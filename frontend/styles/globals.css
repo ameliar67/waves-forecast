@@ -252,6 +252,23 @@ img {
   margin-right: 6px !important;
 }
 
+.custom-cluster-icon {
+  background-color: rgba(0, 131, 22, 0.73);
+  border-radius: 50%;
+  box-shadow: 0 0 0 6px rgba(83, 199, 102, 0.64);
+  color: white;
+  font-size: 17px;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  line-height: 1 !important;
+  text-align: center;
+  user-select: none;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+
 #location-list {
   width: 100%;
   padding: 0;
