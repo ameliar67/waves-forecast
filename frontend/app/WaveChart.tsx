@@ -51,6 +51,7 @@ const WaveChart: React.FC<WaveChartProps> = ({ hourlyForecast = [] }) => {
       },
       yaxis: {
         title: `Wave Height (${units.distance.name})`,
+        ticksuffix: ` ${units.distance.name}  `,
         titlefont: { size: 18, family: "Arial, sans-serif", color: "#636e72" },
         tickfont: { size: 14, family: "Arial, sans-serif", color: "#636e72" },
         showgrid: true,
@@ -61,13 +62,13 @@ const WaveChart: React.FC<WaveChartProps> = ({ hourlyForecast = [] }) => {
       legend: {
         orientation: "h", // Horizontal layout
         x: 0, // Center horizontally
-        y: -0.1, // Move below the x-axis (adjust as needed)
+        y: -0.2, // Move below the x-axis (adjust as needed)
         xanchor: "left",
         yanchor: "bottom",
         font: { family: "Inter", size: 14, color: "#636e72" },
       },
       margin: {
-        l: 50,
+        l: 80,
         r: 30,
         t: 50,
         b: 30,
