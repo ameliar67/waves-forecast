@@ -96,6 +96,13 @@ img {
   position: inherit !important;
 }
 
+.leaflet-layer,
+.leaflet-control-zoom-in,
+.leaflet-control-zoom-out,
+.leaflet-control-attribution {
+  filter: hue-rotate(-12deg);
+}
+
 .wave-and-weather-title {
   font-size: 1.5em;
   padding-left: 1em;
