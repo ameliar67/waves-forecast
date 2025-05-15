@@ -19,7 +19,18 @@ export const LocationMap: React.FC<MapComponentProps> = ({ className }) => {
   const stations = useMemo(() => Object.values(stationsMap), [stationsMap]);
 
   return (
-    <MapContainer className={className} center={center} zoom={2.5}>
+    <MapContainer
+      className={className}
+      center={center}
+      zoom={3}
+      minZoom={3}
+      maxBounds={[
+        [-170, -240],
+        [110, 210],
+      ]}
+      maxBoundsViscosity={1.0}
+      worldCopyJump={false}
+    >
       <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
 
       <MarkerCluster>
