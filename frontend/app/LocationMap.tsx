@@ -28,7 +28,7 @@ export const LocationMap: React.FC<MapComponentProps> = ({ className }) => {
             key={buoyStation.id}
             position={[buoyStation.latitude, buoyStation.longitude]}
           >
-            <Popup>
+            <Popup closeButton={false}>
               <div>
                 <a href={`/forecast/${buoyStation.id}`}>{buoyStation.name}</a>
               </div>
