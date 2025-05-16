@@ -82,7 +82,7 @@ const WaveChart: React.FC<WaveChartProps> = ({ hourlyForecast = [] }) => {
 
   // Ensure graph_data is not empty before proceeding
   if (plotData.length === 0) {
-    return <p>No forecast data available</p>;
+    return <p id="no-wave-chart-available">No forecast data available</p>;
   }
 
   return (

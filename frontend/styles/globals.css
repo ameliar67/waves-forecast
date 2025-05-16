@@ -311,6 +311,10 @@ input {
   font-size: 1.1em;
 }
 
+#no-wave-chart-available {
+  margin-bottom: 150px;
+}
+
 .dropdown-group-list {
   padding-left: 20px;
 }
