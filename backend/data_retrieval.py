@@ -40,7 +40,6 @@ logging.basicConfig(level=logging.INFO)  # Set to INFO level for less verbosity
 
 async def get_response(session: aiohttp.ClientSession, url: str) -> bytes:
     try:
-        logging.info("Fetching data from %s", url)
         async with session.get(url) as response:
             response.raise_for_status()
             return await response.read()
