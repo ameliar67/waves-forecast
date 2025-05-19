@@ -19,15 +19,9 @@ class LocationData(TypedDict):
     tide_station: str
 
 
-def is_in_great_lakes_region(lat, lon):
-    lon = lon if lon >= 0 else lon + 360
-    return 41.0 <= lat <= 49.0 and 267.5 <= lon <= 285.0
-
-
 def get_coastal_locations() -> dict[str, LocationData]:
 
-    # fetch NOAA station data for buoy and tide stations (they are seperate)
-
+    # fetch NOAA station data for wave heights and tides (data comes from seperate stations)
     buoy_stations = surfpy.BuoyStations()
     buoy_stations.fetch_stations()
 
@@ -35,41 +29,29 @@ def get_coastal_locations() -> dict[str, LocationData]:
     tide_stations.fetch_stations()
 
     # calculate closest buoy station
-
     locations_dict = {}
+    # open pre-estabilished list of known surfing locations
     with open("known_locations.json") as fp:
-        known_locations: dict[str, KnownLocation] = json.load(fp)
+        known_surf_locations: dict[str, KnownLocation] = json.load(fp)
 
     for buoyStation in buoy_stations.stations:
-        data_available, surf_location = is_buoy_data_available(
-            buoyStation, known_locations, 1
+        data_available, surf_location = get_closest_buoy_data_available(
+            buoyStation, known_surf_locations, 1
         )
         if not data_available or is_in_great_lakes_region(
             buoyStation.location.latitude, buoyStation.location.longitude
         ):
             continue
-        known_locations[surf_location]["closest_station"] = buoyStation
+        known_surf_locations[surf_location]["closest_station"] = buoyStation
 
-    # calculate closest tide station
-
-    adjusted_known_locations = round_dict_keys_by_precision(known_locations, 0)
-
-    for tideStation in tide_stations.stations:
-        data_available, surf_location = is_buoy_data_available(
-            tideStation, adjusted_known_locations, 0
-        )
-        if not data_available:
-            continue
-        adjusted_known_locations[surf_location][
-            "closest_tide_station"
-        ] = tideStation.station_id
-
-    for location in adjusted_known_locations.values():
+    for location in known_surf_locations.values():
         buoyStation = location.get("closest_station")
         if not buoyStation:
             continue
-
+        # calculate closest tide station
+        closest_tide_station = tide_stations.find_closest_station(buoyStation.location)
         buoy_name = get_buoy_display_name(buoyStation.location.name)
+
         # set country to United States until global buoys supported
         locations_dict[buoyStation.station_id] = {
             "id": buoyStation.station_id,
@@ -78,14 +60,14 @@ def get_coastal_locations() -> dict[str, LocationData]:
             "latitude": float(buoyStation.location.latitude),
             "country": "United States",
             "state": location.get("state", "Unknown"),
-            "tide_station": location.get("closest_tide_station") or None,
+            "tide_station": closest_tide_station.station_id or None,
         }
 
     return locations_dict
 
 
-def is_buoy_data_available(
-    station: surfpy.BuoyStation, known_locations: object, rounding_precision: int
+def get_closest_buoy_data_available(
+    station: surfpy.BuoyStation, known_surf_locations: object, rounding_precision: int
 ) -> tuple[Literal[False], None] | tuple[Literal[True], str]:
 
     rounded_lat = round(station.location.latitude, rounding_precision)
@@ -93,7 +75,7 @@ def is_buoy_data_available(
     lat_lon_key = f"{rounded_lat},{rounded_lon}"
 
     # Check if the key exists and calculate the difference
-    location = known_locations.get(lat_lon_key)
+    location = known_surf_locations.get(lat_lon_key)
     if location:
         current_loc_diff = abs(station.location.latitude - rounded_lat) + abs(
             station.location.longitude - rounded_lon
@@ -118,22 +100,6 @@ def get_buoy_display_name(name: str) -> str:
     return name
 
 
-def round_dict_keys_by_precision(data: dict, precision: int) -> dict:
-    """
-    Takes a dictionary where keys are strings of the form 'lat,lon',
-    rounds the float values of lat and lon to the given precision,
-    and returns a new dictionary with the rounded keys.
-
-
-    """
-    new_dict = {}
-    for key, value in data.items():
-        try:
-            lat_str, lon_str = key.split(",")
-            lat = round(float(lat_str), precision)
-            lon = round(float(lon_str), precision)
-            new_key = f"{lat},{lon}"
-            new_dict[new_key] = value
-        except ValueError:
-            raise ValueError(f"Invalid key format: {key}. Expected format 'lat,lon'.")
-    return new_dict
+def is_in_great_lakes_region(lat, lon):
+    lon = lon if lon >= 0 else lon + 360
+    return 41.0 <= lat <= 49.0 and 267.5 <= lon <= 285.0
