@@ -62,30 +62,6 @@ async def fetch_active_weather_alerts(location: surfpy.Location) -> dict:
         return {}
 
 
-async def fetch_tidal_forecast_async(
-    station: surfpy.TideStation,
-    start_date: datetime.datetime,
-    end_date: datetime.datetime,
-) -> list[surfpy.TideEvent]:
-    try:
-        logging.info(
-            "Fetching hourly forecast for station %s",
-            station.station_id,
-        )
-        return station.fetch_tide_data(
-            start_date,
-            end_date,
-            interval=surfpy.TideStation.DataInterval.high_low,
-            unit=surfpy.units.Units.metric,
-        )
-    except:
-        logging.exception(
-            "Failure fetching tide forecast for location %s - returning empty result",
-            station.station_id,
-        )
-        return []
-
-
 async def fetch_hourly_forecast_async(
     location: surfpy.Location,
 ) -> list[surfpy.BuoyData]:
@@ -161,7 +137,6 @@ async def retrieve_new_data(
             "No wave data available after parsing GRIB data for %f,%f",
             location.latitude,
             location.longitude,
-            wave_model.description,
         )
         return None
 
@@ -193,7 +168,12 @@ async def retrieve_new_data(
 
     for station in tide_stations.stations:
         if station.station_id == tide_station:
-            tide_data = await fetch_tidal_forecast_async(station, start_date, end_date)
+            tide_data = station.fetch_tide_data(
+                start_date,
+                end_date,
+                interval=surfpy.TideStation.DataInterval.high_low,
+                unit=surfpy.units.Units.metric,
+            )
 
     weather_data_index = 0
 
