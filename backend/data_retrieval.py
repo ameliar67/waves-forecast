@@ -201,7 +201,7 @@ async def retrieve_new_data(
                     else None
                 ),
                 "min_breaking_height": (
-                    x.maximum_breaking_height  # ← If this should be minimum_breaking_height, change it
+                    x.maximum_breaking_height
                     if not math.isnan(x.maximum_breaking_height)
                     else None
                 ),
