@@ -69,7 +69,7 @@ export const ForecastContent: React.FC<ForecastContentProps> = ({
               <p className="wave-height">
                 {lowerRange === 0 && upperRange === 0
                   ? "Flat"
-                  : `${lowerRange} - ${upperRange} ft`}
+                  : `${lowerRange}-${upperRange} ft`}
               </p>
               <p className="label">Wave Height</p>
             </div>
