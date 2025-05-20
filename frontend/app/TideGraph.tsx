@@ -10,13 +10,13 @@ const TideGraph: React.FC<TidesProps> = ({ tidalForecast }) => {
     return null;
   }
 
-  const pointSpacing = 180;
+  const pointSpacing = 120;
   const width = tidalForecast.length * pointSpacing * 2;
-  const height = 400;
+  const height = 300;
   const padding = 80;
 
   const graphMinY = 10;
-  const graphMaxY = 370;
+  const graphMaxY = 270;
 
   // Simulate tide height variation
   const processed = tidalForecast.map((d, i) => {
@@ -82,7 +82,7 @@ const TideGraph: React.FC<TidesProps> = ({ tidalForecast }) => {
                   x1={p.x}
                   y1={p.y + 10}
                   x2={p.x}
-                  y2={height - 40}
+                  y2={height - 20}
                   stroke="#6fb8af"
                   strokeWidth="28"
                   strokeOpacity="0.4"
