@@ -49,7 +49,7 @@ async def forecast(message: str, datacontainer: blob_binding.ContainerClient) ->
         wave_model=wave_model,
         lat=selected_location["latitude"],
         lon=selected_location["longitude"],
-        tide_station=selected_location["tide_station"],
+        tide_stations=selected_location["tide_stations"],
     )
 
     # Handle missing forecast data
@@ -114,7 +114,7 @@ def queue_location_forecasts(timer: func.TimerRequest, locationsjson: str):
             "latitude": loc["latitude"],
             "longitude": loc["longitude"],
             "name": loc["name"],
-            "tide_station": loc["tide_station"],
+            "tide_stations": loc["tide_stations"],
         }
         queue_messages.append(json.dumps(message))
 

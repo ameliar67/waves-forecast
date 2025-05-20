@@ -16,7 +16,7 @@ class LocationData(TypedDict):
     latitude: float
     country: str
     state: str
-    tide_station: str
+    tide_stations: list
 
 
 def get_coastal_locations() -> dict[str, LocationData]:
@@ -25,8 +25,8 @@ def get_coastal_locations() -> dict[str, LocationData]:
     buoy_stations = surfpy.BuoyStations()
     buoy_stations.fetch_stations()
 
-    tide_stations = surfpy.TideStations()
-    tide_stations.fetch_stations()
+    current_tide_stations = surfpy.TideStations()
+    current_tide_stations.fetch_stations()
 
     # calculate closest buoy station
     locations_dict = {}
@@ -49,8 +49,12 @@ def get_coastal_locations() -> dict[str, LocationData]:
         if not buoyStation:
             continue
         # calculate closest tide station
-        closest_tide_station = tide_stations.find_closest_station(buoyStation.location)
+        closest_tide_stations = current_tide_stations.find_closest_stations(
+            buoyStation.location, 2
+        )
         buoy_name = get_buoy_display_name(buoyStation.location.name)
+
+        tide_stations = [station.station_id for station in closest_tide_stations]
 
         # set country to United States until global buoys supported
         locations_dict[buoyStation.station_id] = {
@@ -60,7 +64,7 @@ def get_coastal_locations() -> dict[str, LocationData]:
             "latitude": float(buoyStation.location.latitude),
             "country": "United States",
             "state": location.get("state", "Unknown"),
-            "tide_station": closest_tide_station.station_id or None,
+            "tide_stations": tide_stations or None,
         }
 
     return locations_dict

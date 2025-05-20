@@ -114,13 +114,13 @@ async def retrieve_new_data(
     wave_model: surfpy.WaveModel,
     hours_to_forecast: int,
     location: surfpy.Location,
-    tide_station: str,
+    tide_stations: list,
 ) -> WaveForecastData | None:
     location_resolution = 0.167
     wave_data = defaultdict(list)
 
-    tide_stations = surfpy.TideStations()
-    tide_stations.fetch_stations()
+    current_tide_stations = surfpy.TideStations()
+    current_tide_stations.fetch_stations()
 
     # Retrieve grib data from NOAA for given location
     forecast_models = await get_wave_forecast_models(wave_model, hours_to_forecast)
@@ -165,25 +165,32 @@ async def retrieve_new_data(
     start_date = datetime.datetime.today()
     end_date = start_date + datetime.timedelta(days=16)
 
-    for station in tide_stations.stations:
-        if station.station_id == tide_station:
-            tide_data = station.fetch_tide_data(
-                start_date,
-                end_date,
-                interval=surfpy.TideStation.DataInterval.high_low,
-                unit=surfpy.units.Units.metric,
-            )
+    station_objects = [None] * 2
+
+    for station in current_tide_stations.stations:
+        if station.station_id == tide_stations[0]:
+            station_objects[0] = station
+        if station.station_id == tide_stations[1]:
+            station_objects[1] = station
+
+    for s in station_objects:
+        tide_data = s.fetch_tide_data(
+            start_date,
+            end_date,
+            interval=surfpy.TideStation.DataInterval.high_low,
+            unit=surfpy.units.Units.metric,
+        )
+        if tide_data and tide_data[0]:
+            break
 
     weather_data_index = 0
 
     hourly_forecast = []
     for x in buoy_data:
         x.solve_breaking_wave_heights(location)
-        while (
-            weather_data_index < (len(weather_data) - 1)
-            and weather_data[weather_data_index].date < x.date
-        ):
-            weather_data_index += 1
+
+        valid_index = 0 <= weather_data_index < len(weather_data)
+        weather_entry = weather_data[weather_data_index] if valid_index else None
 
         hourly_forecast.append(
             {
@@ -194,28 +201,34 @@ async def retrieve_new_data(
                     else None
                 ),
                 "min_breaking_height": (
-                    x.maximum_breaking_height
+                    x.maximum_breaking_height  # ← If this should be minimum_breaking_height, change it
                     if not math.isnan(x.maximum_breaking_height)
                     else None
                 ),
                 "air_temperature": (
-                    weather_data[weather_data_index].air_temperature
-                    if not math.isnan(weather_data[weather_data_index].air_temperature)
+                    weather_entry.air_temperature
+                    if weather_entry
+                    and weather_entry.air_temperature is not None
+                    and not math.isnan(weather_entry.air_temperature)
                     else None
                 ),
                 "wind_direction": (
-                    weather_data[weather_data_index].wind_direction
-                    if not math.isnan(weather_data[weather_data_index].wind_direction)
+                    weather_entry.wind_direction
+                    if weather_entry
+                    and weather_entry.wind_direction is not None
+                    and not math.isnan(weather_entry.wind_direction)
                     else None
                 ),
                 "wind_speed": (
-                    weather_data[weather_data_index].wind_speed
-                    if not math.isnan(weather_data[weather_data_index].wind_speed)
+                    weather_entry.wind_speed
+                    if weather_entry
+                    and weather_entry.wind_speed is not None
+                    and not math.isnan(weather_entry.wind_speed)
                     else None
                 ),
                 "short_forecast": (
-                    weather_data[weather_data_index].short_forecast
-                    if weather_data[weather_data_index].short_forecast
+                    weather_entry.short_forecast
+                    if weather_entry and weather_entry.short_forecast
                     else None
                 ),
                 "wave_height": x.wave_summary.wave_height,
