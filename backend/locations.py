@@ -17,6 +17,8 @@ class LocationData(TypedDict):
     country: str
     state: str
     tide_stations: list
+    precise_latitude: set
+    precise_longitude: str
 
 
 def get_coastal_locations() -> dict[str, LocationData]:
@@ -65,6 +67,8 @@ def get_coastal_locations() -> dict[str, LocationData]:
             "country": "United States",
             "state": location.get("state", "Unknown"),
             "tide_stations": tide_stations or None,
+            "precise_latitude": location.get("precise_latitude" or "Unknown"),
+            "precise_longitude": location.get("precise_longitude" or "Unknown"),
         }
 
     return locations_dict
