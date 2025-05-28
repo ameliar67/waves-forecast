@@ -65,20 +65,25 @@ const HourlyForecastGrid: React.FC<WaveChartProps> = ({
           <div key={date} className="forecast-day-group">
             {!isMobile && <div className="forecast-date-banner">{date}</div>}
             <div className="forecast-items">
-              {groupedByDate[date].map((data, i) => (
+              {groupedByDate[date].map((data, i) => {
+                const averageBreakingHeight = units.distance.convert(
+                  (data.max_breaking_height + data.min_breaking_height) / 2
+                );
+                return (
                 <ForecastItem
                   key={i}
-                  forecastHeight={formatUnit(
-                    (data.max_breaking_height + data.min_breaking_height) / 2,
-                    units.distance,
-                    1
-                  )}
+                    forecastHeight={
+                      averageBreakingHeight < 1
+                        ? "Flat"
+                        : `${Math.floor(averageBreakingHeight)} - ${Math.ceil(averageBreakingHeight)} ft`
+                    }
                   formattedTime={data.time}
                   airTemperature={data.air_temperature}
                   windSpeed={data.wind_speed}
                   windDirection={data.wind_direction}
                 />
-              ))}
+                );
+              })}
             </div>
           </div>
         );
