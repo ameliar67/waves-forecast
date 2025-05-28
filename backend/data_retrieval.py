@@ -7,7 +7,6 @@ from typing import TypedDict
 
 import aiohttp
 import surfpy
-import surfpy.basestation
 from swell_calculation import solve_breaking_wave_heights_from_swell
 from grib_parser import GribTimeWindow, parse_grib_data
 
