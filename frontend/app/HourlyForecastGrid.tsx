@@ -2,7 +2,7 @@ import React, { useCallback, useMemo, useState } from "react";
 import { HourlyForecast } from "./api";
 import ForecastItem from "./ForecastItem";
 import { useIsMobile } from "./mobile";
-import { formatUnit, useUnits } from "./Units";
+import { useUnits } from "./Units";
 
 interface WaveChartProps {
   hourlyForecast: HourlyForecast[];
