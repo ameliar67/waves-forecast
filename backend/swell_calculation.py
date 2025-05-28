@@ -9,8 +9,8 @@ def solve_breaking_wave_heights_from_swell(buoydata, location):
         buoydata.change_units(units.Units.metric)
 
     breaking_heights = []
-    per_swell_results = []
 
+    # Calculate wave heights for all swells before finding total surf energy
     for swell in buoydata.swell_components:
         height = swell.wave_height
         period = swell.period
@@ -21,6 +21,7 @@ def solve_breaking_wave_heights_from_swell(buoydata, location):
         if incident_angle > 180:
             incident_angle = 360 - incident_angle
 
+        # > 90 degree Incident Angle indicates swell is coming from behind the beach and should be ignored
         if incident_angle > 90:
             continue
 
@@ -33,16 +34,6 @@ def solve_breaking_wave_heights_from_swell(buoydata, location):
         adjusted_height = 0.8 * wave_breaking_height
 
         breaking_heights.append(adjusted_height)
-
-        per_swell_results.append(
-            {
-                "height": height,
-                "period": period,
-                "direction": direction,
-                "incident_angle": incident_angle,
-                "breaking_height": adjusted_height,
-            }
-        )
 
     # Combine using quadrature sum: total surf energy from all swells
     if breaking_heights:
