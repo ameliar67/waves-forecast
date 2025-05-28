@@ -43,13 +43,23 @@ export const ImperialConversions: UnitConversions = {
 export function formatUnit(
   value: number,
   unit: ConvertableUnit,
-  precision?: number
+  precision?: number,
+  roundingUp: boolean = true,
+  suffix: boolean = true
 ) {
-  const displayValue =
-    precision === undefined
-      ? unit.convert(value)
-      : unit.convert(value).toFixed(precision);
-  return `${displayValue} ${unit.suffix}`;
+  const converted = unit.convert(value);
+
+  if (precision === undefined) {
+    return suffix ? `${converted} ${unit.suffix}` : `${converted}`;
+  }
+  
+  const factor = 10 ** precision;
+  
+  const adjusted = roundingUp
+    ? Math.ceil(converted * factor) / factor
+    : Math.round(converted * factor) / factor;
+  const formatted = adjusted.toFixed(precision);
+  return suffix ? `${formatted} ${unit.suffix}` : formatted;
 }
 
 export const UnitsContext = createContext<UnitConversions>(MetricConversions);
