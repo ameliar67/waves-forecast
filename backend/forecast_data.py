@@ -15,7 +15,7 @@ async def get_wave_forecast(
     precise_lon=str,
 ) -> WaveForecastData:
 
-    # Your beach location
+    # Beach location
     lon, lat = float(precise_lon), float(precise_lat)
 
     # Fallback default values
