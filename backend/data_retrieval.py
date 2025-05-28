@@ -8,6 +8,7 @@ from typing import TypedDict
 import aiohttp
 import surfpy
 import surfpy.basestation
+from swell_calculation import solve_breaking_wave_heights_from_swell
 from grib_parser import GribTimeWindow, parse_grib_data
 
 http_session = aiohttp.ClientSession()
@@ -187,7 +188,7 @@ async def retrieve_new_data(
 
     hourly_forecast = []
     for x in buoy_data:
-        x.solve_breaking_wave_heights(location)
+        solve_breaking_wave_heights_from_swell(x, location)
 
         valid_index = 0 <= weather_data_index < len(weather_data)
         weather_entry = weather_data[weather_data_index] if valid_index else None
