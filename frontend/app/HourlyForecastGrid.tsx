@@ -70,18 +70,18 @@ const HourlyForecastGrid: React.FC<WaveChartProps> = ({
                   (data.max_breaking_height + data.min_breaking_height) / 2
                 );
                 return (
-                <ForecastItem
-                  key={i}
+                  <ForecastItem
+                    key={i}
                     forecastHeight={
                       averageBreakingHeight < 1
                         ? "Flat"
                         : `${Math.floor(averageBreakingHeight)} - ${Math.ceil(averageBreakingHeight)} ft`
                     }
-                  formattedTime={data.time}
-                  airTemperature={data.air_temperature}
-                  windSpeed={data.wind_speed}
-                  windDirection={data.wind_direction}
-                />
+                    formattedTime={data.time}
+                    airTemperature={data.air_temperature}
+                    windSpeed={data.wind_speed}
+                    windDirection={data.wind_direction}
+                  />
                 );
               })}
             </div>
