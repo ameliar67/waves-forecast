@@ -9,6 +9,7 @@ import aiohttp
 import surfpy
 from swell_calculation import solve_breaking_wave_heights_from_swell
 from grib_parser import GribTimeWindow, parse_grib_data
+from wave_rating import surf_quality_rating
 
 http_session = aiohttp.ClientSession()
 http_session.headers["User-Agent"] = "waves-forecast/1.0.0"
@@ -191,6 +192,10 @@ async def retrieve_new_data(
 
         valid_index = 0 <= weather_data_index < len(weather_data)
         weather_entry = weather_data[weather_data_index] if valid_index else None
+        swell_period = combined_swell_period(x.swell_components)
+        surf_condition_rating = surf_quality_rating(
+            x.maximum_breaking_height, swell_period, weather_entry.wind_speed
+        )
 
         hourly_forecast.append(
             {
@@ -266,3 +271,33 @@ async def retrieve_new_data(
         "hourly_forecast": hourly_forecast,
         "tide_forecast": tide_forecast,
     }
+
+
+def combined_swell_period(swell_components):
+    """
+    Calculate the energy-weighted average swell period from a list of swell components.
+
+    Args:
+        swell_components (list of dict or objects): Each with 'period' and 'height' properties.
+
+    Returns:
+        float: Combined swell period in seconds.
+    """
+    if not swell_components:
+        return 0
+
+    weighted_sum = 0
+    energy_sum = 0
+
+    for swell in swell_components:
+        period = swell.period
+        height = swell.wave_height
+
+        if period is None or height is None:
+            continue  # skip incomplete data
+
+        energy = height**2
+        weighted_sum += period * energy
+        energy_sum += energy
+
+    return weighted_sum / energy_sum if energy_sum > 0 else 0
