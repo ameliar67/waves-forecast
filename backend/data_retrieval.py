@@ -7,9 +7,10 @@ from typing import TypedDict
 
 import aiohttp
 import surfpy
-from swell_calculation import solve_breaking_wave_heights_from_swell
+from swell_calculations import solve_breaking_wave_heights_from_swell
 from grib_parser import GribTimeWindow, parse_grib_data
 from wave_rating import surf_quality_rating
+from tide_calculations import calculate_tide_intervals
 
 http_session = aiohttp.ClientSession()
 http_session.headers["User-Agent"] = "waves-forecast/1.0.0"
