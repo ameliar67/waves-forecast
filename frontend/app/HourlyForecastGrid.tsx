@@ -78,6 +78,7 @@ const HourlyForecastGrid: React.FC<WaveChartProps> = ({
                         : `${Math.floor(averageBreakingHeight)} - ${Math.ceil(averageBreakingHeight)} ft`
                     }
                     formattedTime={data.time}
+                    surfRating={data.surf_rating}
                     airTemperature={data.air_temperature}
                     windSpeed={data.wind_speed}
                     windDirection={data.wind_direction}

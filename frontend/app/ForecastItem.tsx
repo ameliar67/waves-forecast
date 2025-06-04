@@ -7,6 +7,7 @@ interface ForecastItemProps {
   airTemperature: number;
   windSpeed: number;
   windDirection: number;
+  surfRating: string
 }
 
 const ForecastItem: React.FC<ForecastItemProps> = ({
@@ -15,6 +16,7 @@ const ForecastItem: React.FC<ForecastItemProps> = ({
   airTemperature,
   windSpeed,
   windDirection,
+  surfRating
 }) => {
   const units = useUnits();
 
@@ -38,6 +40,9 @@ const ForecastItem: React.FC<ForecastItemProps> = ({
       </div>
       <div className="wind-direction">
         Wind Direction: {!windDirection ? "-" : direction + " " + windDirection}
+      </div>
+      <div className="wind-direction">
+        Surf Rating: {!surfRating ? "-" : surfRating}
       </div>
     </div>
   );

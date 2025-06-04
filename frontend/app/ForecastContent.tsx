@@ -126,6 +126,15 @@ export const ForecastContent: React.FC<ForecastContentProps> = ({
         </div>
 
         <div className="alerts-layout">
+          {forecastData.surf_rating !== "None" ? (
+            <>
+              <p className="no-alerts">
+                Surf Rating: {forecastData.surf_rating}
+              </p>
+            </>
+          ) : (
+            <p>No surf rating available</p>
+          )}
           {forecastData.weather_alerts !== "None" ? (
             <>
               <p className="label">Current Weather Warnings:</p>
