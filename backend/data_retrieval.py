@@ -21,6 +21,7 @@ class HourlyForecastSummary(TypedDict):
     max_breaking_height: float
     min_breaking_height: float
     wave_height: float
+    surf_ratng: str
 
 
 class WaveForecastData(TypedDict):
@@ -204,13 +205,6 @@ async def retrieve_new_data(
         ):
             tide_data_iterator += 1
 
-        surf_condition_rating = surf_quality_rating(
-            x.maximum_breaking_height,
-            swell_period,
-            weather_entry.wind_speed,
-            tides_with_intervals[tide_data_iterator]["normalized_level"],
-        )
-
         hourly_forecast.append(
             {
                 "date": x.date.isoformat(),
@@ -251,6 +245,12 @@ async def retrieve_new_data(
                     else None
                 ),
                 "wave_height": x.wave_summary.wave_height,
+                "surf_rating": surf_quality_rating(
+                    x.maximum_breaking_height,
+                    swell_period,
+                    weather_entry.wind_speed,
+                    tides_with_intervals[tide_data_iterator]["normalized_level"],
+                ),
             }
         )
 
