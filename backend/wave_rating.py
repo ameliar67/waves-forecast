@@ -1,4 +1,9 @@
-def surf_quality_rating(wave_height, swell_period, wind_speed, tide_level):  # in meters
+def surf_quality_rating(
+        wave_height: int, 
+        swell_period: int, 
+        wind_speed: int, 
+        tide_level: int) -> str:  # in meters
+    
     """
     Returns: 'Poor', 'Fair', 'Good', or 'Epic'
     Score range: 0 to 8 (if each component scores up to 2)
