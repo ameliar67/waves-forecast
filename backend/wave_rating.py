@@ -1,15 +1,14 @@
-def surf_quality_rating(
-    wave_height,
-    swell_period,
-    wind_speed,
-):
+def surf_quality_rating(wave_height, swell_period, wind_speed, tide_level):  # in meters
+    """
+    Returns: 'Poor', 'Fair', 'Good', or 'Epic'
+    Score range: 0 to 8 (if each component scores up to 2)
+    """
 
-    # Returns: 'Poor', 'Fair', 'Good', or 'Epic'
-    # Score from 0 to 6
     score = (
         score_wave_height(wave_height)
         + score_swell_period(swell_period)
         + score_wind_speed(wind_speed)
+        + score_tide_level(tide_level)
     )
 
     if score >= 7:
@@ -20,6 +19,15 @@ def surf_quality_rating(
         return "Fair"
     else:
         return "Poor"
+
+
+def score_tide_level(normalized_tide):
+    if 0.4 <= normalized_tide <= 0.6:
+        return 2  # Mid-tide sweet spot
+    elif 0.25 <= normalized_tide < 0.4 or 0.6 < normalized_tide <= 0.75:
+        return 1  # Acceptable
+    else:
+        return 0  # Too high or too low
 
 
 def score_wave_height(height_ft):
