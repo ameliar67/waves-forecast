@@ -186,6 +186,9 @@ async def retrieve_new_data(
             break
 
     weather_data_index = 0
+    tide_data_iterator = 0
+    if tide_data and tide_data[0]:
+        tides_with_intervals = calculate_tide_intervals(tide_data[0], 3)
 
     hourly_forecast = []
     for x in buoy_data:
@@ -194,8 +197,18 @@ async def retrieve_new_data(
         valid_index = 0 <= weather_data_index < len(weather_data)
         weather_entry = weather_data[weather_data_index] if valid_index else None
         swell_period = combined_swell_period(x.swell_components)
+
+        if (
+            tide_data_iterator < (len(tides_with_intervals) - 1)
+            and x.date > tides_with_intervals[tide_data_iterator]["timestamp"]
+        ):
+            tide_data_iterator += 1
+
         surf_condition_rating = surf_quality_rating(
-            x.maximum_breaking_height, swell_period, weather_entry.wind_speed
+            x.maximum_breaking_height,
+            swell_period,
+            weather_entry.wind_speed,
+            tides_with_intervals[tide_data_iterator]["normalized_level"],
         )
 
         hourly_forecast.append(
