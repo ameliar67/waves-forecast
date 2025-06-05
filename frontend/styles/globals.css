@@ -520,6 +520,7 @@ input {
 
   .individual-data-fields {
     flex-direction: column;
+    gap: 10vh;
     margin: 0;
   }
 
@@ -660,9 +661,9 @@ input {
   }
 
   .alerts-layout {
-    box-shadow: none;
-    width: 300px;
-    height: 300px;
+    width: auto;
+    height: auto;
     border-radius: 0px;
+    border-radius: none;
   }
 }
