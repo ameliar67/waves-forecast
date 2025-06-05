@@ -32,6 +32,17 @@ export const ForecastContent: React.FC<ForecastContentProps> = ({
   const upperRange = Math.ceil(averageBreakingHeight);
 
   const stations = useStations();
+  type SurfRating = "Epic" | "Good" | "Fair" | "Poor";
+
+  const ratingColors: Record<SurfRating, string> = {
+    Epic: "purple",
+    Good: "green",
+    Fair: "orange",
+    Poor: "red",
+  };
+
+  let ratingColor =
+    ratingColors[forecastData.surf_rating as SurfRating] || "black";
 
   const direction =
     typeof forecastData.wind_direction !== "number"
@@ -66,7 +77,7 @@ export const ForecastContent: React.FC<ForecastContentProps> = ({
                     forecastData.hourly_forecast[0].time
                   : ""}
               </p>
-              <p className="wave-height">
+              <p className="wave-height" style={{ color: `${ratingColor}` }}>
                 {lowerRange === 0 && upperRange === 0
                   ? "Flat"
                   : `${lowerRange}-${upperRange} ft`}
@@ -125,19 +136,22 @@ export const ForecastContent: React.FC<ForecastContentProps> = ({
           </div>
         </div>
 
-        <div className="alerts-layout">
-          {forecastData.surf_rating !== "None" ? (
+        <div
+          className="alerts-layout"
+          style={{ "--shadow-color": `${ratingColor}` } as React.CSSProperties}
+        >
+          {forecastData.surf_rating ? (
             <>
-              <p className="no-alerts">
+              <p className="surf-rating" style={{ color: `${ratingColor}` }}>
                 Surf Rating: {forecastData.surf_rating}
               </p>
             </>
           ) : (
-            <p>No surf rating available</p>
+            <p className="surf-rating">No surf rating available</p>
           )}
           {forecastData.weather_alerts !== "None" ? (
             <>
-              <p className="label">Current Weather Warnings:</p>
+              <p className="weather-warning-label">Current Weather Warnings:</p>
               <p id="weather-alerts" className="data">
                 {forecastData.weather_alerts}
               </p>
