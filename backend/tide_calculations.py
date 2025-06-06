@@ -19,6 +19,9 @@ def calculate_tide_intervals(tide_events, hour_interval_hours):
         time_diff_hours = (end.date - start.date).total_seconds() / 3600
         num_steps = int(time_diff_hours // hour_interval_hours)
 
+        if num_steps == 0:
+            continue  # Skip short intervals that don't fit the resolution
+
         level_step = (end.water_level - start.water_level) / num_steps
 
         for step in range(num_steps + 1):
