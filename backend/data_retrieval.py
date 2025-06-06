@@ -22,6 +22,7 @@ class HourlyForecastSummary(TypedDict):
     min_breaking_height: float
     wave_height: float
     surf_ratng: str
+    swell_period: float
 
 
 class WaveForecastData(TypedDict):
@@ -188,6 +189,7 @@ async def retrieve_new_data(
 
     weather_data_index = 0
     tide_data_iterator = 0
+    tides_with_intervals = []
     if tide_data and tide_data[0]:
         tides_with_intervals = calculate_tide_intervals(tide_data[0], 3)
 
@@ -198,6 +200,15 @@ async def retrieve_new_data(
         valid_index = 0 <= weather_data_index < len(weather_data)
         weather_entry = weather_data[weather_data_index] if valid_index else None
         swell_period = combined_swell_period(x.swell_components)
+
+        if len(tides_with_intervals) > 0:
+            surf_rating = surf_quality_rating(
+                    x.maximum_breaking_height,
+                    swell_period,
+                    weather_entry.wind_speed,
+                    tides_with_intervals[tide_data_iterator]["normalized_level"])
+        else:
+            surf_rating = "No surf rating currently available"
 
         if (
             tide_data_iterator < (len(tides_with_intervals) - 1)
@@ -245,12 +256,8 @@ async def retrieve_new_data(
                     else None
                 ),
                 "wave_height": x.wave_summary.wave_height,
-                "surf_rating": surf_quality_rating(
-                    x.maximum_breaking_height,
-                    swell_period,
-                    weather_entry.wind_speed,
-                    tides_with_intervals[tide_data_iterator]["normalized_level"],
-                ),
+                "surf_rating": surf_rating,
+                "swell_period": round(swell_period)
             }
         )
 

@@ -486,6 +486,10 @@ input {
   max-width: 300px;
 }
 
+#swell_period {
+ font-weight: bold;
+}
+
 @media (max-width: 800px) {
   .location-form {
     min-width: 50%;

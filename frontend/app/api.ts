@@ -24,6 +24,7 @@ export interface HourlyForecast {
   wind_direction: number;
   date_time_stamp: string;
   surf_rating: string;
+  swell_period: number
 }
 
 export interface ForecastData {
@@ -37,6 +38,7 @@ export interface ForecastData {
   generated_at: string;
   tide_forecast: TidalForecast[];
   surf_rating: string;
+  swell_period: number;
 }
 
 // Base url for blob storage direct access endpoints
@@ -89,6 +91,7 @@ export async function getForecast(
   data["wind_speed"] = data.hourly_forecast[0].wind_speed;
   data["wind_direction"] = data.hourly_forecast[0].wind_direction;
   data["surf_rating"] = data.hourly_forecast[0].surf_rating;
+  data["swell_period"] = data.hourly_forecast[0].swell_period;
 
   //remove past hourly forecasts
   const now = new Date();
