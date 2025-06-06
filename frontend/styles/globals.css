@@ -402,11 +402,6 @@ input {
   height: 700px;
 }
 
-#weather-alerts {
-  margin-top: 20px;
-}
-
-
 .forecast-date-banner {
   text-align: center;
   background-color: #f0f0f0;
@@ -484,6 +479,10 @@ input {
 
 .forecast-air-temperature {
   margin-top: 14px;
+}
+
+#weather-alerts {
+  color: red;
 }
 
 @media (max-width: 800px) {
