@@ -483,6 +483,7 @@ input {
 
 #weather-alerts {
   color: red;
+  max-width: 300px;
 }
 
 @media (max-width: 800px) {
