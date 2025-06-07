@@ -201,7 +201,7 @@ async def retrieve_new_data(
         weather_entry = weather_data[weather_data_index] if valid_index else None
         swell_period = combined_swell_period(x.swell_components)
 
-        if len(tides_with_intervals) > 0:
+        if len(tides_with_intervals) > 0 and weather_entry and weather_entry.wind_speed is not None:
             surf_rating = surf_quality_rating(
                     x.maximum_breaking_height,
                     swell_period,
