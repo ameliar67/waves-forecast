@@ -84,10 +84,13 @@ export const ForecastContent: React.FC<ForecastContentProps> = ({
               </p>
               <p className="label">Wave Height</p>
               <p id="swell_period">
-                {forecastData.hourly_forecast[0]
-                  ? forecastData.hourly_forecast[0].swell_period + " seconds" : ""}
+                {forecastData.hourly_forecast[0]?.swell_period &&
+                  forecastData.hourly_forecast[0].swell_period + " seconds"}
               </p>
-              <p className="label">Swell Period</p>
+              <p className="label">
+                {forecastData.hourly_forecast[0]?.swell_period &&
+                  "Swell Period"}
+              </p>
             </div>
           </div>
 
