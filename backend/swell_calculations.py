@@ -1,5 +1,6 @@
 from surfpy import units, tools
 import math
+import logging
 
 
 def solve_breaking_wave_heights_from_swell(buoydata, location):
@@ -23,6 +24,10 @@ def solve_breaking_wave_heights_from_swell(buoydata, location):
 
         # > 90 degree Incident Angle indicates swell is coming from behind the beach and should be ignored
         if incident_angle > 90:
+            logging.warning(
+                "90 degree Incident Angle indicates swell is coming from behind the beach and should be ignored  at %s",
+                location.name,
+            )
             continue
 
         # Calculate breaking wave height for this swell
