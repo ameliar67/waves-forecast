@@ -179,6 +179,7 @@ async def retrieve_new_data(
     start_date = datetime.datetime.today()
     end_date = start_date + datetime.timedelta(days=16)
 
+    # use two tide stations - one as a backup in case the first has no data
     station_objects = [None] * 2
 
     for station in current_tide_stations.stations:
@@ -220,6 +221,7 @@ async def retrieve_new_data(
         else:
             surf_rating = "No surf rating currently available"
 
+        # keep tide intervals up to date
         if (
             tide_data_iterator < (len(tides_with_intervals) - 1)
             and x.date > tides_with_intervals[tide_data_iterator]["timestamp"]
