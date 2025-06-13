@@ -239,6 +239,8 @@ async def retrieve_new_data(
     hourly_forecast = []
     for x in buoy_data:
         solve_breaking_wave_heights_from_swell(x, location)
+        if x.maximum_breaking_height == "Invalid Incident Angle":
+            return {**EMPTY_FORECAST_DATA.copy(), "wave_model": wave_model.description}
 
         valid_index = 0 <= weather_data_index < len(weather_data)
         weather_entry = weather_data[weather_data_index] if valid_index else None

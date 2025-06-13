@@ -28,6 +28,7 @@ def solve_breaking_wave_heights_from_swell(buoydata, location):
                 "90 degree Incident Angle indicates swell is coming from behind the beach and should be ignored  at %s",
                 location.name,
             )
+            breaking_heights.append("Invalid incident angle")
             continue
 
         # Calculate breaking wave height for this swell
@@ -41,12 +42,14 @@ def solve_breaking_wave_heights_from_swell(buoydata, location):
         breaking_heights.append(adjusted_height)
 
     # Combine using quadrature sum: total surf energy from all swells
-    if breaking_heights:
-        combined_breaking_height = math.sqrt(sum(h**2 for h in breaking_heights))
+    if any(isinstance(h, (int, float)) for h in breaking_heights):
+        combined_breaking_height = math.sqrt(
+            sum(h**2 for h in breaking_heights if isinstance(h, (int, float)))
+        )
         min_height = combined_breaking_height / 1.4
     else:
-        combined_breaking_height = 0
-        min_height = 0
+        combined_breaking_height = "Invalid Incident Angle"
+        min_height = "Invalid Incident Angle"
 
     # Store results in buoydata
     buoydata.maximum_breaking_height = combined_breaking_height
