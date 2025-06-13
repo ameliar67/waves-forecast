@@ -44,10 +44,11 @@ async def forecast(message: str, datacontainer: blob_binding.ContainerClient) ->
     data_container_client: ContainerClient = datacontainer
     selected_location: ForecastQueueMessage = json.loads(message)
 
-    # Fetch wave forecast data
+    # Determine NOAA wave model
     wave_model = get_wave_model(
         selected_location["latitude"], selected_location["longitude"]
     )
+    # Fetch wave forecast data
     wave_forecast = await forecast_data.get_wave_forecast(
         wave_model=wave_model,
         lat=selected_location["latitude"],
