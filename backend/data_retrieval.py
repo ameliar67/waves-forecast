@@ -103,6 +103,16 @@ async def get_wave_forecast_models(
     return [g for g in grib_datas if g is not None]
 
 
+def is_data_all_zeros(data, keys):
+    return all(
+        key in data
+        and isinstance(data[key], list)
+        and all(value == 0.0 for value in data[key])
+        for key in keys
+    )
+
+
+
 EMPTY_FORECAST_DATA = {
     "chart": None,
     "current_wave_height": 0,
