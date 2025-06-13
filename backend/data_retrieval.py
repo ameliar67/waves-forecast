@@ -185,7 +185,10 @@ async def retrieve_new_data(
     # Turn NOAA model grib data into buoy data
     buoy_data: list[surfpy.BuoyData] = wave_model.to_buoy_data(wave_data)
 
-    if len(buoy_data) == 0:
+    # Return empty data if shww (significant wave height), wvdir (wave direction) and shts(significant height of total swell) are all zeroes
+    # If all of these fields are arrays of zeroes there is a problem with the data rather than a forecast for flat waves
+    # which would result in an inaccurate forecast
+    if len(buoy_data) == 0 or is_data_all_zeros(wave_data, ["shww", "wvdir", "shts"]):
         logging.warning(
             "No buoy data available for location %f,%f",
             location.latitude,
