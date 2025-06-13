@@ -112,6 +112,35 @@ def is_data_all_zeros(data, keys):
     )
 
 
+def combined_swell_period(swell_components):
+    """
+    Calculate the energy-weighted average swell period from a list of swell components.
+
+    Args:
+        swell_components (list of dict or objects): Each with 'period' and 'height' properties.
+
+    Returns:
+        float: Combined swell period in seconds.
+    """
+    if not swell_components:
+        return 0
+
+    weighted_sum = 0
+    energy_sum = 0
+
+    for swell in swell_components:
+        period = swell.period
+        height = swell.wave_height
+
+        if period is None or height is None:
+            continue  # skip incomplete data
+
+        energy = height**2
+        weighted_sum += period * energy
+        energy_sum += energy
+
+    return weighted_sum / energy_sum if energy_sum > 0 else 0
+
 
 EMPTY_FORECAST_DATA = {
     "chart": None,
@@ -304,33 +333,3 @@ async def retrieve_new_data(
         "hourly_forecast": hourly_forecast,
         "tide_forecast": tide_forecast,
     }
-
-
-def combined_swell_period(swell_components):
-    """
-    Calculate the energy-weighted average swell period from a list of swell components.
-
-    Args:
-        swell_components (list of dict or objects): Each with 'period' and 'height' properties.
-
-    Returns:
-        float: Combined swell period in seconds.
-    """
-    if not swell_components:
-        return 0
-
-    weighted_sum = 0
-    energy_sum = 0
-
-    for swell in swell_components:
-        period = swell.period
-        height = swell.wave_height
-
-        if period is None or height is None:
-            continue  # skip incomplete data
-
-        energy = height**2
-        weighted_sum += period * energy
-        energy_sum += energy
-
-    return weighted_sum / energy_sum if energy_sum > 0 else 0
