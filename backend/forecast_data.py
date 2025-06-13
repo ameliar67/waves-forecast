@@ -11,12 +11,9 @@ async def get_wave_forecast(
     lon=str,
     tide_stations=list,
     hours_to_forecast=384,
-    precise_lat=str,
-    precise_lon=str,
+    precise_lat=int,
+    precise_lon=int,
 ) -> WaveForecastData:
-
-    # Beach location
-    lon, lat = float(precise_lon), float(precise_lat)
 
     # Fallback default values
     fallback_depth = 10.0
@@ -24,12 +21,12 @@ async def get_wave_forecast(
     fallback_orientation = 90.0  # facing east
 
     try:
-        # Overpass API query
+        # Overpass API query to find nearest coastline
         overpass_url = "https://overpass-api.de/api/interpreter"
         query = f"""
         [out:json];
         (
-          way(around:500,{lat},{lon})["natural"="coastline"];
+          way(around:500,{precise_lat},{precise_lon})["natural"="coastline"];
         );
         out body;
         >;
@@ -64,7 +61,7 @@ async def get_wave_forecast(
         nearest_segment = None
         for i in range(len(nearest_line) - 1):
             segment = nearest_line[i : i + 2]
-            dist = point_line_distance(lat, lon, segment)
+            dist = point_line_distance(precise_lat, precise_lon, segment)
             if dist < min_dist:
                 min_dist = dist
                 nearest_segment = segment
