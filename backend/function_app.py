@@ -23,6 +23,9 @@ class ForecastQueueMessage(TypedDict):
     name: str
     latitude: float
     longitude: float
+    precise_latitude: float
+    precise_longitude: float
+    tide_stations: list
 
 
 # Azure Function to retrieve forecast data from NOAA for each location in the queue
