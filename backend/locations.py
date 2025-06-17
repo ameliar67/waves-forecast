@@ -12,13 +12,13 @@ class KnownLocation(TypedDict):
 class LocationData(TypedDict):
     id: str
     name: str
-    longitude: float
-    latitude: float
+    buoy_longitude: float
+    buoy_latitude: float
     country: str
     state: str
     tide_stations: list
-    precise_latitude: set
-    precise_longitude: str
+    beach_latitude: float
+    beach_longitude: float
 
 
 def get_coastal_locations() -> dict[str, LocationData]:
@@ -62,13 +62,13 @@ def get_coastal_locations() -> dict[str, LocationData]:
         locations_dict[buoyStation.station_id] = {
             "id": buoyStation.station_id,
             "name": location.get("name", buoy_name or "Unknown"),
-            "longitude": float(buoyStation.location.longitude),
-            "latitude": float(buoyStation.location.latitude),
+            "buoy_longitude": float(buoyStation.location.longitude),
+            "buoy_latitude": float(buoyStation.location.latitude),
             "country": "United States",
             "state": location.get("state", "Unknown"),
             "tide_stations": tide_stations or None,
-            "precise_latitude": location.get("precise_latitude" or "Unknown"),
-            "precise_longitude": location.get("precise_longitude" or "Unknown"),
+            "beach_latitude": location.get("beach_latitude" or "Unknown"),
+            "beach_longitude": location.get("beach_longitude" or "Unknown"),
         }
 
     return locations_dict

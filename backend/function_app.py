@@ -4,7 +4,7 @@ import os
 from typing import TypedDict
 
 import azure.functions as func
-import forecast_data
+import forecast_calculation as forecast_calculation
 from azure.storage.blob import BlobClient, ContainerClient, ContentSettings
 import azurefunctions.extensions.bindings.blob as blob_binding
 from locations import LocationData, get_coastal_locations
@@ -21,10 +21,10 @@ app = func.FunctionApp(http_auth_level=func.AuthLevel.ANONYMOUS)
 class ForecastQueueMessage(TypedDict):
     output_path: str
     name: str
-    latitude: float
-    longitude: float
-    precise_latitude: float
-    precise_longitude: float
+    buoy_latitude: float
+    buoy_longitude: float
+    beach_latitude: float
+    beach_longitude: float
     tide_stations: list
 
 
@@ -46,16 +46,16 @@ async def forecast(message: str, datacontainer: blob_binding.ContainerClient) ->
 
     # Determine NOAA wave model
     wave_model = get_wave_model(
-        selected_location["latitude"], selected_location["longitude"]
+        selected_location["buoy_latitude"], selected_location["buoy_longitude"]
     )
     # Fetch wave forecast data
-    wave_forecast = await forecast_data.get_wave_forecast(
+    wave_forecast = await forecast_calculation.get_wave_forecast(
         wave_model=wave_model,
-        lat=selected_location["latitude"],
-        lon=selected_location["longitude"],
+        buoy_lat=selected_location["buoy_latitude"],
+        buoy_lon=selected_location["buoy_longitude"],
         tide_stations=selected_location["tide_stations"],
-        precise_lat=selected_location["precise_latitude"],
-        precise_lon=selected_location["precise_longitude"],
+        beach_lat=selected_location["beach_latitude"],
+        beach_lon=selected_location["beach_longitude"],
     )
 
     # Handle missing forecast data
@@ -117,12 +117,12 @@ def queue_location_forecasts(timer: func.TimerRequest, locationsjson: str):
     for loc in locations.values():
         message: ForecastQueueMessage = {
             "output_path": f"forecast/{loc['id']}",
-            "latitude": loc["latitude"],
-            "longitude": loc["longitude"],
+            "buoy_latitude": loc["buoy_latitude"],
+            "buoy_longitude": loc["buoy_longitude"],
             "name": loc["name"],
             "tide_stations": loc["tide_stations"],
-            "precise_latitude": loc["precise_latitude"],
-            "precise_longitude": loc["precise_longitude"],
+            "beach_latitude": loc["beach_latitude"],
+            "beach_longitude": loc["beach_longitude"],
         }
         queue_messages.append(json.dumps(message))
 
