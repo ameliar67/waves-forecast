@@ -18,9 +18,7 @@ async def get_wave_forecast(
     fallback_slope = 0.02
     fallback_orientation = 180.0  # facing south
 
-    
-
-    #calculate beach characteristics for accurate forecast
+    # calculate beach characteristics for accurate forecast
     depth, slope, orientation = beach_profile_and_planform(
         beach_lat, beach_lon, fallback_slope, fallback_depth, fallback_orientation
     )
