@@ -18,6 +18,14 @@ async def get_wave_forecast(
     fallback_slope = 0.02
     fallback_orientation = 180.0  # facing south
 
+    # use longitude to ensure semi accurate fallback orientation
+    if beach_lon > -81 and beach_lon < -66:
+        # beach is located on US East Coast - faces East
+        fallback_orientation = 90.0
+    elif beach_lon > -126 and beach_lon < -117:
+        #beach is located on US West Coast - faces West
+        fallback_orientation = 270.0
+
     # calculate beach characteristics for accurate forecast
     depth, slope, orientation = beach_profile_and_planform(
         beach_lat, beach_lon, fallback_slope, fallback_depth, fallback_orientation
