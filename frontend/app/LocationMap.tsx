@@ -48,7 +48,7 @@ export const LocationMap: React.FC<MapComponentProps> = ({ className }) => {
         {stations.map((buoyStation) => (
           <Marker
             key={buoyStation.id}
-            position={[buoyStation.latitude, buoyStation.longitude]}
+            position={[buoyStation.buoy_latitude, buoyStation.buoy_longitude]}
           >
             <Popup closeButton={false}>
               <div>

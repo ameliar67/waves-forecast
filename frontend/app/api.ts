@@ -1,7 +1,7 @@
 export interface BuoyStation {
   id: string;
-  latitude: number;
-  longitude: number;
+  buoy_latitude: number;
+  buoy_longitude: number;
   name: string;
   country: string;
   state: string;
