@@ -23,7 +23,7 @@ async def get_wave_forecast(
         # beach is located on US East Coast - faces East
         fallback_orientation = 90.0
     elif beach_lon > -126 and beach_lon < -117:
-        #beach is located on US West Coast - faces West
+        # beach is located on US West Coast - faces West
         fallback_orientation = 270.0
 
     # calculate beach characteristics for accurate forecast
