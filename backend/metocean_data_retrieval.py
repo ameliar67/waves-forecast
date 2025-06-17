@@ -252,9 +252,9 @@ async def retrieve_new_data(
             and weather_entry.wind_speed is not None
         ):
             surf_rating = surf_quality_rating(
-                    x.maximum_breaking_height,
-                    swell_period,
-                    weather_entry.wind_speed,
+                x.maximum_breaking_height,
+                swell_period,
+                weather_entry.wind_speed,
                 tides_with_intervals[tide_data_iterator]["normalized_level"],
             )
         else:
