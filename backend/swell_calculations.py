@@ -3,7 +3,7 @@ import math
 import logging
 
 
-def solve_breaking_wave_heights_from_swell(buoydata, location):
+def solve_breaking_wave_heights_from_swell(buoydata, location, jetty_obstructions=None, wind=None):
     # Convert to metric units temporarily
     old_unit = buoydata.unit
     if buoydata.unit != units.Units.metric:

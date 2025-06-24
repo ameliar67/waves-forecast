@@ -158,6 +158,7 @@ async def retrieve_new_data(
     hours_to_forecast: int,
     location: surfpy.Location,
     tide_stations: list,
+    jetty_obstructions: list
 ) -> WaveForecastData | None:
     location_resolution = 0.167
     wave_data = defaultdict(list)
@@ -238,7 +239,7 @@ async def retrieve_new_data(
 
     hourly_forecast = []
     for x in buoy_data:
-        solve_breaking_wave_heights_from_swell(x, location)
+        solve_breaking_wave_heights_from_swell(x, location, jetty_obstructions)
         if x.maximum_breaking_height == "Invalid Incident Angle":
             return {**EMPTY_FORECAST_DATA.copy(), "wave_model": wave_model.description}
 

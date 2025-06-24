@@ -26,6 +26,7 @@ class ForecastQueueMessage(TypedDict):
     beach_latitude: float
     beach_longitude: float
     tide_stations: list
+    jetty_obstructions: list
 
 
 # Azure Function to retrieve forecast data from NOAA for each location in the queue
@@ -56,6 +57,7 @@ async def forecast(message: str, datacontainer: blob_binding.ContainerClient) ->
         tide_stations=selected_location["tide_stations"],
         beach_lat=selected_location["beach_latitude"],
         beach_lon=selected_location["beach_longitude"],
+        jetty_obstructions=selected_location["jetty_obstructions"]
     )
 
     # Handle missing forecast data
@@ -123,6 +125,7 @@ def queue_location_forecasts(timer: func.TimerRequest, locationsjson: str):
             "tide_stations": loc["tide_stations"],
             "beach_latitude": loc["beach_latitude"],
             "beach_longitude": loc["beach_longitude"],
+            "jetty_obstructions": loc["jetty_obstructions"]
         }
         queue_messages.append(json.dumps(message))
 

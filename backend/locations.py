@@ -19,6 +19,7 @@ class LocationData(TypedDict):
     tide_stations: list
     beach_latitude: float
     beach_longitude: float
+    jetty_obstructions: int
 
 
 def get_coastal_locations() -> dict[str, LocationData]:
@@ -69,6 +70,7 @@ def get_coastal_locations() -> dict[str, LocationData]:
             "tide_stations": tide_stations or None,
             "beach_latitude": location.get("beach_latitude" or "Unknown"),
             "beach_longitude": location.get("beach_longitude" or "Unknown"),
+            "jetty_obstructions": location.get("jetty_obstructions" or "Unknown"),
         }
 
     return locations_dict
