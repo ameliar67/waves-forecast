@@ -89,9 +89,7 @@ def beach_profile_and_planform(
 
     except Exception as e:
         logging.error("Error determining coastal geometry: %s", e)
-        slope = fallback_slope
-        depth = fallback_depth
-        orientation = fallback_orientation
+        return fallback_depth, fallback_slope, fallback_orientation
 
 
 def haversine(lat1, lon1, lat2, lon2):
