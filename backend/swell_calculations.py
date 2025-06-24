@@ -65,7 +65,6 @@ def solve_breaking_wave_heights_from_swell(buoydata, location, jetty_obstruction
 
         # Apply 0.8 breaking coefficient
         adjusted_height = 0.8 * wave_breaking_height
-
         breaking_heights.append(adjusted_height)
 
     # Combine using quadrature sum: total surf energy from all swells
@@ -79,10 +78,37 @@ def solve_breaking_wave_heights_from_swell(buoydata, location, jetty_obstruction
         buoydata.minimum_breaking_height = "Invalid Incident Angle"
         return
 
+    # Apply wind adjustment if provided
+    if isinstance(combined_breaking_height, (int, float)) and buoydata:
+        wind_speed = getattr(wind, "speed", 0)
+        wind_direction = getattr(wind, "direction", 0)
+
+        wind_type = classify_wind_relative_to_beach(wind_direction, location.angle)
+
+        if wind_speed >= 13:
+            if wind_type == "onshore":
+                wind_penalty = -0.4  # range: -0.25 to -0.5 ft
+            elif wind_type == "sideshore":
+                wind_penalty = -0.15  # range: -0.1 to -0.2 ft
+            else:  # offshore
+                wind_penalty = 0.1
+        else:
+            if wind_type == "offshore":
+                wind_penalty = 0.2
+            else:
+                wind_penalty = 0.0
+
+        combined_breaking_height += wind_penalty
+        min_height = combined_breaking_height / 1.4
 
     # Store results in buoydata
-    buoydata.maximum_breaking_height = combined_breaking_height
-    buoydata.minimum_breaking_height = min_height
+    if len(jetty_obstructions) > 0:
+        factor = directional_shadowing_multiplier(direction, jetty_obstructions)
+        buoydata.maximum_breaking_height = combined_breaking_height * factor
+        buoydata.minimum_breaking_height = min_height * factor
+    else:
+        buoydata.maximum_breaking_height = combined_breaking_height
+        buoydata.minimum_breaking_height = min_height
 
     # Restore original units
     if old_unit != buoydata.unit:
