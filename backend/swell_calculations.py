@@ -48,8 +48,10 @@ def solve_breaking_wave_heights_from_swell(buoydata, location, jetty_obstruction
         )
         min_height = combined_breaking_height / 1.4
     else:
-        combined_breaking_height = "Invalid Incident Angle"
-        min_height = "Invalid Incident Angle"
+        buoydata.maximum_breaking_height = "Invalid Incident Angle"
+        buoydata.minimum_breaking_height = "Invalid Incident Angle"
+        return
+
 
     # Store results in buoydata
     buoydata.maximum_breaking_height = combined_breaking_height
