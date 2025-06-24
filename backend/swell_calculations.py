@@ -22,10 +22,10 @@ def solve_breaking_wave_heights_from_swell(buoydata, location, jetty_obstruction
         if incident_angle > 180:
             incident_angle = 360 - incident_angle
 
-        # > 90 degree Incident Angle indicates swell is coming from behind the beach and should be ignored
+        # Ignore swells coming from behind the beach
         if incident_angle > 90:
             logging.warning(
-                "90 degree Incident Angle indicates swell is coming from behind the beach and should be ignored  at %s",
+                "90 degree Incident Angle indicates swell is coming from behind the beach and should be ignored at %s",
                 location.name,
             )
             breaking_heights.append("Invalid incident angle")
