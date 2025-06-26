@@ -7,7 +7,7 @@ interface ForecastItemProps {
   airTemperature: number;
   windSpeed: number;
   windDirection: number;
-  surfRating: string
+  surfRating: string;
 }
 
 const ForecastItem: React.FC<ForecastItemProps> = ({
@@ -16,9 +16,20 @@ const ForecastItem: React.FC<ForecastItemProps> = ({
   airTemperature,
   windSpeed,
   windDirection,
-  surfRating
+  surfRating,
 }) => {
   const units = useUnits();
+  type SurfRating = "Epic" | "Good" | "Fair" | "Poor";
+
+  const ratingColors: Record<SurfRating, string> = {
+    Epic: "purple",
+    Good: "green",
+    Fair: "orange",
+    Poor: "red",
+  };
+
+  let ratingColor =
+    ratingColors[surfRating as SurfRating] || "black";
 
   const direction =
     typeof windDirection !== "number"
@@ -26,7 +37,12 @@ const ForecastItem: React.FC<ForecastItemProps> = ({
       : ["N", "E", "S", "W"][Math.floor((windDirection + 45) / 90) % 4];
 
   return (
-    <div className="forecast-item">
+    <div
+      className="forecast-item"
+      style={{
+        backgroundImage: `linear-gradient(to top, ${ratingColor}, ${ratingColor} 5%, transparent 2%, transparent 5%)`,
+      }}
+    >
       <div className="forecast-time">{formattedTime}</div>
       <div className="forecast-height">
         {!forecastHeight ? "-" : forecastHeight}
