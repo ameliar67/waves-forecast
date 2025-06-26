@@ -7,6 +7,8 @@ interface NoForecastProps {
   errorDetails: string;
 }
 
+const logo = new URL("./surf-logo.svg", import.meta.url) as unknown as string;
+
 export const ForecastUnavailable: React.FC<NoForecastProps> = ({
   locationId,
   errorMessage,
@@ -16,6 +18,7 @@ export const ForecastUnavailable: React.FC<NoForecastProps> = ({
     <>
       <div className="forecast-header">
         <a href="/" className="wave-and-weather-title">
+          <img id="surf-logo-forecast-page" src={logo} alt="Surf Logo" />
           Surf Forecast
         </a>
         <LocationForm activeStationId={locationId} />
