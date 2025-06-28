@@ -131,7 +131,7 @@ export const ForecastContent: React.FC<ForecastContentProps> = ({
                   ? "No forecast available"
                   : forecastData.short_forecast}
               </p>
-              <p className="label">Forecast</p>
+              <p className="label">Weather Forecast</p>
             </div>
             <div className="forecast-layout">
               <p className="data">
