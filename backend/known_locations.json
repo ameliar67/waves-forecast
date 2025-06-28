@@ -74,7 +74,7 @@
     "43.4,-87.9": {"name": "Port Washington", "state": "Wisconsin", "beach_latitude": 43.391798, "beach_longitude": -87.863240, "jetty_obstructions": []},
     "47.7,-124.4": {"name": "Ruby Beach / Destruction Island", "state": "Washington", "beach_latitude": 47.710866, "beach_longitude": -124.416445, "jetty_obstructions": []},
     "21.3,-157.9": {"name": "Sand Island", "state": "Hawaii", "beach_latitude": 21.298808, "beach_longitude": -157.875462, "jetty_obstructions": []},
-    "34.4,-119.7": {"name": "Santa Barbara", "state": "California", "beach_latitude": 34.401106, "beach_longitude": -119.697845, "jetty_obstructions": []},
+    "34.4,-119.7": {"name": "Sand Spit", "state": "California", "beach_latitude": 34.403974, "beach_longitude": -119.688241, "jetty_obstructions": []},
     "34.0,-118.5": {"name": "Santa Monica Pier", "state": "California", "beach_latitude": 34.000477, "beach_longitude": -118.494444, "jetty_obstructions": []},
     "27.9,-80.4": {"name": "Sebastian Inlet", "state": "Florida", "beach_latitude": 27.863142, "beach_longitude": -80.447059, "jetty_obstructions": [135]},
     "43.8,-87.7": {"name": "Sheboygan / North Point the Elbow", "state": "Wisconsin", "beach_latitude": 43.764084, "beach_longitude": -87.694549, "jetty_obstructions": []},
