@@ -128,7 +128,7 @@ export const LocationForm: React.FC<LocationFormProps> = ({ activeStationId }) =
                     <li
                       key={station.id}
                       className="dropdown-item"
-                      data-station-id={station.id}
+                      data-station-id={station.name}
                       onClick={handleItemSelect}
                     >
                       {station.name}

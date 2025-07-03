@@ -49,6 +49,8 @@ def get_coastal_locations() -> dict[str, LocationData]:
 
     for location in known_surf_locations.values():
         buoyStation = location.get("closest_station")
+        id = location.get("id" or "Unknown")
+        name = location.get("name" or "Unknown")
         if not buoyStation:
             continue
         # calculate closest tide station
@@ -60,8 +62,8 @@ def get_coastal_locations() -> dict[str, LocationData]:
         tide_stations = [station.station_id for station in closest_tide_stations]
 
         # set country to United States until global buoys supported
-        locations_dict[buoyStation.station_id] = {
-            "id": buoyStation.station_id,
+        locations_dict[name] = {
+            "id": id,
             "name": location.get("name", buoy_name or "Unknown"),
             "buoy_longitude": float(buoyStation.location.longitude),
             "buoy_latitude": float(buoyStation.location.latitude),

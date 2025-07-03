@@ -15,13 +15,13 @@ export const ForecastPage: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    if (!locationId) return;
+    if (!locationId || !stations || !stations[locationId]) return;
 
     setLoading(true);
     setForecastData(null);
 
     // Fetch forecast data and location name when locationId changes
-    getForecast(locationId)
+    getForecast(locationId, stations)
       .then((f) => setForecastData(f))
       .finally(() => setLoading(false));
   }, [stations, locationId]);

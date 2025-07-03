@@ -74,9 +74,11 @@ export async function getLocations() {
 
 // Retrieve forecast data from blob storage
 export async function getForecast(
-  id: string
+  id: string,
+  stations: { [key: string]: any } = {}
 ): Promise<ForecastData | { error: string }> {
-  const response = await fetch(`${storageBaseUrl}/forecast/${id}`);
+  let blob_storage_id = stations[id]
+  const response = await fetch(`${storageBaseUrl}/forecast/${blob_storage_id['id']}`);
   if (!response.ok) {
     return { error: "Failed to fetch forecast data" };
   }
