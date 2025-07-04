@@ -45,35 +45,37 @@ def get_coastal_locations() -> dict[str, LocationData]:
             buoyStation.location.latitude, buoyStation.location.longitude
         ):
             continue
-        known_surf_locations[surf_location]["closest_station"] = buoyStation
+        for entry in known_surf_locations[surf_location]:
+            entry["closest_station"] = buoyStation
 
     for location in known_surf_locations.values():
-        buoyStation = location.get("closest_station")
-        id = location.get("id" or "Unknown")
-        name = location.get("name" or "Unknown")
-        if not buoyStation:
-            continue
-        # calculate closest tide station
-        closest_tide_stations = current_tide_stations.find_closest_stations(
-            buoyStation.location, 2
-        )
-        buoy_name = get_buoy_display_name(buoyStation.location.name)
+        for entry in location:
+            buoyStation = entry.get("closest_station")
+            id = entry.get("id" or "Unknown")
+            name = entry.get("name" or "Unknown")
+            if not buoyStation:
+                continue
+            # calculate closest tide station
+            closest_tide_stations = current_tide_stations.find_closest_stations(
+                buoyStation.location, 2
+            )
+            buoy_name = get_buoy_display_name(buoyStation.location.name)
 
-        tide_stations = [station.station_id for station in closest_tide_stations]
+            tide_stations = [station.station_id for station in closest_tide_stations]
 
         # set country to United States until global buoys supported
-        locations_dict[name] = {
-            "id": id,
-            "name": location.get("name", buoy_name or "Unknown"),
-            "buoy_longitude": float(buoyStation.location.longitude),
-            "buoy_latitude": float(buoyStation.location.latitude),
-            "country": "United States",
-            "state": location.get("state", "Unknown"),
-            "tide_stations": tide_stations or None,
-            "beach_latitude": location.get("beach_latitude" or "Unknown"),
-            "beach_longitude": location.get("beach_longitude" or "Unknown"),
-            "jetty_obstructions": location.get("jetty_obstructions" or "Unknown"),
-        }
+            locations_dict[name] = {
+                "id": id,
+                "name": entry.get("name", buoy_name or "Unknown"),
+                "buoy_longitude": float(buoyStation.location.longitude),
+                "buoy_latitude": float(buoyStation.location.latitude),
+                "country": "United States",
+                "state": entry.get("state", "Unknown"),
+                "tide_stations": tide_stations or None,
+                "beach_latitude": location.get("beach_latitude" or "Unknown"),
+                "beach_longitude": location.get("beach_longitude" or "Unknown"),
+                "jetty_obstructions": location.get("jetty_obstructions" or "Unknown"),
+            }
 
     return locations_dict
 
@@ -89,15 +91,16 @@ def get_closest_buoy_data_available(
     # Check if the key exists and calculate the difference
     location = known_surf_locations.get(lat_lon_key)
     if location:
-        current_loc_diff = abs(station.location.latitude - rounded_lat) + abs(
-            station.location.longitude - rounded_lon
-        )
-        closest_distance = location.get("closest_distance")
+        for entry in location:
+            current_loc_diff = abs(station.location.latitude - rounded_lat) + abs(
+                station.location.longitude - rounded_lon
+            )
+            closest_distance = entry.get("closest_distance")
 
-        # Update and return if the current location is closer
-        if closest_distance is None or closest_distance < current_loc_diff:
-            location["closest_distance"] = current_loc_diff
-            return (True, lat_lon_key)
+            # Update and return if the current location is closer
+            if closest_distance is None or closest_distance < current_loc_diff:
+                entry["closest_distance"] = current_loc_diff
+                return (True, lat_lon_key)
 
     # If the location is not found or no update is needed
     return (False, None)
