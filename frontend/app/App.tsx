@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router";
-import { BuoyStation, getLocations } from "./api";
+import { BeachLocation, getLocations } from "./api";
 import { ForecastPage } from "./ForecastPage";
 import { HomePage } from "./Home";
 import { StationsContext } from "./Stations";
 import { ImperialConversions, MetricConversions, UnitsContext } from "./Units";
 
 export function App() {
-  const [stations, setStations] = useState<Record<string, BuoyStation>>({});
+  const [stations, setStations] = useState<Record<string, BeachLocation>>({});
   const [unitSystem, setUnitSystem] = useState<"metric" | "imperial">(
     "imperial"
   );

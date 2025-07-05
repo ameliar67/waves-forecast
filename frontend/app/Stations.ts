@@ -1,6 +1,6 @@
 import { createContext, useContext } from "react";
-import { BuoyStation } from "./api";
+import { BeachLocation } from "./api";
 
-export const StationsContext = createContext<Record<string, BuoyStation>>({});
+export const StationsContext = createContext<Record<string, BeachLocation>>({});
 
 export const useStations = () => useContext(StationsContext);

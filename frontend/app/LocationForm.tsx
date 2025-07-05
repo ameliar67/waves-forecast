@@ -6,14 +6,16 @@ import React, {
   useState,
 } from "react";
 import { useNavigate } from "react-router";
-import { BuoyStation } from "./api";
+import { BeachLocation } from "./api";
 import { useStations } from "./Stations";
 
 interface LocationFormProps {
   activeStationId?: string;
 }
 
-export const LocationForm: React.FC<LocationFormProps> = ({ activeStationId }) => {
+export const LocationForm: React.FC<LocationFormProps> = ({
+  activeStationId,
+}) => {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -31,7 +33,7 @@ export const LocationForm: React.FC<LocationFormProps> = ({ activeStationId }) =
         station.state.toLowerCase().includes(lowercasedQuery)
     );
 
-    const groups: Record<string, BuoyStation[]> = {};
+    const groups: Record<string, BeachLocation[]> = {};
     filteredStations.forEach((station) => {
       if (!groups[station.state]) {
         groups[station.state] = [];

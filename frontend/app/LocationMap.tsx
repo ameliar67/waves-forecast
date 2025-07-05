@@ -45,14 +45,19 @@ export const LocationMap: React.FC<MapComponentProps> = ({ className }) => {
           });
         }}
       >
-        {stations.map((buoyStation) => (
+        {stations.map((beachLocation) => (
           <Marker
-            key={buoyStation.id}
-            position={[buoyStation.buoy_latitude, buoyStation.buoy_longitude]}
+            key={beachLocation.id}
+            position={[
+              beachLocation.beach_latitude,
+              beachLocation.beach_longitude,
+            ]}
           >
             <Popup closeButton={false}>
               <div>
-                <a href={`/forecast/${buoyStation.id}`}>{buoyStation.name}</a>
+                <a href={`/forecast/${beachLocation.id}`}>
+                  {beachLocation.name}
+                </a>
               </div>
             </Popup>
           </Marker>

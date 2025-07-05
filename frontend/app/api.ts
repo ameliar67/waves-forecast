@@ -1,10 +1,12 @@
-export interface BuoyStation {
+export interface BeachLocation {
   id: string;
   buoy_latitude: number;
   buoy_longitude: number;
   name: string;
   country: string;
   state: string;
+  beach_latitude: number;
+  beach_longitude: number;
 }
 
 export interface TidalForecast {
@@ -24,7 +26,7 @@ export interface HourlyForecast {
   wind_direction: number;
   date_time_stamp: string;
   surf_rating: string;
-  swell_period: number
+  swell_period: number;
 }
 
 export interface ForecastData {
@@ -77,8 +79,10 @@ export async function getForecast(
   id: string,
   stations: { [key: string]: any } = {}
 ): Promise<ForecastData | { error: string }> {
-  let blob_storage_id = stations[id]
-  const response = await fetch(`${storageBaseUrl}/forecast/${blob_storage_id['id']}`);
+  let blob_storage_id = stations[id];
+  const response = await fetch(
+    `${storageBaseUrl}/forecast/${blob_storage_id["id"]}`
+  );
   if (!response.ok) {
     return { error: "Failed to fetch forecast data" };
   }
