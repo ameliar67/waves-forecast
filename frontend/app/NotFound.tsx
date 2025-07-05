@@ -19,7 +19,7 @@ export const ForecastUnavailable: React.FC<NoForecastProps> = ({
       <div className="forecast-header">
         <a href="/" className="wave-and-weather-title">
           <img id="surf-logo-forecast-page" src={logo} alt="Surf Logo" />
-          Surf Forecast
+          Surf Sage
         </a>
         <LocationForm activeStationId={locationId} />
       </div>
