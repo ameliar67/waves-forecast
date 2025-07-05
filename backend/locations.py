@@ -45,14 +45,14 @@ def get_coastal_locations() -> dict[str, LocationData]:
             buoyStation.location.latitude, buoyStation.location.longitude
         ):
             continue
-        for entry in known_surf_locations[surf_location]:
-            entry["closest_station"] = buoyStation
+        for beach_location in known_surf_locations[surf_location]:
+            beach_location["closest_station"] = buoyStation
 
-    for location in known_surf_locations.values():
-        for entry in location:
-            buoyStation = entry.get("closest_station")
-            id = entry.get("id" or "Unknown")
-            name = entry.get("name" or "Unknown")
+    for buoy_location in known_surf_locations.values():
+        for beach_location in buoy_location:
+            buoyStation = beach_location.get("closest_station")
+            id = beach_location.get("id" or "Unknown")
+            name = beach_location.get("name" or "Unknown")
             if not buoyStation:
                 continue
             # calculate closest tide station
@@ -63,18 +63,18 @@ def get_coastal_locations() -> dict[str, LocationData]:
 
             tide_stations = [station.station_id for station in closest_tide_stations]
 
-        # set country to United States until global buoys supported
+            # set country to United States until global buoys supported
             locations_dict[name] = {
                 "id": id,
-                "name": entry.get("name", buoy_name or "Unknown"),
+                "name": beach_location.get("name", buoy_name or "Unknown"),
                 "buoy_longitude": float(buoyStation.location.longitude),
                 "buoy_latitude": float(buoyStation.location.latitude),
                 "country": "United States",
-                "state": entry.get("state", "Unknown"),
+                "state": beach_location.get("state", "Unknown"),
                 "tide_stations": tide_stations or None,
-                "beach_latitude": location.get("beach_latitude" or "Unknown"),
-                "beach_longitude": location.get("beach_longitude" or "Unknown"),
-                "jetty_obstructions": location.get("jetty_obstructions" or "Unknown"),
+                "beach_latitude": beach_location.get("beach_latitude" or "Unknown"),
+                "beach_longitude": beach_location.get("beach_longitude" or "Unknown"),
+                "jetty_obstructions": beach_location.get("jetty_obstructions" or "Unknown"),
             }
 
     return locations_dict
