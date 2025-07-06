@@ -11,7 +11,7 @@
     "46.9,-87.7": [{"id": "46.825589,-87.710700", "name": "Big Bay", "state": "Michigan", "beach_latitude": 46.825589, "beach_longitude": -87.710700, "jetty_obstructions": []}],
     "26.4,-81.9": [{"id": "26.364243,-81.863257", "name": "Big Hickory Pass", "state": "Florida", "beach_latitude": 26.364243, "beach_longitude": -81.863257, "jetty_obstructions": []}],
     "38.3,-123.1": [{"id": "38.309913,-123.050796", "name": "Bodega Bay", "state": "California", "beach_latitude": 38.309913, "beach_longitude": -123.050796, "jetty_obstructions": []}],
-    "33.7,-118.3": [{"id": "33.708348,-118.284228", "name": "Cabrillo Beach", "state": "California", "beach_latitude": 33.708348, "beach_longitude": -118.284228, "jetty_obstructions": [135, 235]}],
+    "33.7,-118.3": [{"id": "33.708348,-118.284228", "name": "Cabrillo Beach", "state": "California", "beach_latitude": 33.708348, "beach_longitude": -118.284228, "jetty_obstructions": [135, 235]}, {"id": "33.717701, -118.322562", "name": "White Point", "state": "California", "beach_latitude": 33.717701, "beach_longitude": -118.322562, "jetty_obstructions": []}],
     "37.0,-121.9": [{"id": "36.971140,-121.950211", "name": "Capitola / La Silva", "state": "California", "beach_latitude": 36.971140, "beach_longitude": -121.950211, "jetty_obstructions": []}],
     "28.0,-82.8": [{"id": "27.979642,-82.831624", "name": "Clearwater Beach", "state": "Florida", "beach_latitude": 27.979642, "beach_longitude": -82.831624, "jetty_obstructions": []}],
     "42.0,-80.6": [{"id": "41.965526,-80.564275", "name": "Conneaut", "state": "Ohio", "beach_latitude": 41.965526, "beach_longitude": -80.564275, "jetty_obstructions": []}],
