@@ -1,6 +1,6 @@
 {
     "44.6,-87.4": [{"id": "44.609215,-87.427430", "name": "Algoma", "state": "Wisconsin", "beach_latitude": 44.609215, "beach_longitude": -87.427430, "jetty_obstructions": []}], 
-    "27.8,-97.0": [{"id": "27.846859,-97.041237", "name": "Aransas Pass", "state": "Texas", "beach_latitude": 27.846859, "beach_longitude": -97.041237, "jetty_obstructions": []}],
+    "27.8,-97.0": [{"id": "27.846859,-97.041237", "name": "St Joes Island", "state": "Texas", "beach_latitude": 27.846859, "beach_longitude": -97.041237, "jetty_obstructions": [185]}],
     "39.4,-74.4": [{"id": "39.352590,-74.428619", "name": "Atlantic City", "state": "New Jersey", "beach_latitude": 39.352590, "beach_longitude": -120.700244, "jetty_obstructions": []}],
     "35.2,-120.7": [{"id": "35.171216, -120.700244", "name": "Shell Beach", "state": "New Jersey", "beach_latitude": 35.171216, "beach_longitude": -120.733977, "jetty_obstructions": []}, {"id": "35.177941,-120.733977", "name": "Avila Beach", "state": "New Jersey", "beach_latitude": 35.177941, "beach_longitude": -120.733977, "jetty_obstructions": []}],
     "41.5,-82.1": [{"id": "41.499515,-82.077570", "name": "Avon Lake", "state": "Ohio", "beach_latitude": 41.499515, "beach_longitude": -82.077570, "jetty_obstructions": []}],
@@ -31,7 +31,7 @@
     "26.6,-80.0": [{"id": "26.622158,-80.035814", "name": "Hilton Hotel Backyard", "state": "Florida", "beach_latitude": 26.622158, "beach_longitude": -80.035814, "jetty_obstructions": []}],
     "42.8,-86.2": [{"id": "42.771211,-86.211135", "name": "Holland", "state": "Michigan", "beach_latitude": 42.771211, "beach_longitude": -86.211135, "jetty_obstructions": []}],
     "26.0,-80.0": [{"id": "26.049974,-80.112049", "name": "Hollywood Beach", "state": "Florida", "beach_latitude": 26.049974, "beach_longitude": -80.112049, "jetty_obstructions": []}],
-    "27.8,-97.1": [{"id": "27.826973,-97.052765", "name": "Horace Caldwell Pier", "state": "Texas", "beach_latitude": 27.826973, "beach_longitude": -97.052765, "jetty_obstructions": [45]}],
+    "27.8,-97.1": [{"id": "27.826973,-97.052765", "name": "Horace Caldwell Pier", "state": "Texas", "beach_latitude": 27.826973, "beach_longitude": -97.052765, "jetty_obstructions": [105]}],
     "40.8,-124.2": [{"id": "40.767891,-124.232732", "name": "Humboldt Harbor", "state": "California", "beach_latitude": 40.767891, "beach_longitude": -124.232732, "jetty_obstructions": [225]}],
     "46.3,-124.1": [{"id": "46.286787,-124.078968", "name": "Ilwaco / Clatsop Spit", "state": "Washington", "beach_latitude": 46.286787, "beach_longitude": -124.078968, "jetty_obstructions": []}],
     "26.1,-97.1": [{"id": "26.069919,-97.154540", "name": "Isla Blanca State Park", "state": "Texas", "beach_latitude": 26.069919, "beach_longitude": -97.154540, "jetty_obstructions": []}],
