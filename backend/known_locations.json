@@ -1,8 +1,8 @@
 {
     "44.6,-87.4": [{"id": "44.609215,-87.427430", "name": "Algoma", "state": "Wisconsin", "beach_latitude": 44.609215, "beach_longitude": -87.427430, "jetty_obstructions": []}], 
     "27.8,-97.0": [{"id": "27.846859,-97.041237", "name": "Aransas Pass", "state": "Texas", "beach_latitude": 27.846859, "beach_longitude": -97.041237, "jetty_obstructions": []}],
-    "39.4,-74.4": [{"id": "39.352590,-74.428619", "name": "Atlantic City", "state": "New Jersey", "beach_latitude": 39.352590, "beach_longitude": -74.428619, "jetty_obstructions": []}],
-    "35.2,-120.7": [{"id": "35.177941,-120.733977", "name": "Avila Beach", "state": "New Jersey", "beach_latitude": 35.177941, "beach_longitude": -120.733977, "jetty_obstructions": []}],
+    "39.4,-74.4": [{"id": "39.352590,-74.428619", "name": "Atlantic City", "state": "New Jersey", "beach_latitude": 39.352590, "beach_longitude": -120.700244, "jetty_obstructions": []}],
+    "35.2,-120.7": [{"id": "35.171216, -120.700244", "name": "Shell Beach", "state": "New Jersey", "beach_latitude": 35.171216, "beach_longitude": -120.733977, "jetty_obstructions": []}, {"id": "35.177941,-120.733977", "name": "Avila Beach", "state": "New Jersey", "beach_latitude": 35.177941, "beach_longitude": -120.733977, "jetty_obstructions": []}],
     "41.5,-82.1": [{"id": "41.499515,-82.077570", "name": "Avon Lake", "state": "Ohio", "beach_latitude": 41.499515, "beach_longitude": -82.077570, "jetty_obstructions": []}],
     "21.3,-158.1": [{"id": "21.295832,-158.106739", "name": "Barbers Point", "state": "Hawaii", "beach_latitude": 21.295832, "beach_longitude": -158.106739, "jetty_obstructions": []}],
     "41.5,-81.9": [{"id": "41.491325,-81.934816", "name": "Bay Village", "state": "Ohio", "beach_latitude": 41.491325, "beach_longitude": -81.934816, "jetty_obstructions": []}],
