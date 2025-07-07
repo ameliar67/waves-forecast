@@ -55,7 +55,7 @@ export const LocationMap: React.FC<MapComponentProps> = ({ className }) => {
           >
             <Popup closeButton={false}>
               <div>
-                <a href={`/forecast/${beachLocation.id}`}>
+                <a href={`/forecast/${encodeURIComponent(beachLocation.name)}`}>
                   {beachLocation.name}
                 </a>
               </div>
