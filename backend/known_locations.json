@@ -620,16 +620,6 @@
             "jetty_obstructions": []
         }
     ],
-    "47.9,-124.2": [
-        {
-            "id": "47.905682,-124.636998",
-            "name": "La Push",
-            "state": "Washington",
-            "beach_latitude": 47.905682,
-            "beach_longitude": -124.636998,
-            "jetty_obstructions": []
-        }
-    ],
     "43.0,-82.4": [
         {
             "id": "43.205400,-79.265084",
@@ -980,13 +970,21 @@
             "jetty_obstructions": []
         }
     ],
-    "47.7,-124.4": [
+    "48.5,-124.7": [
         {
             "id": "47.710866,-124.416445",
-            "name": "Ruby Beach / Destruction Island",
+            "name": "Ruby Beach",
             "state": "Washington",
             "beach_latitude": 47.710866,
             "beach_longitude": -124.416445,
+            "jetty_obstructions": []
+        },
+        {
+            "id": "47.905682,-124.636998",
+            "name": "La Push",
+            "state": "Washington",
+            "beach_latitude": 47.905682,
+            "beach_longitude": -124.636998,
             "jetty_obstructions": []
         }
     ],
