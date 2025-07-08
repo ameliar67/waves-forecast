@@ -23,11 +23,43 @@
     ],
     "39.4,-74.4": [
         {
-            "id": "39.352590,-74.428619",
-            "name": "Atlantic City",
+            "id": "39.363360, -74.408385",
+            "name": "Crystals",
             "state": "New Jersey",
-            "beach_latitude": 39.352590,
-            "beach_longitude": -74.428619,
+            "beach_latitude": 39.363360,
+            "beach_longitude": -74.408385,
+            "jetty_obstructions": []
+        },
+        {
+            "id": "39.358854, -74.417296",
+            "name": "States Avenue",
+            "state": "New Jersey",
+            "beach_latitude": 39.358854,
+            "beach_longitude": -74.417296,
+            "jetty_obstructions": []
+        },
+        {
+            "id": "39.356771, -74.422876",
+            "name": "South Carolina Avenue",
+            "state": "New Jersey",
+            "beach_latitude": 39.356771,
+            "beach_longitude": -74.422876,
+            "jetty_obstructions": []
+        },
+        {
+            "id": "39.355869, -74.424871",
+            "name": "St. James",
+            "state": "New Jersey",
+            "beach_latitude": 39.355869,
+            "beach_longitude": -74.424871,
+            "jetty_obstructions": []
+        },
+        {
+            "id": "39.353105, -74.436055",
+            "name": "Chicken Bone Beach",
+            "state": "New Jersey",
+            "beach_latitude": 39.353105,
+            "beach_longitude": -74.436055,
             "jetty_obstructions": []
         }
     ],
@@ -776,6 +808,14 @@
             "beach_latitude": 38.332247,
             "beach_longitude": -75.081495,
             "jetty_obstructions": []
+        },
+        {
+            "id": "38.364484, -75.069397",
+            "name": "Midtown",
+            "state": "Maryland",
+            "beach_latitude": 38.364484,
+            "beach_longitude": -75.069397,
+            "jetty_obstructions": []
         }
     ],
     "33.9,-78.4": [
@@ -957,6 +997,102 @@
             "state": "Hawaii",
             "beach_latitude": 21.298808,
             "beach_longitude": -157.875462,
+            "jetty_obstructions": []
+        },
+        {
+            "id": "21.289130, -157.858697",
+            "name": "Kewalos",
+            "state": "Hawaii",
+            "beach_latitude": 21.289130,
+            "beach_longitude": -157.858697,
+            "jetty_obstructions": []
+        },
+        {
+            "id": "21.286830, -157.849387",
+            "name": "Ala Moana Beach Park",
+            "state": "Hawaii",
+            "beach_latitude": 21.286830,
+            "beach_longitude": -157.849387,
+            "jetty_obstructions": []
+        },
+        {
+            "id": "21.281244, -157.847342",
+            "name": "Ala Moana Bowls",
+            "state": "Hawaii",
+            "beach_latitude": 21.281244,
+            "beach_longitude": -157.847342,
+            "jetty_obstructions": []
+        },
+        {
+            "id": "21.280389, -157.841559",
+            "name": "Rockpiles",
+            "state": "Hawaii",
+            "beach_latitude": 21.280389,
+            "beach_longitude": -157.841559,
+            "jetty_obstructions": []
+        },
+        {
+            "id": "21.277482, -157.841718",
+            "name": "Kaisers",
+            "state": "Hawaii",
+            "beach_latitude": 21.277482,
+            "beach_longitude": -157.841718,
+            "jetty_obstructions": []
+        },
+        {
+            "id": "21.275677, -157.839946",
+            "name": "Fours",
+            "state": "Hawaii",
+            "beach_latitude": 21.275677,
+            "beach_longitude": -157.839946,
+            "jetty_obstructions": []
+        },
+        {
+            "id": "21.277943, -157.835288",
+            "name": "Threes",
+            "state": "Hawaii",
+            "beach_latitude": 21.277943,
+            "beach_longitude": -157.835288,
+            "jetty_obstructions": []
+        },
+        {
+            "id": "21.274256, -157.831290",
+            "name": "Populars",
+            "state": "Hawaii",
+            "beach_latitude": 21.274256,
+            "beach_longitude": -157.831290,
+            "jetty_obstructions": []
+        },
+        {
+            "id": "21.274914, -157.826130",
+            "name": "Waikiki Beach",
+            "state": "Hawaii",
+            "beach_latitude": 21.274914,
+            "beach_longitude": -157.826130,
+            "jetty_obstructions": []
+        },
+        {
+            "id": "21.270996, -157.823666",
+            "name": "The Wall",
+            "state": "Hawaii",
+            "beach_latitude": 21.270996,
+            "beach_longitude": -157.823666,
+            "jetty_obstructions": [45]
+        },
+        {
+            "id": "21.269524, -157.823041",
+            "name": "Publics",
+            "state": "Hawaii",
+            "beach_latitude": 21.269524,
+            "beach_longitude": -157.823041,
+            "jetty_obstructions": []
+        },
+        {
+            "id": "21.267022, -157.823027",
+            "name": "Waikiki Kapi'olani Park",
+            "state": "Hawaii",
+            "beach_latitude": 21.267022,
+            "beach_longitude": -157.823027,
             "jetty_obstructions": []
         }
     ],
@@ -1322,11 +1458,35 @@
     ],
     "36.9,-75.7": [
         {
-            "id": "36.856058,-75.970573",
-            "name": "Virgina Beach",
+            "id": "36.843334, -75.971288",
+            "name": "South End, Virginia Beach",
             "state": "Virginia",
-            "beach_latitude": 36.856058,
-            "beach_longitude": -75.970573,
+            "beach_latitude": 36.843334,
+            "beach_longitude": -75.971288,
+            "jetty_obstructions": []
+        },
+        {
+            "id": "36.830613, -75.967801",
+            "name": "First Street Jetty",
+            "state": "Virginia",
+            "beach_latitude": 36.830613,
+            "beach_longitude": -75.967801,
+            "jetty_obstructions": [42]
+        },
+        {
+            "id": "36.828403, -75.968253",
+            "name": "Croatan Jetty",
+            "state": "Virginia",
+            "beach_latitude": 36.828403,
+            "beach_longitude": -75.968253,
+            "jetty_obstructions": [150]
+        },
+        {
+            "id": "36.817018, -75.965751",
+            "name": "Camp Pendleton",
+            "state": "Virginia",
+            "beach_latitude": 36.817018,
+            "beach_longitude": -75.965751,
             "jetty_obstructions": []
         }
     ],
@@ -1423,6 +1583,38 @@
             "state": "North Carolina",
             "beach_latitude": 34.205976,
             "beach_longitude": -77.792864,
+            "jetty_obstructions": []
+        },
+        {
+            "id": "34.201966, -77.797543",
+            "name": "Wrightsville Beach",
+            "state": "North Carolina",
+            "beach_latitude": 34.201966,
+            "beach_longitude": -77.797543,
+            "jetty_obstructions": []
+        },
+        {
+            "id": "34.214062, -77.787960",
+            "name": "Johnnie Mercers Pier",
+            "state": "North Carolina",
+            "beach_latitude": 34.214062,
+            "beach_longitude": -77.787960,
+            "jetty_obstructions": []
+        },
+        {
+            "id": "34.192885, -77.804347",
+            "name": "Crystal Pier",
+            "state": "North Carolina",
+            "beach_latitude": 34.192885,
+            "beach_longitude": -77.804347,
+            "jetty_obstructions": []
+        },
+        {
+            "id": "34.190384, -77.805817",
+            "name": "South End, Wrightsville Beach",
+            "state": "North Carolina",
+            "beach_latitude": 34.190384,
+            "beach_longitude": -77.805817,
             "jetty_obstructions": []
         }
     ],
