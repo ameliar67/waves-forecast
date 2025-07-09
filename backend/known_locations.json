@@ -198,13 +198,159 @@
             "jetty_obstructions": []
         }
     ],
-    "37.0,-121.9": [
+    "36.8,-121.8": [
+        {
+            "id": "36.936766, -121.867894",
+            "name": "La Selva Beach",
+            "state": "California",
+            "beach_latitude": 36.936766,
+            "beach_longitude": -121.867894,
+            "jetty_obstructions": []
+        },
+        {
+            "id": "36.919112, -121.854734",
+            "name": "Manresa",
+            "state": "California",
+            "beach_latitude": 36.919112,
+            "beach_longitude": -121.854734,
+            "jetty_obstructions": []
+        },
+        {
+            "id": "36.808386, -121.790297",
+            "name": "Moss Landing",
+            "state": "California",
+            "beach_latitude": 36.808386,
+            "beach_longitude": -121.790297,
+            "jetty_obstructions": [300]
+        }
+    ],
+    "36.8,-122.0": [
         {
             "id": "36.971140,-121.950211",
-            "name": "Capitola / La Silva",
+            "name": "Capitola",
             "state": "California",
             "beach_latitude": 36.971140,
             "beach_longitude": -121.950211,
+            "jetty_obstructions": []
+        },
+        {
+            "id": "36.964430, -121.960807",
+            "name": "Privates",
+            "state": "California",
+            "beach_latitude": 36.964430,
+            "beach_longitude": -121.960807,
+            "jetty_obstructions": []
+        },
+        {
+            "id": "36.959633, -121.964935",
+            "name": "The Hook",
+            "state": "California",
+            "beach_latitude": 36.959633,
+            "beach_longitude": -121.964935,
+            "jetty_obstructions": []
+        },
+        {
+            "id": "36.958544, -121.967246",
+            "name": "Jacks",
+            "state": "California",
+            "beach_latitude": 36.958544,
+            "beach_longitude": -121.967246,
+            "jetty_obstructions": []
+        },
+        {
+            "id": "36.954477, -121.972594",
+            "name": "Pleasure Point",
+            "state": "California",
+            "beach_latitude": 36.954477,
+            "beach_longitude": -121.972594,
+            "jetty_obstructions": []
+        },
+        {
+            "id": "36.954192, -121.975028",
+            "name": "Rockview",
+            "state": "California",
+            "beach_latitude": 36.954192,
+            "beach_longitude": -121.975028,
+            "jetty_obstructions": []
+        },
+        {
+            "id": "36.953829, -121.976242",
+            "name": "Wind and Sea",
+            "state": "California",
+            "beach_latitude": 36.953829,
+            "beach_longitude": -121.976242,
+            "jetty_obstructions": []
+        },
+        {
+            "id": "36.957491, -121.981785",
+            "name": "26th Avenue",
+            "state": "California",
+            "beach_latitude": 36.957491,
+            "beach_longitude": -121.981785,
+            "jetty_obstructions": []
+        },
+        {
+            "id": "36.959840, -121.989691",
+            "name": "Sunny Cove",
+            "state": "California",
+            "beach_latitude": 36.959840,
+            "beach_longitude": -121.989691,
+            "jetty_obstructions": []
+        },
+        {
+            "id": "36.959778, -121.994631",
+            "name": "Blacks Beach",
+            "state": "California",
+            "beach_latitude": 36.959778,
+            "beach_longitude": -121.994631,
+            "jetty_obstructions": []
+        },
+        {
+            "id": "36.959595, -122.025052",
+            "name": "Cowells",
+            "state": "California",
+            "beach_latitude": 36.959595,
+            "beach_longitude": -122.025052,
+            "jetty_obstructions": []
+        },
+        {
+            "id": "36.951936, -122.025761",
+            "name": "Steamer Lane",
+            "state": "California",
+            "beach_latitude": 36.951936,
+            "beach_longitude": -122.025761,
+            "jetty_obstructions": []
+        },
+        {
+            "id": "36.951486, -122.042073",
+            "name": "Mitchells Cove",
+            "state": "California",
+            "beach_latitude": 36.951486,
+            "beach_longitude": -122.042073,
+            "jetty_obstructions": []
+        },
+        {
+            "id": "36.949612, -122.047478",
+            "name": "Swift Street",
+            "state": "California",
+            "beach_latitude": 36.949612,
+            "beach_longitude": -122.047478,
+            "jetty_obstructions": []
+        },
+        {
+            "id": "36.948917, -122.061266",
+            "name": "Natural Bridges",
+            "state": "California",
+            "beach_latitude": 36.948917,
+            "beach_longitude": -122.061266,
+            "jetty_obstructions": []
+        },
+        {
+            "id": "36.695688, -121.811183",
+            "name": "Marina State Beach",
+            "state": "California",
+            "beach_latitude": 36.695688,
+            "beach_longitude": -121.811183,
             "jetty_obstructions": []
         }
     ],
@@ -476,7 +622,7 @@
             "jetty_obstructions": []
         }
     ],
-    "26.0,-80.0": [
+    "26.0,-81.0": [
         {
             "id": "26.049974,-80.112049",
             "name": "Hollywood Beach",
@@ -510,7 +656,7 @@
             ]
         }
     ],
-    "46.3,-124.1": [
+    "46.2,-124.1": [
         {
             "id": "46.286787,-124.078968",
             "name": "Ilwaco / Clatsop Spit",
@@ -520,7 +666,7 @@
             "jetty_obstructions": []
         }
     ],
-    "26.1,-97.1": [
+    "27.0,-96.7": [
         {
             "id": "26.069919,-97.154540",
             "name": "Isla Blanca State Park",
@@ -1304,7 +1450,7 @@
             "jetty_obstructions": []
         }
     ],
-    "29.8,-81.3": [
+    "30.0,-81.1": [
         {
             "id": "29.853982,-81.264199",
             "name": "St Augustine Pier",
