@@ -1086,7 +1086,7 @@
             ]
         }
     ],
-    "42.7, -124.5": [
+    "42.8, -124.8": [
         {
             "id": "42.740348,-124.497755",
             "name": "Port Orford",
@@ -1123,6 +1123,30 @@
             "state": "Washington",
             "beach_latitude": 47.710866,
             "beach_longitude": -124.416445,
+            "jetty_obstructions": []
+        },
+        {
+            "id": "48.320284, -124.669786",
+            "name": "Cape Flattery",
+            "state": "Washington",
+            "beach_latitude": 48.320284,
+            "beach_longitude": -124.669786,
+            "jetty_obstructions": []
+        },
+        {
+            "id": "48.262123, -124.684167",
+            "name": "Shi Shi Beach",
+            "state": "Washington",
+            "beach_latitude": 48.262123,
+            "beach_longitude": -124.684167,
+            "jetty_obstructions": []
+        },
+        {
+            "id": "48.337781, -124.665519",
+            "name": "Hobuck Beach",
+            "state": "Washington",
+            "beach_latitude": 48.337781,
+            "beach_longitude": -124.665519,
             "jetty_obstructions": []
         },
         {
@@ -1432,6 +1456,80 @@
             ]
         }
     ],
+    "33.6,-118.2": [
+        {
+            "id": "33.695266, -118.049198",
+            "name": "Boca Chica State Beach",
+            "state": "California",
+            "beach_latitude": 33.695266,
+            "beach_longitude": -118.049198,
+            "jetty_obstructions": []
+        },
+        {
+            "id": "33.676272, -118.029169",
+            "name": "HB Cliffs",
+            "state": "California",
+            "beach_latitude": 33.676272,
+            "beach_longitude": -118.029169,
+            "jetty_obstructions": []
+        },
+        {
+            "id": "33.667090, -118.017902",
+            "name": "North HB Streets",
+            "state": "California",
+            "beach_latitude": 33.667090,
+            "beach_longitude": -118.017902,
+            "jetty_obstructions": []
+        },
+        {
+            "id": "33.655307, -118.003461",
+            "name": "Huntington Beach Pier",
+            "state": "California",
+            "beach_latitude": 33.655307,
+            "beach_longitude": -118.003461,
+            "jetty_obstructions": []
+        },
+        {
+            "id": "33.651835, -117.997313",
+            "name": "Huntington Street",
+            "state": "California",
+            "beach_latitude": 33.651835,
+            "beach_longitude": -117.997313,
+            "jetty_obstructions": []
+        },
+        {
+            "id": "33.637511, -117.974436",
+            "name": "Huntington State Beach",
+            "state": "California",
+            "beach_latitude": 33.637511,
+            "beach_longitude": -117.974436,
+            "jetty_obstructions": []
+        },
+        {
+            "id": "33.627491, -117.958704",
+            "name": "River Jetties",
+            "state": "California",
+            "beach_latitude": 33.627491,
+            "beach_longitude": -117.958704,
+            "jetty_obstructions": []
+        },
+        {
+            "id": "33.622041, -117.944975",
+            "name": "Newport Upper Jetties",
+            "state": "California",
+            "beach_latitude": 33.622041,
+            "beach_longitude": -117.944975,
+            "jetty_obstructions": [315]
+        },
+        {
+            "id": "33.615734, -117.936131",
+            "name": "Newport Lower Jetties",
+            "state": "California",
+            "beach_latitude": 33.615734,
+            "beach_longitude": -117.936131,
+            "jetty_obstructions": [45]
+        }
+    ],
     "33.7,-78.9": [
         {
             "id": "33.680565,-78.888490",
@@ -1546,7 +1644,7 @@
             "jetty_obstructions": []
         }
     ],
-    "41.1,-124.1": [
+    "40.9,-124.4": [
         {
             "id": "41.058154,-124.150478",
             "name": "Trinidad",
@@ -1561,6 +1659,14 @@
             "state": "California",
             "beach_latitude": 41.066760,
             "beach_longitude": -124.151529,
+            "jetty_obstructions": []
+        },
+        {
+            "id": "41.014467, -124.113895",
+            "name": "Little River State Beach",
+            "state": "California",
+            "beach_latitude": 41.014467,
+            "beach_longitude": -124.113895,
             "jetty_obstructions": []
         }
     ],
@@ -1634,6 +1740,56 @@
             "jetty_obstructions": []
         }
     ],
+    "33.4,-117.7": [
+        {
+            "id": "33.461336, -117.685357",
+            "name": "Doheny State Beach",
+            "state": "California",
+            "beach_latitude": 33.461336,
+            "beach_longitude": -117.685357,
+            "jetty_obstructions": [45]
+        },
+        {
+            "id": "33.440579, -117.646122",
+            "name": "Poche Beach",
+            "state": "California",
+            "beach_latitude": 33.440579,
+            "beach_longitude": -117.646122,
+            "jetty_obstructions": []
+        },
+        {
+            "id": "33.424916, -117.626860",
+            "name": "204s",
+            "state": "California",
+            "beach_latitude": 33.424916,
+            "beach_longitude": -117.626860,
+            "jetty_obstructions": []
+        },
+        {
+            "id": "33.420088, -117.621472",
+            "name": "San Clemente Pier Northside",
+            "state": "California",
+            "beach_latitude": 33.420088,
+            "beach_longitude": -117.621472,
+            "jetty_obstructions": []
+        },
+        {
+            "id": "33.416215, -117.618186",
+            "name": "T-Street",
+            "state": "California",
+            "beach_latitude": 33.416215,
+            "beach_longitude": -117.618186,
+            "jetty_obstructions": []
+        },
+        {
+            "id": "33.403752, -117.606183",
+            "name": "San Clemente State Beach",
+            "state": "California",
+            "beach_latitude": 33.403752,
+            "beach_longitude": -117.606183,
+            "jetty_obstructions": []
+        }
+    ],
     "41.7,-86.9": [
         {
             "id": "41.729564,-86.902540",
@@ -1641,6 +1797,56 @@
             "state": "Indiana",
             "beach_latitude": 41.729564,
             "beach_longitude": -86.902540,
+            "jetty_obstructions": []
+        }
+    ],
+    "33.3,-117.7": [
+        {
+            "id": "33.390880, -117.598600",
+            "name": "Cottons",
+            "state": "California",
+            "beach_latitude": 33.390880,
+            "beach_longitude": -117.598600,
+            "jetty_obstructions": []
+        },
+        {
+            "id": "33.384838, -117.594210",
+            "name": "Upper Trestles",
+            "state": "California",
+            "beach_latitude": 33.384838,
+            "beach_longitude": -117.594210,
+            "jetty_obstructions": []
+        },
+        {
+            "id": "33.381859, -117.587048",
+            "name": "Lower Trestles",
+            "state": "California",
+            "beach_latitude": 33.381859,
+            "beach_longitude": -117.587048,
+            "jetty_obstructions": []
+        },
+        {
+            "id": "33.381137, -117.581826",
+            "name": "Middles",
+            "state": "California",
+            "beach_latitude": 33.381137,
+            "beach_longitude": -117.581826,
+            "jetty_obstructions": []
+        },
+        {
+            "id": "33.380196, -117.578030",
+            "name": "Church",
+            "state": "California",
+            "beach_latitude": 33.380196,
+            "beach_longitude": -117.578030,
+            "jetty_obstructions": []
+        },
+        {
+            "id": "33.372630, -117.565711",
+            "name": "San Onofre State Beach",
+            "state": "California",
+            "beach_latitude": 33.372630,
+            "beach_longitude": -117.565711,
             "jetty_obstructions": []
         }
     ],
