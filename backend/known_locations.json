@@ -177,13 +177,13 @@
             "jetty_obstructions": []
         }
     ],
-    "33.7,-118.3": [
+    "33.6,-118.3": [
         {
-            "id": "33.708348,-118.284228",
+            "id": "33.704019, -118.286696",
             "name": "Cabrillo Beach",
             "state": "California",
-            "beach_latitude": 33.708348,
-            "beach_longitude": -118.284228,
+            "beach_latitude": 33.704019,
+            "beach_longitude": -118.286696,
             "jetty_obstructions": [
                 135,
                 235
@@ -216,11 +216,11 @@
             "jetty_obstructions": []
         },
         {
-            "id": "36.808386, -121.790297",
+            "id": "36.823423, -121.801581",
             "name": "Moss Landing",
             "state": "California",
-            "beach_latitude": 36.808386,
-            "beach_longitude": -121.790297,
+            "beach_latitude": 36.823423,
+            "beach_longitude": -121.801581,
             "jetty_obstructions": [300]
         }
     ],
@@ -2222,29 +2222,29 @@
             "jetty_obstructions": []
         }
     ],
-    "34.2,-77.8": [
+    "34.1,-77.7": [
         {
-            "id": "34.205976,-77.792864",
+            "id": "34.205376, -77.789106",
             "name": "Wrightsville Beach",
             "state": "North Carolina",
-            "beach_latitude": 34.205976,
-            "beach_longitude": -77.792864,
+            "beach_latitude": 34.205376,
+            "beach_longitude": -77.789106,
             "jetty_obstructions": []
         },
         {
-            "id": "34.201966, -77.797543",
-            "name": "Wrightsville Beach",
+            "id": "34.199813, -77.794066",
+            "name": "Blockade Runner",
             "state": "North Carolina",
-            "beach_latitude": 34.201966,
-            "beach_longitude": -77.797543,
+            "beach_latitude": 34.199813,
+            "beach_longitude": -77.794066,
             "jetty_obstructions": []
         },
         {
-            "id": "34.214062, -77.787960",
+            "id": "34.213300, -77.784559",
             "name": "Johnnie Mercers Pier",
             "state": "North Carolina",
-            "beach_latitude": 34.214062,
-            "beach_longitude": -77.787960,
+            "beach_latitude": 34.213300,
+            "beach_longitude": -77.784559,
             "jetty_obstructions": []
         },
         {
