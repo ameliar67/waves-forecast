@@ -1876,6 +1876,302 @@
             "jetty_obstructions": []
         }
     ],
+    "17.1,-157.8": [
+        {
+            "id": "19.694632, -156.044815",
+            "name": "Pine Trees",
+            "state": "Hawaii",
+            "beach_latitude": 19.694632,
+            "beach_longitude": -156.044815,
+            "jetty_obstructions": []
+        },
+        {
+            "id": "19.672208, -156.026352",
+            "name": "Honokohau Beach",
+            "state": "Hawaii",
+            "beach_latitude": 19.672208,
+            "beach_longitude": -156.026352,
+            "jetty_obstructions": []
+        },
+        {
+            "id": "19.657903, -156.032898",
+            "name": "Kaiwi Point",
+            "state": "Hawaii",
+            "beach_latitude": 19.657903,
+            "beach_longitude": -156.032898,
+            "jetty_obstructions": []
+        },
+        {
+            "id": "19.643571, -156.011442",
+            "name": "Old Kona Airport",
+            "state": "Hawaii",
+            "beach_latitude": 19.643571,
+            "beach_longitude": -156.011442,
+            "jetty_obstructions": []
+        },
+        {
+            "id": "19.628347, -155.988577",
+            "name": "Honl's",
+            "state": "Hawaii",
+            "beach_latitude": 19.628347,
+            "beach_longitude": -155.988577,
+            "jetty_obstructions": []
+        },
+        {
+            "id": "19.605859, -155.977261",
+            "name": "Banyans",
+            "state": "Hawaii",
+            "beach_latitude": 19.605859,
+            "beach_longitude": -155.977261,
+            "jetty_obstructions": []
+        },
+        {
+            "id": "19.603221, -155.975157",
+            "name": "Lymans",
+            "state": "Hawaii",
+            "beach_latitude": 19.603221,
+            "beach_longitude": -155.975157,
+            "jetty_obstructions": []
+        },
+        {
+            "id": "19.594265, -155.972207",
+            "name": "Magic Sands Beach",
+            "state": "Hawaii",
+            "beach_latitude": 19.594265,
+            "beach_longitude": -155.972207,
+            "jetty_obstructions": []
+        },
+        {
+            "id": "19.580140, -155.967153",
+            "name": "Kahalu'u Bay",
+            "state": "Hawaii",
+            "beach_latitude": 19.580140,
+            "beach_longitude": -155.967153,
+            "jetty_obstructions": []
+        },
+        {
+            "id": "19.010198, -155.797619",
+            "name": "Pohue Bay Beach",
+            "state": "Hawaii",
+            "beach_latitude": 19.010198,
+            "beach_longitude": -155.797619,
+            "jetty_obstructions": []
+        },
+        {
+            "id": "18.910942, -155.678225",
+            "name": "South Point",
+            "state": "Hawaii",
+            "beach_latitude": 18.910942,
+            "beach_longitude": -155.678225,
+            "jetty_obstructions": []
+        }
+    ],
+    "17.5,-152.2": [
+        {
+            "id": "19.455748, -154.843092",
+            "name": "Pohoiki",
+            "state": "Hawaii",
+            "beach_latitude": 19.455748,
+            "beach_longitude": -154.843092,
+            "jetty_obstructions": []
+        }
+    ],
+    "21.7,-158.1": [
+        {
+            "id": "21.596780, -158.108090",
+            "name": "Hale'iwa",
+            "state": "Hawaii",
+            "beach_latitude": 21.596780,
+            "beach_longitude": -158.108090,
+            "jetty_obstructions": []
+        },
+        {
+            "id": "21.603861, -158.107127",
+            "name": "Pua'ena Point",
+            "state": "Hawaii",
+            "beach_latitude": 21.603861,
+            "beach_longitude": -158.107127,
+            "jetty_obstructions": []
+        },
+        {
+            "id": "21.618635, -158.086869",
+            "name": "Laniakea",
+            "state": "Hawaii",
+            "beach_latitude": 21.618635,
+            "beach_longitude": -158.086869,
+            "jetty_obstructions": []
+        },
+        {
+            "id": "21.621598, -158.085507",
+            "name": "Hultin's",
+            "state": "Hawaii",
+            "beach_latitude": 21.621598,
+            "beach_longitude": -158.085507,
+            "jetty_obstructions": []
+        },
+        {
+            "id": "21.622585, -158.083136",
+            "name": "Jocko's",
+            "state": "Hawaii",
+            "beach_latitude": 21.622585,
+            "beach_longitude": -158.083136,
+            "jetty_obstructions": []
+        },
+        {
+            "id": "21.624520, -158.081698",
+            "name": "Chun's",
+            "state": "Hawaii",
+            "beach_latitude": 21.624520,
+            "beach_longitude": -158.081698,
+            "jetty_obstructions": []
+        },
+        {
+            "id": "21.642418, -158.066441",
+            "name": "Waimea Bay",
+            "state": "Hawaii",
+            "beach_latitude": 21.642418,
+            "beach_longitude": -158.066441,
+            "jetty_obstructions": []
+        },
+        {
+            "id": "21.657114, -158.060597",
+            "name": "Log Cabins",
+            "state": "Hawaii",
+            "beach_latitude": 21.657114,
+            "beach_longitude": -158.060597,
+            "jetty_obstructions": []
+        },
+        {
+            "id": "21.662377, -158.055440",
+            "name": "Rockpile",
+            "state": "Hawaii",
+            "beach_latitude": 21.662377,
+            "beach_longitude": -158.055440,
+            "jetty_obstructions": []
+        },
+        {
+            "id": "21.662862, -158.054197",
+            "name": "Off The Wall",
+            "state": "Hawaii",
+            "beach_latitude": 21.662862,
+            "beach_longitude": -158.054197,
+            "jetty_obstructions": []
+        },
+        {
+            "id": "21.665667, -158.051670",
+            "name": "Backdoor",
+            "state": "Hawaii",
+            "beach_latitude": 21.665667,
+            "beach_longitude": -158.051670,
+            "jetty_obstructions": []
+        },
+        {
+            "id": "21.666231, -158.051092",
+            "name": "Pipeline",
+            "state": "Hawaii",
+            "beach_latitude": 21.666231,
+            "beach_longitude": -158.051092,
+            "jetty_obstructions": []
+        },
+        {
+            "id": "21.666677, -158.050455",
+            "name": "Ehukai Beach Park",
+            "state": "Hawaii",
+            "beach_latitude": 21.666677,
+            "beach_longitude": -158.050455,
+            "jetty_obstructions": []
+        },
+        {
+            "id": "21.667806, -158.048805",
+            "name": "Pupukea",
+            "state": "Hawaii",
+            "beach_latitude": 21.667806,
+            "beach_longitude": -158.048805,
+            "jetty_obstructions": []
+        },
+        {
+            "id": "21.670329, -158.047515",
+            "name": "Rocky Point",
+            "state": "Hawaii",
+            "beach_latitude": 21.670329,
+            "beach_longitude": -158.047515,
+            "jetty_obstructions": []
+        },
+        {
+            "id": "21.678123, -158.039775",
+            "name": "Sunset Beach",
+            "state": "Hawaii",
+            "beach_latitude": 21.678123,
+            "beach_longitude": -158.039775,
+            "jetty_obstructions": []
+        },
+        {
+            "id": "21.682222, -158.033150",
+            "name": "Freddieland",
+            "state": "Hawaii",
+            "beach_latitude": 21.682222,
+            "beach_longitude": -158.033150,
+            "jetty_obstructions": []
+        },
+        {
+            "id": "21.684270, -158.032445",
+            "name": "Velzyland",
+            "state": "Hawaii",
+            "beach_latitude": 21.684270,
+            "beach_longitude": -158.032445,
+            "jetty_obstructions": []
+        }
+    ],
+    "20.8,-157.0": [
+        {
+            "id": "20.735920, -156.893443",
+            "name": "Manele Bay",
+            "state": "Hawaii",
+            "beach_latitude": 20.735920,
+            "beach_longitude": -156.893443,
+            "jetty_obstructions": []
+        },
+        {
+            "id": "20.805295, -156.806917",
+            "name": "Lopa Beach",
+            "state": "Hawaii",
+            "beach_latitude": 20.805295,
+            "beach_longitude": -156.806917,
+            "jetty_obstructions": []
+        },
+        {
+            "id": "20.868315, -156.677092",
+            "name": "Lahaina Harbor - Breakwall",
+            "state": "Hawaii",
+            "beach_latitude": 20.868315,
+            "beach_longitude": -156.677092,
+            "jetty_obstructions": []
+        },
+        {
+            "id": "20.841506, -156.652109",
+            "name": "Launiupoko",
+            "state": "Hawaii",
+            "beach_latitude": 20.841506,
+            "beach_longitude": -156.652109,
+            "jetty_obstructions": []
+        },
+        {
+            "id": "20.808911, -156.622707",
+            "name": "Olowalu",
+            "state": "Hawaii",
+            "beach_latitude": 20.808911,
+            "beach_longitude": -156.622707,
+            "jetty_obstructions": []
+        },
+                {
+            "id": "20.794262, -156.581509",
+            "name": "Ukumehame",
+            "state": "Hawaii",
+            "beach_latitude": 20.794262,
+            "beach_longitude": -156.581509,
+            "jetty_obstructions": []
+        }
+    ],
     "29.1,-95.1": [
         {
             "id": "29.135522,-95.038515",
