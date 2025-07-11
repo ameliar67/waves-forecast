@@ -13,7 +13,7 @@ export const ForecastLoading: React.FC<ForecastLoadingProps> = ({
     <>
       <div className="forecast-header">
         <a href="/" className="wave-and-weather-title">
-          Surf Forecast
+          Surf Sage
         </a>
 
         <LocationForm activeStationId={locationId} />
