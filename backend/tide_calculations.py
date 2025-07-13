@@ -29,17 +29,26 @@ def calculate_tide_intervals(tide_events, hour_interval_hours):
             interpolated_level = start.water_level + level_step * step
             normalized_level = normalize(interpolated_level, min_level, max_level)
 
-            tide_phase = "Incoming Tide" if end.tidal_event == 'H' else "Ebb Tide"
-            tide_label = start.tidal_event if step == 0 else (end.tidal_event if step == num_steps else tide_phase)
+            tide_phase = "Incoming Tide" if end.tidal_event == "H" else "Ebb Tide"
+            tide_label = (
+                start.tidal_event
+                if step == 0
+                else (end.tidal_event if step == num_steps else tide_phase)
+            )
 
-            tide_data.append({
-                'timestamp': interpolated_time,
-                'water_level': interpolated_level,
-                'normalized_level': normalized_level,
-                'tidal_event': tide_label
-            })
+            tide_data.append(
+                {
+                    "timestamp": interpolated_time,
+                    "water_level": interpolated_level,
+                    "normalized_level": normalized_level,
+                    "tidal_event": tide_label,
+                }
+            )
 
     return tide_data
 
+
 def normalize(value, min_level, max_level):
-    return (value - min_level) / (max_level - min_level) if max_level > min_level else 0.0
+    return (
+        (value - min_level) / (max_level - min_level) if max_level > min_level else 0.0
+    )

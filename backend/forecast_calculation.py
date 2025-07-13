@@ -11,7 +11,7 @@ async def get_wave_forecast(
     hours_to_forecast=384,
     beach_lat=float,
     beach_lon=float,
-    jetty_obstructions=list
+    jetty_obstructions=list,
 ) -> WaveForecastData:
 
     # Fallback default values

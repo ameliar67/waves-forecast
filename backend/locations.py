@@ -74,7 +74,9 @@ def get_coastal_locations() -> dict[str, LocationData]:
                 "tide_stations": tide_stations or None,
                 "beach_latitude": beach_location.get("beach_latitude" or "Unknown"),
                 "beach_longitude": beach_location.get("beach_longitude" or "Unknown"),
-                "jetty_obstructions": beach_location.get("jetty_obstructions" or "Unknown"),
+                "jetty_obstructions": beach_location.get(
+                    "jetty_obstructions" or "Unknown"
+                ),
             }
 
     return locations_dict

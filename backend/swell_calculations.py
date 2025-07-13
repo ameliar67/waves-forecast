@@ -25,12 +25,20 @@ def classify_wind_relative_to_beach(wind_dir, beach_angle):
 def directional_shadowing_multiplier(direction, jetty_obstructions):
     # Check if direction is within ±45° of obstruction_direction (handling circular wraparound)
     for obstruction_direction in jetty_obstructions:
-        if min(abs(direction - obstruction_direction), 360 - abs(direction - obstruction_direction)) <= 90:
+        if (
+            min(
+                abs(direction - obstruction_direction),
+                360 - abs(direction - obstruction_direction),
+            )
+            <= 90
+        ):
             return 0.7  # reduce breaking height by 30%
     return 1.0  # no reduction otherwise
 
 
-def solve_breaking_wave_heights_from_swell(buoydata, location, jetty_obstructions=None, wind=None):
+def solve_breaking_wave_heights_from_swell(
+    buoydata, location, jetty_obstructions=None, wind=None
+):
     # Convert to metric units temporarily
     old_unit = buoydata.unit
     if buoydata.unit != units.Units.metric:
