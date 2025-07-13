@@ -15,6 +15,7 @@
                 "host": "localhost",
                 "port": 9091
             },
+            "justMyCode": false,
             "preLaunchTask": "func: host start"
         }
     ],
