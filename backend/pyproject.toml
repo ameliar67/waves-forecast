@@ -8,11 +8,13 @@ black = "24.10.0"
 name = "waves-forecast-backend"
 requires-python = ">=3.10,<3.11"
 dependencies = [
-    "azure-storage-blob (==12.24.0)",
     "requests (==2.32.3)",
     "surfpy @ git+https://github.com/mpiannucci/surfpy.git@c2c4b288777ec539dfa07aa9aeda51a68edcfdd4",
     "pygrib (==2.1.6)",
-    "aiohttp (==3.11.14)"
+    "aiohttp (==3.11.14)",
+    "python-dotenv (>=1.1.1,<2.0.0)",
+    "boto3 (>=1.39.4,<2.0.0)",
+    "boto3-stubs[boto3,s3] (>=1.39.4,<2.0.0)",
 ]
 
 

@@ -1,14 +1,12 @@
 import json
 import logging
-import os
 from typing import TypedDict
 
-import forecast_calculation as forecast_calculation
-from azure.storage.blob import BlobClient, ContainerClient, ContentSettings
+import forecast_calculation
+from config import Config
 from locations import get_coastal_locations
 from wave_model import get_wave_model
 
-IS_DEVELOPMENT_MODE = os.environ.get("IS_DEVELOPMENT") in ("1", "True", "true")
 data_container_name = "data"
 locations_blob_path = f"{data_container_name}/locations"
 
@@ -24,9 +22,7 @@ class LocationForecastRequest(TypedDict):
     jetty_obstructions: list
 
 
-async def refresh_forecast(
-    location: LocationForecastRequest, data_container_client: ContainerClient
-) -> None:
+async def refresh_forecast(config: Config, location: LocationForecastRequest) -> None:
     logging.info("Refreshing forecast for %s", location["name"])
 
     # Determine NOAA wave model
@@ -50,37 +46,34 @@ async def refresh_forecast(
     # Prepare response data
     wave_forecast["selected_location"] = location["name"]
 
-    forecast_blob_client = data_container_client.get_blob_client(
-        location["output_path"]
-    )
-    content_settings = ContentSettings(
-        content_type="application/json", cache_control="public, max-age=1800"
-    )
-    forecast_blob_client.upload_blob(
-        json.dumps(wave_forecast), overwrite=True, content_settings=content_settings
+    # Upload to S3
+    config.s3_bucket.put_object(
+        Key=location["output_path"],
+        Body=json.dumps(wave_forecast),
+        ContentType="application/json",
+        CacheControl="public, max-age=1800",
     )
 
 
-async def refresh_api_data(locations_blob: BlobClient):
+async def refresh_api_data(config: Config):
     logging.info("Refreshing locations response blob")
 
-    # Get updated locations and upload to Blob storage
+    # Get updated locations and upload to S3
     locations_data = get_coastal_locations()
-    response_content = json.dumps({"locations": locations_data})
-
-    content_settings = ContentSettings(
-        content_type="application/json", cache_control="public, max-age=7200"
-    )
-    locations_blob.upload_blob(
-        response_content, overwrite=True, content_settings=content_settings
+    config.s3_bucket.put_object(
+        Key=locations_blob_path,
+        Body=json.dumps({"locations": locations_data}),
+        ContentType="application/json",
+        CacheControl="public, max-age=7200",
     )
 
     logging.info("Refreshing forecasts for locations")
     for loc in locations_data.values():
         try:
             await refresh_forecast(
+                config,
                 {
-                    "output_path": f"forecast/{loc['id']}",
+                    "output_path": f"{data_container_name}/forecast/{loc['id']}",
                     "buoy_latitude": loc["buoy_latitude"],
                     "buoy_longitude": loc["buoy_longitude"],
                     "name": loc["name"],
@@ -89,13 +82,10 @@ async def refresh_api_data(locations_blob: BlobClient):
                     "beach_longitude": loc["beach_longitude"],
                     "jetty_obstructions": loc["jetty_obstructions"],
                 },
-                None,
             )
         except Exception:
-            logging.error(
-                "Error while generating forecast for %s", loc["name"], exc_info=True
-            )
+            logging.exception("Error while generating forecast for %s", loc["name"])
 
-        if IS_DEVELOPMENT_MODE:
+        if config.is_development:
             # Only process a single location in development
             break
