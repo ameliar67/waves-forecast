@@ -186,40 +186,6 @@ aio = ["aiohttp (>=3.0)"]
 tracing = ["opentelemetry-api (>=1.26,<2.0)"]
 
 [[package]]
-name = "azure-functions"
-version = "1.21.3"
-description = "Azure Functions for Python"
-optional = false
-python-versions = "*"
-groups = ["main"]
-files = [
-    {file = "azure-functions-1.21.3.tar.gz", hash = "sha256:c359b9dbd2998c84d8595e31a28ffad4e8ca8dcfb4a3798327f776a67f964351"},
-    {file = "azure_functions-1.21.3-py3-none-any.whl", hash = "sha256:6c45f5e61fe59328c81928a428d43c838e9ead52f1cde1628fcabb372fa10cc8"},
-]
-
-[package.extras]
-dev = ["azure-functions-durable", "coverage", "flake8 (>=4.0.1,<4.1.0)", "flake8-logging-format", "mypy", "pytest", "pytest-cov", "requests (==2.*)"]
-
-[[package]]
-name = "azure-identity"
-version = "1.19.0"
-description = "Microsoft Azure Identity Library for Python"
-optional = false
-python-versions = ">=3.8"
-groups = ["main"]
-files = [
-    {file = "azure_identity-1.19.0-py3-none-any.whl", hash = "sha256:e3f6558c181692d7509f09de10cca527c7dce426776454fb97df512a46527e81"},
-    {file = "azure_identity-1.19.0.tar.gz", hash = "sha256:500144dc18197d7019b81501165d4fa92225f03778f17d7ca8a2a180129a9c83"},
-]
-
-[package.dependencies]
-azure-core = ">=1.31.0"
-cryptography = ">=2.5"
-msal = ">=1.30.0"
-msal-extensions = ">=1.2.0"
-typing-extensions = ">=4.0.0"
-
-[[package]]
 name = "azure-storage-blob"
 version = "12.24.0"
 description = "Microsoft Azure Blob Storage Client Library for Python"
@@ -239,41 +205,6 @@ typing-extensions = ">=4.6.0"
 
 [package.extras]
 aio = ["azure-core[aio] (>=1.30.0)"]
-
-[[package]]
-name = "azurefunctions-extensions-base"
-version = "1.0.0b2"
-description = "Base Python worker extension for Azure Functions."
-optional = false
-python-versions = ">=3.8"
-groups = ["main"]
-files = [
-    {file = "azurefunctions_extensions_base-1.0.0b2-py3-none-any.whl", hash = "sha256:0174f3e4df1d971d597b10337a812a1ed27d9c0bc9ad9a618df5e84f7ae1606c"},
-    {file = "azurefunctions_extensions_base-1.0.0b2.tar.gz", hash = "sha256:a22836fde967ac959a9678457e4da63480f64bc254c0474469d04489704d5691"},
-]
-
-[package.extras]
-dev = ["coverage", "pre-commit", "pytest", "pytest-cov", "pytest-instafail"]
-
-[[package]]
-name = "azurefunctions-extensions-bindings-blob"
-version = "1.0.0b3"
-description = "Blob Python worker extension for Azure Functions."
-optional = false
-python-versions = ">=3.9"
-groups = ["main"]
-files = [
-    {file = "azurefunctions_extensions_bindings_blob-1.0.0b3-py3-none-any.whl", hash = "sha256:3b713b356647698fa0ed3930dc44bf2a457a22b084f379b649622c4f73ac7366"},
-    {file = "azurefunctions_extensions_bindings_blob-1.0.0b3.tar.gz", hash = "sha256:d9547c41f7ff51b4f1aed084ca29bbad21682ce89f2a0ca35f3c8866f040b025"},
-]
-
-[package.dependencies]
-azure-identity = ">=1.19.0,<1.20.0"
-azure-storage-blob = ">=12.24.0,<12.25.0"
-azurefunctions-extensions-base = "*"
-
-[package.extras]
-dev = ["coverage", "pre-commit", "pytest", "pytest-cov", "pytest-instafail"]
 
 [[package]]
 name = "black"
@@ -747,44 +678,6 @@ files = [
 ]
 
 [[package]]
-name = "msal"
-version = "1.32.3"
-description = "The Microsoft Authentication Library (MSAL) for Python library enables your app to access the Microsoft Cloud by supporting authentication of users with Microsoft Azure Active Directory accounts (AAD) and Microsoft Accounts (MSA) using industry standard OAuth2 and OpenID Connect."
-optional = false
-python-versions = ">=3.7"
-groups = ["main"]
-files = [
-    {file = "msal-1.32.3-py3-none-any.whl", hash = "sha256:b2798db57760b1961b142f027ffb7c8169536bf77316e99a0df5c4aaebb11569"},
-    {file = "msal-1.32.3.tar.gz", hash = "sha256:5eea038689c78a5a70ca8ecbe1245458b55a857bd096efb6989c69ba15985d35"},
-]
-
-[package.dependencies]
-cryptography = ">=2.5,<47"
-PyJWT = {version = ">=1.0.0,<3", extras = ["crypto"]}
-requests = ">=2.0.0,<3"
-
-[package.extras]
-broker = ["pymsalruntime (>=0.14,<0.18) ; python_version >= \"3.6\" and platform_system == \"Windows\"", "pymsalruntime (>=0.17,<0.18) ; python_version >= \"3.8\" and platform_system == \"Darwin\""]
-
-[[package]]
-name = "msal-extensions"
-version = "1.3.1"
-description = "Microsoft Authentication Library extensions (MSAL EX) provides a persistence API that can save your data on disk, encrypted on Windows, macOS and Linux. Concurrent data access will be coordinated by a file lock mechanism."
-optional = false
-python-versions = ">=3.9"
-groups = ["main"]
-files = [
-    {file = "msal_extensions-1.3.1-py3-none-any.whl", hash = "sha256:96d3de4d034504e969ac5e85bae8106c8373b5c6568e4c8fa7af2eca9dbe6bca"},
-    {file = "msal_extensions-1.3.1.tar.gz", hash = "sha256:c5b0fd10f65ef62b5f1d62f4251d51cbcaf003fcedae8c91b040a488614be1a4"},
-]
-
-[package.dependencies]
-msal = ">=1.29,<2"
-
-[package.extras]
-portalocker = ["portalocker (>=1.4,<4)"]
-
-[[package]]
 name = "multidict"
 version = "6.6.3"
 description = "multidict implementation"
@@ -1178,27 +1071,6 @@ packaging = "*"
 pyproj = "*"
 
 [[package]]
-name = "pyjwt"
-version = "2.10.1"
-description = "JSON Web Token implementation in Python"
-optional = false
-python-versions = ">=3.9"
-groups = ["main"]
-files = [
-    {file = "PyJWT-2.10.1-py3-none-any.whl", hash = "sha256:dcdd193e30abefd5debf142f9adfcdd2b58004e644f25406ffaebd50bd98dacb"},
-    {file = "pyjwt-2.10.1.tar.gz", hash = "sha256:3cc5772eb20009233caf06e9d8a0577824723b44e6648ee0a2aedb6cf9381953"},
-]
-
-[package.dependencies]
-cryptography = {version = ">=3.4.0", optional = true, markers = "extra == \"crypto\""}
-
-[package.extras]
-crypto = ["cryptography (>=3.4.0)"]
-dev = ["coverage[toml] (==5.0.4)", "cryptography (>=3.4.0)", "pre-commit", "pytest (>=6.0.0,<7.0.0)", "sphinx", "sphinx-rtd-theme", "zope.interface"]
-docs = ["sphinx", "sphinx-rtd-theme", "zope.interface"]
-tests = ["coverage[toml] (==5.0.4)", "pytest (>=6.0.0,<7.0.0)"]
-
-[[package]]
 name = "pyproj"
 version = "3.7.1"
 description = "Python interface to PROJ (cartographic projections and coordinate transformations library)"
@@ -1508,4 +1380,4 @@ propcache = ">=0.2.1"
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.10,<3.11"
-content-hash = "527be1a9313939a22b1da53f914a2ca7a7f07e8fefd29e1298cdc5c29caba8e1"
+content-hash = "8dfe6e4559d2ff4ea2a543e18713dc2298fcb81ae261440e860fbeb91066656c"

@@ -1,5 +1,2 @@
 __pycache__/
-.python_packages/
-deploy-backend.sh
-run-azurite-emulator.sh
 frontend/parcel-bundle-reports
