@@ -329,6 +329,7 @@ async def retrieve_new_data(
 
     tide_forecast = []
 
+    #could add forecast.water_level later on if it's relevant to forecast calculation
     if tide_data and tide_data[0]:
         for forecast in tide_data[0]:
             tide_forecast.append(
