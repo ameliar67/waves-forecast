@@ -1,12 +1,8 @@
-import logging
 import struct
 from collections.abc import Callable
 
 import pygrib
 import surfpy
-
-# Set up logging for the GribParser class
-logging.basicConfig(level=logging.INFO)
 
 GRIB_START = "GRIB".encode("ascii")
 REQUIRED_SIGNALS = {

@@ -6,15 +6,16 @@ black = "24.10.0"
 
 [project]
 name = "waves-forecast-backend"
-requires-python = ">=3.10,<3.11"
+requires-python = ">=3.12"
 dependencies = [
-    "requests (==2.32.3)",
+    "requests (>=2.32.3,<3.0.0)",
     "surfpy @ git+https://github.com/mpiannucci/surfpy.git@c2c4b288777ec539dfa07aa9aeda51a68edcfdd4",
-    "pygrib (==2.1.6)",
-    "aiohttp (==3.11.14)",
+    "pygrib (>=2.1.6,<3.0.0)",
+    "aiohttp (>=3.12.14,<4.0.0)",
     "python-dotenv (>=1.1.1,<2.0.0)",
     "boto3 (>=1.39.4,<2.0.0)",
     "boto3-stubs[boto3,s3] (>=1.39.4,<2.0.0)",
+    "apscheduler (>=3.11.0,<4.0.0)",
 ]
 
 

@@ -38,10 +38,6 @@ class WaveForecastData(TypedDict):
     tide_forecast: list
 
 
-# Setup logging to track the execution flow
-logging.basicConfig(level=logging.INFO)  # Set to INFO level for less verbosity
-
-
 async def get_response(session: aiohttp.ClientSession, url: str) -> bytes:
     try:
         async with session.get(url) as response:
