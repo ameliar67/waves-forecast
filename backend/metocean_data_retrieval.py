@@ -7,12 +7,28 @@ from typing import TypedDict
 
 import aiohttp
 import surfpy
+
 from swell_calculations import solve_breaking_wave_heights_from_swell
 from grib_parser import GribTimeWindow, parse_grib_data
 from wave_rating import surf_quality_rating
 from tide_calculations import calculate_tide_intervals
 
-http_session = aiohttp.ClientSession()
+client_logger = logging.getLogger("aiohttp.client")
+
+
+async def on_request_end(_1, _2, params: aiohttp.TraceRequestEndParams):
+    client_logger.debug(
+        "Request end %s %s [%d]",
+        params.method,
+        params.url,
+        params.response.status,
+    )
+
+
+trace_config = aiohttp.TraceConfig()
+trace_config.on_request_end.append(on_request_end)
+
+http_session = aiohttp.ClientSession(trace_configs=[trace_config])
 http_session.headers["User-Agent"] = "waves-forecast/1.0.0"
 
 

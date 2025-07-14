@@ -22,6 +22,9 @@ async def main():
 
     load_dotenv()
     logging.basicConfig(level=logging.INFO)
+    logging.getLogger("aiohttp.client").setLevel(logging.DEBUG)
+    logging.getLogger("urllib3").setLevel(logging.DEBUG)
+
     app_config = Config.from_environment()
 
     scheduler = AsyncIOScheduler()
