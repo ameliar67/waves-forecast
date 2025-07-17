@@ -1,6 +1,7 @@
 import asyncio
 import datetime
 import logging
+import signal
 
 from apscheduler.events import JobExecutionEvent, EVENT_JOB_ERROR, EVENT_JOB_EXECUTED
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
@@ -42,14 +43,16 @@ async def main():
 
     scheduler.start()
 
+    try:
+        wait_task = asyncio.Future()
+        loop = asyncio.get_running_loop()
+        loop.add_signal_handler(signal.SIGINT, wait_task.cancel)
+        loop.add_signal_handler(signal.SIGTERM, wait_task.cancel)
+
+        await wait_task
+    except asyncio.CancelledError:
+        pass
+
 
 if __name__ == "__main__":
-    try:
-        loop = asyncio.new_event_loop()
-        asyncio.set_event_loop(loop)
-        loop.run_until_complete(main())
-        loop.run_forever()
-    except (KeyboardInterrupt, SystemExit):
-        pass
-    finally:
-        logging.info("Exiting")
+    asyncio.run(main())
