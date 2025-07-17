@@ -8,28 +8,11 @@ from typing import TypedDict
 import aiohttp
 import surfpy
 
-from swell_calculations import solve_breaking_wave_heights_from_swell
+from context import ForecastContext
 from grib_parser import GribTimeWindow, parse_grib_data
-from wave_rating import surf_quality_rating
+from swell_calculations import solve_breaking_wave_heights_from_swell
 from tide_calculations import calculate_tide_intervals
-
-client_logger = logging.getLogger("aiohttp.client")
-
-
-async def on_request_end(_1, _2, params: aiohttp.TraceRequestEndParams):
-    client_logger.debug(
-        "Request end %s %s [%d]",
-        params.method,
-        params.url,
-        params.response.status,
-    )
-
-
-trace_config = aiohttp.TraceConfig()
-trace_config.on_request_end.append(on_request_end)
-
-http_session = aiohttp.ClientSession(trace_configs=[trace_config])
-http_session.headers["User-Agent"] = "waves-forecast/1.0.0"
+from wave_rating import surf_quality_rating
 
 
 class HourlyForecastSummary(TypedDict):
@@ -54,9 +37,9 @@ class WaveForecastData(TypedDict):
     tide_forecast: list
 
 
-async def get_response(session: aiohttp.ClientSession, url: str) -> bytes:
+async def get_response(context: ForecastContext, url: str) -> bytes:
     try:
-        async with session.get(url) as response:
+        async with context.http_session.get(url) as response:
             response.raise_for_status()
             return await response.read()
     except aiohttp.ClientError:
@@ -64,11 +47,13 @@ async def get_response(session: aiohttp.ClientSession, url: str) -> bytes:
         return b""
 
 
-async def fetch_active_weather_alerts(location: surfpy.Location) -> dict:
+async def fetch_active_weather_alerts(
+    context: ForecastContext, location: surfpy.Location
+) -> dict:
     url = f"https://api.weather.gov/alerts/active?point={location.latitude},{location.longitude}"
     try:
         logging.info("Fetching weather alerts from url %s", url)
-        async with http_session.get(url) as resp:
+        async with context.http_session.get(url) as resp:
             resp.raise_for_status()
             resp_json = await resp.json()
             return resp_json
@@ -98,9 +83,11 @@ async def fetch_hourly_forecast_async(
         return []
 
 
-async def get_wave_model_grib(url) -> GribTimeWindow | None:
+async def get_wave_model_grib(
+    context: ForecastContext, url: str
+) -> GribTimeWindow | None:
     try:
-        response = await get_response(http_session, url)
+        response = await get_response(context, url)
         return parse_grib_data(response) if len(response) else None
     except:
         logging.exception("Failed to get GRIB data from %s", url)
@@ -108,9 +95,12 @@ async def get_wave_model_grib(url) -> GribTimeWindow | None:
 
 
 async def get_wave_forecast_models(
-    wave_model: surfpy.WaveModel, hours: int
+    context: ForecastContext, wave_model: surfpy.WaveModel, hours: int
 ) -> list[GribTimeWindow]:
-    futures = [get_wave_model_grib(u) for u in wave_model.create_grib_urls(0, hours)]
+    futures = [
+        context.get_cached_or_compute(u, get_wave_model_grib)
+        for u in wave_model.create_grib_urls(0, hours)
+    ]
     grib_datas = await asyncio.gather(*futures)
     return [g for g in grib_datas if g is not None]
 
@@ -166,6 +156,7 @@ EMPTY_FORECAST_DATA = {
 
 
 async def retrieve_new_data(
+    context: ForecastContext,
     wave_model: surfpy.WaveModel,
     hours_to_forecast: int,
     location: surfpy.Location,
@@ -175,11 +166,10 @@ async def retrieve_new_data(
     location_resolution = 0.167
     wave_data = defaultdict(list)
 
-    current_tide_stations = surfpy.TideStations()
-    current_tide_stations.fetch_stations()
-
     # Retrieve grib data from NOAA for given location
-    forecast_models = await get_wave_forecast_models(wave_model, hours_to_forecast)
+    forecast_models = await get_wave_forecast_models(
+        context, wave_model, hours_to_forecast
+    )
     for m in forecast_models:
         wave_data["time"].append(m.time)
         for key, func in m.data_funcs.items():
@@ -227,7 +217,7 @@ async def retrieve_new_data(
     # use two tide stations - one as a backup in case the first has no data
     station_objects: list[surfpy.TideStation | None] = [None] * 2
 
-    for station in current_tide_stations.stations:
+    for station in context.tide_stations.stations:
         if station.station_id == tide_stations[0]:
             station_objects[0] = station
         if station.station_id == tide_stations[1]:

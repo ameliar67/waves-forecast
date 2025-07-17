@@ -1,7 +1,8 @@
-import json
 from typing import Literal, TypedDict
 
 import surfpy
+
+from context import ForecastContext
 
 
 class KnownLocation(TypedDict):
@@ -27,33 +28,22 @@ class LocationData(TypedDict):
     jetty_obstructions: int
 
 
-def get_coastal_locations() -> dict[str, LocationData]:
-
-    # fetch NOAA station data for wave heights and tides (data comes from seperate stations)
-    buoy_stations = surfpy.BuoyStations()
-    buoy_stations.fetch_stations()
-
-    current_tide_stations = surfpy.TideStations()
-    current_tide_stations.fetch_stations()
-
+def get_coastal_locations(context: ForecastContext) -> dict[str, LocationData]:
     # calculate closest buoy station
     locations_dict = {}
-    # open pre-estabilished list of known surfing locations
-    with open("known_locations.json") as fp:
-        known_surf_locations: dict[str, KnownLocation] = json.load(fp)
 
-    for buoyStation in buoy_stations.stations:
+    for buoyStation in context.buoy_stations.stations:
         data_available, surf_location = get_closest_buoy_data_available(
-            buoyStation, known_surf_locations, 1
+            buoyStation, context.known_surf_locations, 1
         )
         if not data_available or is_in_great_lakes_region(
             buoyStation.location.latitude, buoyStation.location.longitude
         ):
             continue
-        for beach_location in known_surf_locations[surf_location]:
+        for beach_location in context.known_surf_locations[surf_location]:
             beach_location["closest_station"] = buoyStation
 
-    for buoy_location in known_surf_locations.values():
+    for buoy_location in context.known_surf_locations.values():
         for beach_location in buoy_location:
             buoyStation = beach_location.get("closest_station")
             id = beach_location.get("id" or "Unknown")
@@ -61,8 +51,8 @@ def get_coastal_locations() -> dict[str, LocationData]:
             if not buoyStation:
                 continue
             # calculate closest tide station
-            closest_tide_stations = current_tide_stations.find_closest_stations(
-                buoyStation.location, 2
+            closest_tide_stations: list[surfpy.TideStation] = (
+                context.tide_stations.find_closest_stations(buoyStation.location, 2)
             )
             buoy_name = get_buoy_display_name(buoyStation.location.name)
 
@@ -88,7 +78,7 @@ def get_coastal_locations() -> dict[str, LocationData]:
 
 
 def get_closest_buoy_data_available(
-    station: surfpy.BuoyStation, known_surf_locations: object, rounding_precision: int
+    context: ForecastContext, station: surfpy.BuoyStation, rounding_precision: int
 ) -> tuple[Literal[False], None] | tuple[Literal[True], str]:
 
     rounded_lat = round(station.location.latitude, rounding_precision)
@@ -96,7 +86,7 @@ def get_closest_buoy_data_available(
     lat_lon_key = f"{rounded_lat},{rounded_lon}"
 
     # Check if the key exists and calculate the difference
-    location = known_surf_locations.get(lat_lon_key)
+    location = context.known_surf_locations.get(lat_lon_key)
     if location:
         for entry in location:
             current_loc_diff = abs(station.location.latitude - rounded_lat) + abs(
