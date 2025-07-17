@@ -1,17 +1,19 @@
 import surfpy
 from metocean_data_retrieval import WaveForecastData, retrieve_new_data
 from beach_morphology import beach_profile_and_planform
+from context import ForecastContext
 
 
 async def get_wave_forecast(
+    context: ForecastContext,
     wave_model: surfpy.WaveModel,
-    buoy_lat=str,
-    buoy_lon=str,
-    tide_stations=list,
+    buoy_lat: float,
+    buoy_lon: float,
+    tide_stations: list[str] | None,
+    beach_lat: float,
+    beach_lon: float,
+    jetty_obstructions: list[int],
     hours_to_forecast=384,
-    beach_lat=float,
-    beach_lon=float,
-    jetty_obstructions=list,
 ) -> WaveForecastData:
 
     # Fallback default values
@@ -40,7 +42,12 @@ async def get_wave_forecast(
 
     # Retrieve forecast data
     data = await retrieve_new_data(
-        wave_model, hours_to_forecast, location, tide_stations, jetty_obstructions
+        context,
+        wave_model,
+        hours_to_forecast,
+        location,
+        tide_stations,
+        jetty_obstructions,
     )
 
     return data

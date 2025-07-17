@@ -1,4 +1,4 @@
-from typing import Literal, TypedDict
+from typing import Literal, TypedDict, cast
 
 import surfpy
 
@@ -13,6 +13,7 @@ class KnownLocation(TypedDict):
     beach_longitude: float
     jetty_obstructions: list[int]
     closest_station: surfpy.BuoyStation | None
+    closest_distance: int | None
 
 
 class LocationData(TypedDict):
@@ -22,26 +23,27 @@ class LocationData(TypedDict):
     buoy_latitude: float
     country: str
     state: str
-    tide_stations: list
+    tide_stations: list[str] | None
     beach_latitude: float
     beach_longitude: float
-    jetty_obstructions: int
+    jetty_obstructions: list[int]
 
 
 def get_coastal_locations(context: ForecastContext) -> dict[str, LocationData]:
     # calculate closest buoy station
-    locations_dict = {}
+    locations_dict: dict[str, LocationData] = {}
 
     for buoyStation in context.buoy_stations.stations:
         data_available, surf_location = get_closest_buoy_data_available(
-            buoyStation, context.known_surf_locations, 1
+            context, buoyStation, 1
         )
         if not data_available or is_in_great_lakes_region(
             buoyStation.location.latitude, buoyStation.location.longitude
         ):
             continue
-        for beach_location in context.known_surf_locations[surf_location]:
-            beach_location["closest_station"] = buoyStation
+        if surf_location:
+            for beach_location in context.known_surf_locations[surf_location]:
+                beach_location["closest_station"] = buoyStation
 
     for buoy_location in context.known_surf_locations.values():
         for beach_location in buoy_location:
@@ -51,27 +53,30 @@ def get_coastal_locations(context: ForecastContext) -> dict[str, LocationData]:
             if not buoyStation:
                 continue
             # calculate closest tide station
-            closest_tide_stations: list[surfpy.TideStation] = (
+            closest_tide_stations: list[surfpy.TideStation] | list[None] | None = (
                 context.tide_stations.find_closest_stations(buoyStation.location, 2)
             )
             buoy_name = get_buoy_display_name(buoyStation.location.name)
 
-            tide_stations = [station.station_id for station in closest_tide_stations]
+        if closest_tide_stations:
+            tide_stations = [
+                cast(str, station.station_id)
+                for station in closest_tide_stations
+                if station is not None and station.station_id is not None
+            ]
 
             # set country to United States until global buoys supported
             locations_dict[name] = {
                 "id": id,
                 "name": beach_location.get("name", buoy_name or "Unknown"),
-                "buoy_longitude": float(buoyStation.location.longitude),
-                "buoy_latitude": float(buoyStation.location.latitude),
+                "buoy_longitude": cast(surfpy.Location, buoyStation.location).longitude if buoyStation is not None else 0.0,
+                "buoy_latitude": cast(surfpy.Location, buoyStation.location).latitude if buoyStation is not None else 0.0,
                 "country": "United States",
                 "state": beach_location.get("state", "Unknown"),
                 "tide_stations": tide_stations or None,
-                "beach_latitude": beach_location.get("beach_latitude" or "Unknown"),
-                "beach_longitude": beach_location.get("beach_longitude" or "Unknown"),
-                "jetty_obstructions": beach_location.get(
-                    "jetty_obstructions" or "Unknown"
-                ),
+                "beach_latitude": beach_location["beach_latitude"],
+                "beach_longitude": beach_location["beach_longitude"],
+                "jetty_obstructions": beach_location.get("jetty_obstructions", []),
             }
 
     return locations_dict

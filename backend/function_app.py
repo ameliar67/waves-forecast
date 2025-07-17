@@ -19,8 +19,8 @@ class LocationForecastRequest(TypedDict):
     buoy_longitude: float
     beach_latitude: float
     beach_longitude: float
-    tide_stations: list
-    jetty_obstructions: list
+    tide_stations: list[str] | None
+    jetty_obstructions: list[int]
 
 
 async def refresh_forecast(
@@ -32,6 +32,7 @@ async def refresh_forecast(
     wave_model = get_wave_model(location["buoy_latitude"], location["buoy_longitude"])
     # Fetch wave forecast data
     wave_forecast = await forecast_calculation.get_wave_forecast(
+        context=context,
         wave_model=wave_model,
         buoy_lat=location["buoy_latitude"],
         buoy_lon=location["buoy_longitude"],
@@ -45,9 +46,6 @@ async def refresh_forecast(
     if not wave_forecast:
         logging.error("Failed to retrieve forecast data for %s", location["name"])
         return
-
-    # Prepare response data
-    wave_forecast["selected_location"] = location["name"]
 
     # Upload to S3
     config.s3_bucket.put_object(

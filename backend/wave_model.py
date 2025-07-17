@@ -14,7 +14,7 @@ all_wave_models = [
 fallback_model = surfpy.wavemodel.global_gfs_wave_model_25km()
 
 
-def get_wave_model(lat: int, lon: int):
+def get_wave_model(lat: float, lon: float):
     loc = surfpy.Location(lat, lon)
     for m in all_wave_models:
         if m.contains_location(loc):

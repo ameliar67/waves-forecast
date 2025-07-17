@@ -1,5 +1,5 @@
 def surf_quality_rating(
-    wave_height: int, swell_period: int, wind_speed: int, tide_level: int
+    wave_height: float | None, swell_period: float | None, wind_speed: float | None, tide_level: int
 ) -> str:  # in meters
     """
     Returns: 'Poor', 'Fair', 'Good', or 'Epic'

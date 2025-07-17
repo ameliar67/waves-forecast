@@ -3,7 +3,7 @@ from collections import defaultdict
 import datetime
 import logging
 import math
-from typing import TypedDict
+from typing import TypedDict, cast
 
 import aiohttp
 import surfpy
@@ -25,16 +25,30 @@ class HourlyForecastSummary(TypedDict):
 
 
 class WaveForecastData(TypedDict):
-    selected_location: str
     generated_at: str
-    average_wave_height: int
     weather_alerts: str | None
-    air_temperature: int | str
-    short_forecast: str
-    wind_speed: int | str
-    wind_direction: str
     hourly_forecast: list[HourlyForecastSummary]
     tide_forecast: list
+    selected_location: str
+
+
+EMPTY_FORECAST_DATA = {
+    "generated_at": datetime.datetime.now(datetime.timezone.utc).isoformat(),
+    "weather_alerts": [],
+    "hourly_forecast": [
+        {
+            "chart": None,
+            "current_wave_height": 0,
+            "alerts": "No forecast available",
+            "air_temperature": "No forecast available",
+            "wind_speed": "No forecast available",
+            "wind_direction": "No forecast available",
+            "short_forecast": "No forecast available",
+        }
+    ],
+    "tide_forecast": [],
+    "selected_location": "",
+}
 
 
 async def get_response(context: ForecastContext, url: str) -> bytes:
@@ -144,25 +158,14 @@ def combined_swell_period(swell_components):
     return weighted_sum / energy_sum if energy_sum > 0 else 0
 
 
-EMPTY_FORECAST_DATA = {
-    "chart": None,
-    "current_wave_height": 0,
-    "alerts": "No forecast available",
-    "air_temperature": "No forecast available",
-    "wind_speed": "No forecast available",
-    "wind_direction": "No forecast available",
-    "short_forecast": "No forecast available",
-}
-
-
 async def retrieve_new_data(
     context: ForecastContext,
     wave_model: surfpy.WaveModel,
     hours_to_forecast: int,
     location: surfpy.Location,
-    tide_stations: list,
-    jetty_obstructions: list,
-) -> WaveForecastData | None:
+    tide_stations: list[str] | None,
+    jetty_obstructions: list[int],
+) -> WaveForecastData:
     location_resolution = 0.167
     wave_data = defaultdict(list)
 
@@ -183,7 +186,7 @@ async def retrieve_new_data(
             location.latitude,
             location.longitude,
         )
-        return None
+        return cast(WaveForecastData, {**EMPTY_FORECAST_DATA.copy()})
 
     # Turn NOAA model grib data into buoy data
     buoy_data: list[surfpy.BuoyData] = wave_model.to_buoy_data(wave_data)
@@ -197,11 +200,12 @@ async def retrieve_new_data(
             location.latitude,
             location.longitude,
         )
-        return {**EMPTY_FORECAST_DATA.copy(), "wave_model": wave_model.description}
+        return cast(WaveForecastData, {**EMPTY_FORECAST_DATA.copy()})
 
     # Fetch weather data
     weather_data, alerts = await asyncio.gather(
-        fetch_hourly_forecast_async(location), fetch_active_weather_alerts(location)
+        fetch_hourly_forecast_async(location),
+        fetch_active_weather_alerts(context, location),
     )
 
     alerts_list = alerts.get("features", [])
@@ -218,20 +222,21 @@ async def retrieve_new_data(
     station_objects: list[surfpy.TideStation | None] = [None] * 2
 
     for station in context.tide_stations.stations:
-        if station.station_id == tide_stations[0]:
+        if tide_stations and station.station_id == tide_stations[0]:
             station_objects[0] = station
-        if station.station_id == tide_stations[1]:
+        if tide_stations and station.station_id == tide_stations[1]:
             station_objects[1] = station
 
     for s in station_objects:
-        tide_data = s.fetch_tide_data(
-            start_date,
-            end_date,
-            interval=surfpy.TideStation.DataInterval.high_low,
-            unit=surfpy.units.Units.metric,
-        )
-        if tide_data and tide_data[0]:
-            break
+        if s:
+            tide_data = s.fetch_tide_data(
+                start_date,
+                end_date,
+                interval=surfpy.TideStation.DataInterval.high_low,
+                unit=surfpy.units.Units.metric,
+            )
+            if tide_data and tide_data[0]:
+                break
 
     weather_data_index = 0
     tide_data_iterator = 0
@@ -246,7 +251,7 @@ async def retrieve_new_data(
         weather_entry = weather_data[weather_data_index] if valid_index else None
 
         if x.maximum_breaking_height == "Invalid Incident Angle":
-            return {**EMPTY_FORECAST_DATA.copy(), "wave_model": wave_model.description}
+            return cast(WaveForecastData, {**EMPTY_FORECAST_DATA.copy()})
 
         swell_period = combined_swell_period(x.swell_components)
 
@@ -273,7 +278,7 @@ async def retrieve_new_data(
 
         hourly_forecast.append(
             {
-                "date": x.date.isoformat(),
+                "date": x.date.isoformat() if x.date is not None else None,
                 "max_breaking_height": (
                     x.maximum_breaking_height
                     if not math.isnan(x.maximum_breaking_height)
@@ -310,7 +315,9 @@ async def retrieve_new_data(
                     if weather_entry and weather_entry.short_forecast
                     else None
                 ),
-                "wave_height": x.wave_summary.wave_height,
+                "wave_height": (
+                    x.wave_summary.wave_height if x.wave_summary is not None else None
+                ),
                 "surf_rating": surf_rating,
                 "swell_period": round(swell_period),
             }
@@ -323,12 +330,14 @@ async def retrieve_new_data(
             location.latitude,
             location.longitude,
         )
-        return {
-            **EMPTY_FORECAST_DATA.copy(),
-            "generated_at": datetime.datetime.now(datetime.timezone.utc).isoformat(),
-            "weather_alerts": headline or "None",
-            "hourly_forecast": hourly_forecast,
-        }
+        return cast(
+            WaveForecastData,
+            {
+                **EMPTY_FORECAST_DATA.copy(),
+                "weather_alerts": headline or "None",
+                "hourly_forecast": hourly_forecast,
+            },
+        )
 
     tide_forecast = []
 
@@ -347,4 +356,5 @@ async def retrieve_new_data(
         "weather_alerts": headline or "None",
         "hourly_forecast": hourly_forecast,
         "tide_forecast": tide_forecast,
+        "selected_location": location.name,
     }
