@@ -1,0 +1,17 @@
+name: waves-forecast
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    environment:
+      IS_DEVELOPMENT: "false"
+    secrets:
+      - source: backend_secrets_env
+        target: /app/.env
+
+secrets:
+  backend_secrets_env:
+    file: ./backend.env
