@@ -225,7 +225,7 @@ async def retrieve_new_data(
     end_date = start_date + datetime.timedelta(days=16)
 
     # use two tide stations - one as a backup in case the first has no data
-    station_objects = [None] * 2
+    station_objects: list[surfpy.TideStation | None] = [None] * 2
 
     for station in current_tide_stations.stations:
         if station.station_id == tide_stations[0]:

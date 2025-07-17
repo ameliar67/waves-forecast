@@ -5,8 +5,13 @@ import surfpy
 
 
 class KnownLocation(TypedDict):
+    id: str
     name: str
     state: str
+    beach_latitude: float
+    beach_longitude: float
+    jetty_obstructions: list[int]
+    closest_station: surfpy.BuoyStation | None
 
 
 class LocationData(TypedDict):
