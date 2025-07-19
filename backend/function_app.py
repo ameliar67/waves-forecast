@@ -33,6 +33,7 @@ async def refresh_forecast(
     # Fetch wave forecast data
     wave_forecast = await forecast_calculation.get_wave_forecast(
         context=context,
+        beach_name=location["name"],
         wave_model=wave_model,
         buoy_lat=location["buoy_latitude"],
         buoy_lon=location["buoy_longitude"],

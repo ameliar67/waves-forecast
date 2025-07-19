@@ -1,13 +1,15 @@
-from surfpy import units, tools
-import math
 import logging
+import math
+from typing import cast
+
+import surfpy
 
 
 def classify_wind_relative_to_beach(wind_dir, beach_angle):
     """
     Determine wind orientation relative to beach angle:
     - Onshore: ±45° from directly onshore
-    - Sideshore: 45°–135°
+    - Sideshore: 45°-135°
     - Offshore: >135°
     """
     relative_angle = (wind_dir - beach_angle) % 360
@@ -37,17 +39,20 @@ def directional_shadowing_multiplier(direction, jetty_obstructions):
 
 
 def solve_breaking_wave_heights_from_swell(
-    buoydata, location, jetty_obstructions=None, wind=None
+    buoydata: surfpy.BuoyData,
+    location: surfpy.Location,
+    jetty_obstructions: list[int] | None = None,
+    wind=None,
 ):
     # Convert to metric units temporarily
     old_unit = buoydata.unit
-    if buoydata.unit != units.Units.metric:
-        buoydata.change_units(units.Units.metric)
+    if buoydata.unit != surfpy.units.Units.metric:
+        buoydata.change_units(surfpy.units.Units.metric)
 
     breaking_heights = []
 
     # Calculate wave heights for all swells before finding total surf energy
-    for swell in buoydata.swell_components:
+    for swell in cast(list[surfpy.Swell], buoydata.swell_components):
         height = swell.wave_height
         period = swell.period
         direction = swell.direction
@@ -59,7 +64,7 @@ def solve_breaking_wave_heights_from_swell(
 
         # Ignore swells coming from behind the beach
         if incident_angle > 90:
-            logging.warning(
+            logging.debug(
                 "90 degree Incident Angle indicates swell is coming from behind the beach and should be ignored at %s",
                 location.name,
             )
@@ -67,8 +72,12 @@ def solve_breaking_wave_heights_from_swell(
             continue
 
         # Calculate breaking wave height for this swell
-        wave_breaking_height, _ = tools.breaking_characteristics(
-            period, incident_angle, height, location.slope, location.depth
+        wave_breaking_height, _ = surfpy.tools.breaking_characteristics(
+            period,
+            incident_angle,
+            height,
+            location.slope,
+            location.depth,
         )
 
         # Apply 0.8 breaking coefficient
@@ -110,7 +119,7 @@ def solve_breaking_wave_heights_from_swell(
         min_height = combined_breaking_height / 1.4
 
     # Store results in buoydata
-    if len(jetty_obstructions) > 0:
+    if jetty_obstructions and len(jetty_obstructions) > 0:
         factor = directional_shadowing_multiplier(direction, jetty_obstructions)
         buoydata.maximum_breaking_height = combined_breaking_height * factor
         buoydata.minimum_breaking_height = min_height * factor

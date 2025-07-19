@@ -6,6 +6,7 @@ from context import ForecastContext
 
 async def get_wave_forecast(
     context: ForecastContext,
+    beach_name: str,
     wave_model: surfpy.WaveModel,
     buoy_lat: float,
     buoy_lon: float,
@@ -35,10 +36,15 @@ async def get_wave_forecast(
     )
 
     # Setup location
-    location = surfpy.Location(buoy_lat, buoy_lon, altitude=0)
-    location.depth = depth
-    location.slope = slope
-    location.angle = orientation
+    location = surfpy.Location(
+        latitude=buoy_lat,
+        longitude=buoy_lon,
+        name=beach_name,
+        altitude=0,
+        depth=depth,
+        angle=orientation,
+        slope=slope,
+    )
 
     # Retrieve forecast data
     data = await retrieve_new_data(
