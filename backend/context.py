@@ -1,11 +1,20 @@
 import json
 import logging
-from typing import Awaitable, Callable, Hashable, Self, TypeVar
+from typing import Awaitable, Callable, Hashable, Self, TypeVar, TypedDict
 
 import aiohttp
 import surfpy
 
-from locations import KnownLocation
+
+class KnownLocation(TypedDict):
+    id: str
+    name: str
+    state: str
+    beach_latitude: float
+    beach_longitude: float
+    jetty_obstructions: list[int]
+    closest_station: surfpy.BuoyStation | None
+    closest_distance: int | None
 
 
 client_logger = logging.getLogger("aiohttp.client")
