@@ -9,6 +9,7 @@ from apscheduler.triggers.cron import CronTrigger
 from dotenv import load_dotenv
 
 from config import Config
+from function_app import refresh_api_data
 
 
 def on_scheduler_executed(event: JobExecutionEvent):
@@ -19,8 +20,6 @@ def on_scheduler_executed(event: JobExecutionEvent):
 
 
 async def main():
-    from function_app import refresh_api_data
-
     load_dotenv()
     logging.basicConfig(level=logging.INFO)
     logging.getLogger("aiohttp.client").setLevel(logging.DEBUG)
@@ -48,6 +47,11 @@ async def main():
         loop = asyncio.get_running_loop()
         loop.add_signal_handler(signal.SIGINT, wait_task.cancel)
         loop.add_signal_handler(signal.SIGTERM, wait_task.cancel)
+        loop.add_signal_handler(
+            signal.SIGUSR1,
+            lambda c: asyncio.ensure_future(refresh_api_data(c)),
+            app_config,
+        )
 
         await wait_task
     except asyncio.CancelledError:
