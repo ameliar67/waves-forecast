@@ -7,7 +7,6 @@ import surfpy
 
 
 class KnownLocation(TypedDict):
-    id: str
     name: str
     state: str
     beach_latitude: float

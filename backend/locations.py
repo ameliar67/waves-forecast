@@ -37,17 +37,18 @@ def get_coastal_locations(context: ForecastContext) -> dict[str, LocationData]:
     for buoy_location in context.known_surf_locations.values():
         for beach_location in buoy_location:
             buoyStation = beach_location.get("closest_station")
-            id = beach_location.get("id" or "Unknown")
-            name = beach_location.get("name" or "Unknown")
+            id = f"{beach_location['beach_latitude']},{beach_location['beach_longitude']}"
+            name = beach_location["name"]
             if not buoyStation:
                 continue
             # calculate closest tide station
             closest_tide_stations: list[surfpy.TideStation] | list[None] | None = (
                 context.tide_stations.find_closest_stations(buoyStation.location, 2)
             )
-            buoy_name = get_buoy_display_name(buoyStation.location.name)
 
-        if closest_tide_stations:
+            if not closest_tide_stations:
+                continue
+
             tide_stations = [
                 cast(str, station.station_id)
                 for station in closest_tide_stations
@@ -55,13 +56,21 @@ def get_coastal_locations(context: ForecastContext) -> dict[str, LocationData]:
             ]
 
             # set country to United States until global buoys supported
-            locations_dict[name] = {
+            locations_dict[id] = {
                 "id": id,
-                "name": beach_location.get("name", buoy_name or "Unknown"),
-                "buoy_longitude": cast(surfpy.Location, buoyStation.location).longitude if buoyStation is not None else 0.0,
-                "buoy_latitude": cast(surfpy.Location, buoyStation.location).latitude if buoyStation is not None else 0.0,
+                "name": name,
+                "buoy_longitude": (
+                    cast(surfpy.Location, buoyStation.location).longitude
+                    if buoyStation is not None
+                    else 0.0
+                ),
+                "buoy_latitude": (
+                    cast(surfpy.Location, buoyStation.location).latitude
+                    if buoyStation is not None
+                    else 0.0
+                ),
                 "country": "United States",
-                "state": beach_location.get("state", "Unknown"),
+                "state": beach_location["state"],
                 "tide_stations": tide_stations or None,
                 "beach_latitude": beach_location["beach_latitude"],
                 "beach_longitude": beach_location["beach_longitude"],
@@ -95,15 +104,6 @@ def get_closest_buoy_data_available(
 
     # If the location is not found or no update is needed
     return (False, None)
-
-
-def get_buoy_display_name(name: str) -> str:
-    if len(name) > 4 and name[-4] == "," and name[-3] == " " and name[-2:].isupper():
-        name = name[:-4]
-
-    name = name.lstrip("0123456789- ").rstrip(", ")
-
-    return name
 
 
 def is_in_great_lakes_region(lat, lon):
