@@ -33,10 +33,8 @@ async def main():
     scheduler.add_job(
         refresh_api_data,
         args=[app_config],
-        trigger=CronTrigger(
-            hour=4,
-            minute=15,
-            timezone=datetime.timezone.utc,
+        trigger=CronTrigger.from_crontab(
+            app_config.schedule, timezone=datetime.timezone.utc
         ),
     )
 
