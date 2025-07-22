@@ -10,13 +10,10 @@
         {
             "name": "Run and Debug Python Functions",
             "type": "debugpy",
-            "request": "attach",
-            "connect": {
-                "host": "localhost",
-                "port": 9091
-            },
+            "request": "launch",
             "justMyCode": false,
-            "preLaunchTask": "func: host start"
+            "cwd": "${workspaceFolder}/backend",
+            "module": "main"
         }
     ],
     "version": "0.2.0"

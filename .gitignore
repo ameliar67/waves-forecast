@@ -1,3 +1,4 @@
 __pycache__/
 frontend/parcel-bundle-reports
 backend.env
+backend/.env

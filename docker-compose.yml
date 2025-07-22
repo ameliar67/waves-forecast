@@ -6,13 +6,25 @@ services:
       context: ./backend
       dockerfile: Dockerfile
     restart: unless-stopped
-    environment:
-      IS_DEVELOPMENT: "false"
-      SCHEDULE: "15 4 * * *"
     secrets:
       - source: backend_secrets_env
         target: /app/.env
 
+  # AWS S3 emulator for development
+  s3-mock:
+    image: adobe/s3mock
+    volumes:
+      - s3-data:/data
+    ports:
+      - 9090:9090
+    environment:
+      COM_ADOBE_TESTING_S3MOCK_STORE_INITIAL_BUCKETS: waves-forecast-dev
+      COM_ADOBE_TESTING_S3MOCK_STORE_ROOT: data
+      COM_ADOBE_TESTING_S3MOCK_STORE_RETAIN_FILES_ON_EXIT: "true"
+
 secrets:
   backend_secrets_env:
     file: ./backend.env
+
+volumes:
+  s3-data:
