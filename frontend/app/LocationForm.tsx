@@ -130,7 +130,7 @@ export const LocationForm: React.FC<LocationFormProps> = ({
                     <li
                       key={station.id}
                       className="dropdown-item"
-                      data-station-id={station.name}
+                      data-station-id={station.id}
                       onClick={handleItemSelect}
                     >
                       {station.name}
