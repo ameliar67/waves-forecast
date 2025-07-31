@@ -1,6 +1,7 @@
 import asyncio
 import datetime
 import logging
+import os
 import signal
 
 from apscheduler.events import JobExecutionEvent, EVENT_JOB_ERROR, EVENT_JOB_EXECUTED
@@ -25,6 +26,8 @@ async def main():
     logging.getLogger("aiohttp.client").setLevel(logging.DEBUG)
     logging.getLogger("urllib3").setLevel(logging.DEBUG)
 
+    logging.info("Starting, process ID: %d", os.getpid())
+
     app_config = Config.from_environment()
 
     scheduler = AsyncIOScheduler()
@@ -38,8 +41,6 @@ async def main():
         ),
     )
 
-    scheduler.start()
-
     try:
         wait_task = asyncio.Future()
         loop = asyncio.get_running_loop()
@@ -51,6 +52,7 @@ async def main():
             app_config,
         )
 
+        scheduler.start()
         await wait_task
     except asyncio.CancelledError:
         pass

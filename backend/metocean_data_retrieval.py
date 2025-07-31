@@ -116,6 +116,7 @@ async def get_wave_forecast_models(
         for u in wave_model.create_grib_urls(0, hours)
     ]
     grib_datas = await asyncio.gather(*futures)
+    logging.info("Wave model retrieval complete")
     return [g for g in grib_datas if g is not None]
 
 
