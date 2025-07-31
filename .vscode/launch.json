@@ -8,7 +8,7 @@
             "justMyCode": false
         },
         {
-            "name": "Run and Debug Python Functions",
+            "name": "Run and Debug Backend",
             "type": "debugpy",
             "request": "launch",
             "justMyCode": false,
